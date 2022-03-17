@@ -1,2 +1,3 @@
-# sid-desktop
-Sid Desktop
+# SID
+- Desktop
+    - Favorites
