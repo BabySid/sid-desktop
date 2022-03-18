@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/theme"
-	sidTheme "sid/desktop/theme"
+	sidTheme "sid-desktop/desktop/theme"
 )
 
 type mainMenu struct {

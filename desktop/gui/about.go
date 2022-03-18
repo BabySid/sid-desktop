@@ -4,7 +4,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
-	sidTheme "sid/desktop/theme"
+	sidTheme "sid-desktop/desktop/theme"
 )
 
 type about struct {

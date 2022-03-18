@@ -6,7 +6,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	"net/url"
-	sidTheme "sid/desktop/theme"
+	sidTheme "sid-desktop/desktop/theme"
 )
 
 var _ appInterface = (*appWelcome)(nil)

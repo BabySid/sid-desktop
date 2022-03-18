@@ -3,7 +3,7 @@ package gui
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
+	sidContainer "sid-desktop/desktop/container"
 )
 
 type toys struct {
@@ -24,10 +24,10 @@ func newToys() *toys {
 		cards[i] = toy.GetToyCard()
 	}
 
-	t.widget = container.NewVBox(container.NewGridWithRows(len(toyRegister),
-		cards...),
-		layout.NewSpacer(),
-	)
+	t.widget = container.New(sidContainer.NewVCZBoxLayout(),
+		cards...)
+	//t.widget = container.NewVBox(container.NewGridWithRows(len(toyRegister), cards...),
+	//	layout.NewSpacer())
 
 	return &t
 }

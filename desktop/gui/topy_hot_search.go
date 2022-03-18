@@ -10,8 +10,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"math"
 	"net/http"
-	"sid/base"
-	sidTheme "sid/desktop/theme"
+	"sid-desktop/base"
+	sidTheme "sid-desktop/desktop/theme"
 	"strconv"
 	"sync"
 )
@@ -65,10 +65,12 @@ func (ths *toyHotSearch) Init() error {
 		container.NewBorder(container.NewHBox(ths.titleLabel, layout.NewSpacer(), ths.nextPage),
 			nil, nil, nil, ths.hotList),
 	)
-
+	ths.widget.Resize(fyne.NewSize(ToyWidth, 240))
+	
 	// for init
 	go ths.Run()
 	_ = base.GlobalScheduler.AddJob("toy_hot_search", "0 */30 * * * *", ths)
+
 	return nil
 }
 

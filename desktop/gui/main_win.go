@@ -9,9 +9,9 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"log"
 	"os"
-	"sid/base"
-	"sid/desktop/common"
-	sidTheme "sid/desktop/theme"
+	"sid-desktop/base"
+	"sid-desktop/desktop/common"
+	sidTheme "sid-desktop/desktop/theme"
 	"time"
 )
 

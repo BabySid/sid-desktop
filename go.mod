@@ -1,4 +1,4 @@
-module sid
+module sid-desktop
 
 go 1.17
 

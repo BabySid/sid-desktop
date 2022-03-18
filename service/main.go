@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sid/base"
+	"sid-desktop/base"
 )
 
 func main() {

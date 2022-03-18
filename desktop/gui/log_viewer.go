@@ -6,7 +6,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	sidTheme "sid/desktop/theme"
+	sidTheme "sid-desktop/desktop/theme"
 )
 
 type logViewer struct {

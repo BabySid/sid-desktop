@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/sahilm/fuzzy"
 	"runtime"
-	"sid/base"
+	"sid-desktop/base"
 )
 
 type AppList struct {

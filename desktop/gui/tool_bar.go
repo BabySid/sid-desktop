@@ -3,7 +3,7 @@ package gui
 import (
 	"fmt"
 	"fyne.io/fyne/v2/widget"
-	sidTheme "sid/desktop/theme"
+	sidTheme "sid-desktop/desktop/theme"
 )
 
 type toolBar struct {

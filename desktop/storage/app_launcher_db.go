@@ -3,8 +3,8 @@ package storage
 import (
 	"database/sql"
 	"path/filepath"
-	"sid/base"
-	"sid/desktop/common/apps"
+	"sid-desktop/base"
+	"sid-desktop/desktop/common/apps"
 	"sync"
 )
 

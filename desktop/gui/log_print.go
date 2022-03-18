@@ -3,7 +3,7 @@ package gui
 import (
 	"fyne.io/fyne/v2/dialog"
 	"log"
-	sidTheme "sid/desktop/theme"
+	sidTheme "sid-desktop/desktop/theme"
 )
 
 func printErr(err error) {

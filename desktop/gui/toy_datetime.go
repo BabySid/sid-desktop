@@ -6,8 +6,8 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	"image/color"
-	"sid/base"
-	sidTheme "sid/desktop/theme"
+	"sid-desktop/base"
+	sidTheme "sid-desktop/desktop/theme"
 	"time"
 )
 import xwidget "fyne.io/x/fyne/widget"
@@ -21,8 +21,6 @@ type toyDateTime struct {
 	m1  *xwidget.HexWidget
 	m2  *xwidget.HexWidget
 
-	dt *widget.Label
-
 	widget *widget.Card
 }
 
@@ -32,7 +30,6 @@ func (tdt *toyDateTime) Init() error {
 	tdt.dot = widget.NewRichTextFromMarkdown("# :")
 	tdt.m1 = xwidget.NewHexWidget()
 	tdt.m2 = xwidget.NewHexWidget()
-	tdt.dt = widget.NewLabel("")
 
 	hexes := []*xwidget.HexWidget{tdt.h1, tdt.h2, tdt.m1, tdt.m2}
 	for _, w := range hexes {
@@ -55,13 +52,11 @@ func (tdt *toyDateTime) Init() error {
 		w.SetOffColor(off)
 	}
 
-	tdt.dt.Alignment = fyne.TextAlignCenter
-
 	tdt.widget = widget.NewCard("", sidTheme.ToyDateTimeTitle,
-		container.NewVBox(
-			container.NewGridWithColumns(5, tdt.h1, tdt.h2, tdt.dot, tdt.m1, tdt.m2),
-			tdt.dt),
+		container.NewGridWithColumns(5, tdt.h1, tdt.h2, tdt.dot, tdt.m1, tdt.m2),
 	)
+
+	tdt.widget.Resize(fyne.NewSize(ToyWidth, 120))
 
 	// for init
 	tdt.Run()
@@ -106,5 +101,7 @@ func (tdt *toyDateTime) Run() {
 		"Saturday",
 	}
 
-	tdt.dt.SetText(fmt.Sprintf("%d/%d/%d %s", year, month, day, weekStr[now.Weekday()]))
+	tdt.widget.SetSubTitle(
+		fmt.Sprintf(sidTheme.ToyDateTimeTitle+": %d/%d/%d %s",
+			year, month, day, weekStr[now.Weekday()]))
 }

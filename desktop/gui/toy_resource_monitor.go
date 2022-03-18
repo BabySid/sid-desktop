@@ -5,8 +5,8 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"sid/base"
-	sidTheme "sid/desktop/theme"
+	"sid-desktop/base"
+	sidTheme "sid-desktop/desktop/theme"
 )
 
 var _ toyInterface = (*toyResourceMonitor)(nil)
@@ -41,6 +41,8 @@ func (trm *toyResourceMonitor) Init() error {
 			trm.upTime,
 		),
 	)
+
+	trm.widget.Resize(fyne.NewSize(ToyWidth, 230))
 
 	_ = base.GlobalScheduler.AddJob("toy_resource_monitor", "*/1 * * * * *", trm)
 

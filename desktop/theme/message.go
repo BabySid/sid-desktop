@@ -70,7 +70,7 @@ const (
 	ToyResourceMonitorItem1        = "CPU:"
 	ToyResourceMonitorItem2        = "MEM:"
 	ToyResourceMonitorUpTimeFormat = "Up time %d:%d:%d"
-	ToyHotSearchTitle              = "Baidu Hot Search"
+	ToyHotSearchTitle              = "Hot Search(BD)"
 	ToyHotSearchRefreshing         = "Content is Updating"
 	ToyHotSearchRefreshFormat      = "Refresh (%d/%d)"
 

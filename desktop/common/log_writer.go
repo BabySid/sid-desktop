@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"sid/base"
+	"sid-desktop/base"
 )
 
 var _ io.Writer = (*LogWriter)(nil)

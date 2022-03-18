@@ -16,3 +16,7 @@ var (
 		&toyHotSearch{},
 	}
 )
+
+const (
+	ToyWidth = 250
+)

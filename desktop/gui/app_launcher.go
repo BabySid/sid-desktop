@@ -9,10 +9,10 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"path/filepath"
-	"sid/base"
-	"sid/desktop/common/apps"
-	"sid/desktop/storage"
-	sidTheme "sid/desktop/theme"
+	"sid-desktop/base"
+	"sid-desktop/desktop/common/apps"
+	"sid-desktop/desktop/storage"
+	sidTheme "sid-desktop/desktop/theme"
 	"time"
 )
 

@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"sid/base"
+	"sid-desktop/base"
 	"strings"
 	"time"
 

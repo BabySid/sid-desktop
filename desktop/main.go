@@ -1,7 +1,7 @@
 package main
 
 import (
-	"sid/desktop/gui"
+	"sid-desktop/desktop/gui"
 )
 
 // -ldflags -H=windowsgui

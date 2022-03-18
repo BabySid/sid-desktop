@@ -4,7 +4,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/data/binding"
 	"reflect"
-	"sid/desktop/common/apps"
+	"sid-desktop/desktop/common/apps"
 	"strings"
 )
 
