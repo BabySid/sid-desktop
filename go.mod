@@ -6,7 +6,6 @@ replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7
 
 require (
 	fyne.io/fyne/v2 v2.1.3
-	fyne.io/x/fyne v0.0.0-20220107050838-c4a1de51d4ce
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/go-cmd/cmd v1.4.0
 	github.com/mattn/go-sqlite3 v1.14.12
