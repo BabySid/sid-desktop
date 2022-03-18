@@ -20,7 +20,7 @@ func (a *appWelcome) LazyInit() error {
 	logo.FillMode = canvas.ImageFillContain
 	logo.SetMinSize(fyne.NewSize(362*0.8, 192*0.8))
 
-	a.tabItem = container.NewTabItem(sidTheme.AppWelcomeName, nil)
+	a.tabItem = container.NewTabItemWithIcon(sidTheme.AppWelcomeName, sidTheme.ResourceWelIcon, nil)
 
 	wel := widget.NewRichTextFromMarkdown("# " + sidTheme.WelComeMsg)
 	for i := range wel.Segments {

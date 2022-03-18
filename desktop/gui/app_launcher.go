@@ -51,7 +51,7 @@ func (al *appLauncher) LazyInit() error {
 	al.appBinding = binding.NewUntypedList()
 	al.createAppList()
 
-	al.tabItem = container.NewTabItem(sidTheme.AppLauncherName, nil)
+	al.tabItem = container.NewTabItemWithIcon(sidTheme.AppLauncherName, sidTheme.ResourceLauncherIcon, nil)
 	al.tabItem.Content = container.NewBorder(
 		container.NewGridWithColumns(2,
 			al.searchEntry,
