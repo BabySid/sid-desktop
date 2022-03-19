@@ -3,7 +3,6 @@ package gui
 import (
 	"fmt"
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/theme"
 	sidTheme "sid-desktop/desktop/theme"
 )
 
@@ -49,14 +48,14 @@ func newMainMenu() *mainMenu {
 
 	// Option-Theme
 	mm.themeDark = fyne.NewMenuItem(sidTheme.MenuOptThemeDark, func() {
-		globalWin.app.Settings().SetTheme(theme.DarkTheme())
+		globalWin.app.Settings().SetTheme(sidTheme.DarkTheme{})
 		mm.themeDark.Checked = true
 		mm.themeLight.Checked = false
 		globalConfig.Theme.Set("__DARK__")
 	})
 	mm.themeDark.Checked = true
 	mm.themeLight = fyne.NewMenuItem(sidTheme.MenuOptThemeLight, func() {
-		globalWin.app.Settings().SetTheme(theme.LightTheme())
+		globalWin.app.Settings().SetTheme(sidTheme.LightTheme{})
 		mm.themeDark.Checked = false
 		mm.themeLight.Checked = true
 		globalConfig.Theme.Set("__LIGHT__")

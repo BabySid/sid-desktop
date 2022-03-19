@@ -6,9 +6,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
-	"fyne.io/fyne/v2/theme"
 	"log"
-	"os"
 	"sid-desktop/base"
 	"sid-desktop/desktop/common"
 	sidTheme "sid-desktop/desktop/theme"
@@ -28,8 +26,8 @@ type MainWin struct {
 
 func init() {
 	// set env to support chinese
-	_ = os.Setenv("FYNE_FONT", "./resource/Microsoft-YaHei.ttf")
-	_ = os.Setenv("FYNE_FONT_MONOSPACE", "./resource/Microsoft-YaHei.ttf")
+	//_ = os.Setenv("FYNE_FONT", "./resource/Microsoft-YaHei.ttf")
+	//_ = os.Setenv("FYNE_FONT_MONOSPACE", "./resource/Microsoft-YaHei.ttf")
 }
 
 //func setAPPID() {
@@ -77,16 +75,16 @@ func NewMainWin() *MainWin {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.SetOutput(globalLogWriter)
 
+	mw.win = mw.app.NewWindow(sidTheme.AppTitle)
+	mw.win.SetPadded(false)
+
 	preTheme, _ := globalConfig.Theme.Get()
 	switch preTheme {
 	case "__DARK__":
-		mw.app.Settings().SetTheme(theme.DarkTheme())
+		mw.app.Settings().SetTheme(sidTheme.DarkTheme{})
 	case "__LIGHT__":
-		mw.app.Settings().SetTheme(theme.LightTheme())
+		mw.app.Settings().SetTheme(sidTheme.LightTheme{})
 	}
-
-	mw.win = mw.app.NewWindow(sidTheme.AppTitle)
-	mw.win.SetPadded(false)
 
 	// Main Menu
 	mw.mm = newMainMenu()
@@ -113,8 +111,8 @@ func NewMainWin() *MainWin {
 
 func (mw *MainWin) Run() {
 	defer func() {
-		_ = os.Unsetenv("FYNE_FONT")
-		_ = os.Unsetenv("FYNE_FONT_MONOSPACE")
+		//_ = os.Unsetenv("FYNE_FONT")
+		//_ = os.Unsetenv("FYNE_FONT_MONOSPACE")
 
 		base.Exit()
 	}()
@@ -129,6 +127,7 @@ func (mw *MainWin) Run() {
 		printErr(fmt.Errorf(sidTheme.RunAppFailedFormat, app, err))
 	}
 	log.Print(sidTheme.WelComeMsg)
+
 	mw.win.ShowAndRun()
 }
 

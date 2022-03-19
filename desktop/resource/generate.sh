@@ -21,3 +21,5 @@ ${fyne} bundle -pkg theme -name ResourceConfIndexIcon -a -o icons.go config_inde
 
 ${fyne} bundle -pkg theme -name ResourceRunAppIcon -a -o icons.go run_app.png
 ${fyne} bundle -pkg theme -name ResourceDefAppIcon -a -o icons.go def_app.png
+
+# use https://github.com/lusingander/fyne-theme-generator to generate theme file
