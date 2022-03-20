@@ -5,7 +5,7 @@ go 1.17
 replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7-0.20220103002232-5d2af9a563d4
 
 require (
-	fyne.io/fyne/v2 v2.1.3
+	fyne.io/fyne/v2 v2.1.4
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/go-cmd/cmd v1.4.0
 	github.com/mattn/go-sqlite3 v1.14.12
@@ -28,8 +28,6 @@ require (
 	github.com/goki/freetype v0.0.0-20181231101311-fa8a33aabaff // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
-	github.com/lusingander/colorpicker v0.7.1 // indirect
-	github.com/lusingander/fyne-theme-generator v0.2.3 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect

@@ -48,16 +48,16 @@ func (DarkTheme) Color(c fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
 
 func (DarkTheme) Font(s fyne.TextStyle) fyne.Resource {
 	if s.Monospace {
-		return theme.DefaultTheme().Font(s)
+		return fontMicrosoftYaHeiTtf
 	}
 	if s.Bold {
 		if s.Italic {
-			return theme.DefaultTheme().Font(s)
+			return fontMicrosoftYaHeiTtf
 		}
-		return theme.DefaultTheme().Font(s)
+		return fontMicrosoftYaHeiTtf
 	}
 	if s.Italic {
-		return theme.DefaultTheme().Font(s)
+		return fontMicrosoftYaHeiTtf
 	}
 	return fontMicrosoftYaHeiTtf
 }

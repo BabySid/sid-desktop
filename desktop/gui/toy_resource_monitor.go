@@ -34,16 +34,18 @@ func (trm *toyResourceMonitor) Init() error {
 
 	trm.widget = widget.NewCard("", sidTheme.ToyResourceMonitorTitle,
 		container.NewVBox(
-			widget.NewLabel(sidTheme.ToyResourceMonitorItem1),
-			trm.cpuIndicator,
-			widget.NewLabel(sidTheme.ToyResourceMonitorItem2),
-			trm.memIndicator,
+			widget.NewForm(
+				widget.NewFormItem(sidTheme.ToyResourceMonitorItem1, trm.cpuIndicator),
+				widget.NewFormItem(sidTheme.ToyResourceMonitorItem2, trm.memIndicator),
+			),
 			trm.upTime,
 		),
 	)
 
-	trm.widget.Resize(fyne.NewSize(ToyWidth, 230))
+	trm.widget.Resize(fyne.NewSize(ToyWidth, 150))
 
+	trm.Run()
+	
 	_ = base.GlobalScheduler.AddJob("toy_resource_monitor", "*/1 * * * * *", trm)
 
 	return nil
