@@ -36,12 +36,31 @@ const (
 	AppLauncherConfigFinishScanAppFormat = "Scan App finished. Found %d apps"
 	AppLauncherConfigCannotCloseMsg      = "Index is building. Cannot close"
 
+	AppFavoritesName             = "Favorites"
+	AppFavoritesSearchText       = "Type the name, url or tags of favorites"
+	AppFavoritesImportBtnText    = "Import"
+	AppFavoritesExportBtnText    = "Export"
+	AppFavoritesAddFavorBtnText  = "Add"
+	AppFavoritesFavorListOp1     = "Edit"
+	AppFavoritesFavorListOp2     = "Open"
+	AppFavoritesFavorListHeader1 = "Name(Tags)"
+	AppFavoritesFavorListHeader2 = "Url"
+	AppFavoritesAddFavorTitle    = "Add Favor"
+	AppFavoritesAddFavorName     = "Name"
+	AppFavoritesAddFavorUrl      = "Url"
+	AppFavoritesAddFavorTags     = "Tags"
+	AppFavoritesAddFavorExpand   = "Expand"
+	AppFavoritesAddFavorShrink   = "Shrink"
+
 	LogViewerRefreshBtn = "Refresh"
 	LogViewerTitle      = "Show Log"
 
-	AboutTitle = "About SID"
-	// AboutIntro todo Supplement and improve the content of this section
-	AboutIntro = "About me? About u?"
+	AboutTitle = "About"
+	AboutIntro = `## Sid Desktop  
+
+Sid desktop is a desktop software based on [Fyne](https://fyne.io/),  
+
+which is purely built by personal interests.`
 
 	OpenAppLocationFailedFormat = "open location for %s failed. %s"
 	RunAppFailedFormat          = "run %s failed. %s"
@@ -49,6 +68,7 @@ const (
 	RunCommandFailedFormat      = "run command %s failed. %s"
 	RunExplorerFailedFormat     = "run explorer to %s failed. %s"
 	RunAppIndexFailedFormat     = "app index run failed. %s"
+	OpenFavoritesFailedFormat   = "open favorites failed. %s"
 
 	// MenuSys begins for menus
 	MenuSys     = "System"
@@ -73,6 +93,8 @@ const (
 	ToyHotSearchTitle              = "Hot Search(BD)"
 	ToyHotSearchRefreshing         = "Content is Updating"
 	ToyHotSearchRefreshFormat      = "Refresh (%d/%d)"
+
+	NotEmptyValidatorFormat = "%s must not empty"
 
 	NetWorkErrorFormat   = "network error. %s"
 	InvalidContentFormat = "invalid content. %s"

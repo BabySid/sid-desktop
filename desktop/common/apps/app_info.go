@@ -88,5 +88,6 @@ func (app *AppInfo) Exec() error {
 	case "windows":
 		return base.ExecApp(app.FullPath)
 	}
-	panic(fmt.Errorf("NotSupport"))
+	base.AssertHere()
+	return nil
 }

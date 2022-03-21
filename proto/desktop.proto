@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+// run `protoc --go_out=plugins=grpc:. ./proto/desktop.proto` in root directory
+
+option go_package = "./proto";
+
+package proto;
+
+service Desktop {
+  rpc UploadWebInfo(UploadWebInfoRequest) returns (UploadWebInfoResponse) {}
+}
+
+message UploadWebInfoRequest {
+  int32 request_id = 1;
+  string url = 2;
+  string title = 3;
+}
+
+message UploadWebInfoResponse {
+
+}

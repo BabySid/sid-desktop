@@ -16,6 +16,8 @@ require (
 	github.com/sahilm/fuzzy v0.1.0
 	github.com/shirou/gopsutil/v3 v3.22.1
 	github.com/tc-hib/winres v0.0.0-00010101000000-000000000000
+	google.golang.org/grpc v1.45.0
+	google.golang.org/protobuf v1.27.1
 )
 
 require (
@@ -28,6 +30,7 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/goki/freetype v0.0.0-20181231101311-fa8a33aabaff // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/jchv/go-webview2 v0.0.0-20220126073738-2ea27096a5eb // indirect
 	github.com/jchv/go-winloader v0.0.0-20200815041850-dec1ee9a7fd5 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
@@ -49,5 +52,6 @@ require (
 	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf // indirect
 	golang.org/x/sys v0.0.0-20220111092808-5a964db01320 // indirect
 	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )

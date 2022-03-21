@@ -23,7 +23,7 @@ var (
 func GetAppLauncherDB() *AppLauncherDB {
 	appLauncherDBOnce.Do(func() {
 		appLauncherDB = &AppLauncherDB{
-			dbName:      "sid.db",
+			dbName:      "sid_app_launcher.db",
 			appIndexTbl: "app_index",
 		}
 	})
@@ -148,7 +148,7 @@ func (db *AppLauncherDB) AddAppToIndex(apps *apps.AppList) error {
 	return nil
 }
 
-func (db *AppLauncherDB) UpsertAppInfo(app apps.AppInfo) error {
+func (db *AppLauncherDB) UpdateAppInfo(app apps.AppInfo) error {
 	_, _, err := db.sqlite.Exec("update "+db.appIndexTbl+" set access_time = ? where id = ?",
 		app.AccessTime, app.AppID)
 	return err

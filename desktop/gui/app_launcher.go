@@ -103,7 +103,7 @@ func (al *appLauncher) createAppList() {
 			item.(*fyne.Container).Objects[2].(*widget.Label).SetText("")
 		},
 	)
-	// App数据区
+	// App Data
 	al.appList = widget.NewListWithData(
 		al.appBinding,
 		func() fyne.CanvasObject {
@@ -145,7 +145,7 @@ func (al *appLauncher) createAppList() {
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
 				app.AccessTime = time.Now().Unix()
 				go func() {
-					err := storage.GetAppLauncherDB().UpsertAppInfo(app)
+					err := storage.GetAppLauncherDB().UpdateAppInfo(app)
 					if err != nil {
 						printErr(fmt.Errorf(sidTheme.UpdateAppIndexFailedFormat, app.FullPath, err))
 					}

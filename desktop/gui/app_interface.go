@@ -14,5 +14,6 @@ var (
 	appRegister = []appInterface{
 		&appWelcome{},
 		&appLauncher{},
+		&appFavorites{},
 	}
 )

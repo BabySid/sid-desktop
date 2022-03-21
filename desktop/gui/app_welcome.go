@@ -5,7 +5,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"net/url"
+	"sid-desktop/desktop/common"
 	sidTheme "sid-desktop/desktop/theme"
 )
 
@@ -34,11 +34,11 @@ func (a *appWelcome) LazyInit() error {
 			wel,
 			logo,
 			container.NewHBox(
-				widget.NewHyperlink("百度", parseURL("https://fyne.io/")),
+				widget.NewHyperlink("百度", common.ParseURL("https://fyne.io/")),
 				widget.NewLabel("-"),
-				widget.NewHyperlink("documentation", parseURL("https://developer.fyne.io/")),
+				widget.NewHyperlink("documentation", common.ParseURL("https://developer.fyne.io/")),
 				widget.NewLabel("-"),
-				widget.NewHyperlink("sponsor", parseURL("https://fyne.io/sponsor/")),
+				widget.NewHyperlink("sponsor", common.ParseURL("https://fyne.io/sponsor/")),
 			),
 		))
 	return nil
@@ -58,10 +58,4 @@ func (a *appWelcome) OpenDefault() bool {
 
 func (a *appWelcome) OnClose() bool {
 	return true
-}
-
-func parseURL(urlStr string) *url.URL {
-	link, _ := url.Parse(urlStr)
-
-	return link
 }
