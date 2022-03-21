@@ -8,6 +8,8 @@ require (
 	fyne.io/fyne/v2 v2.1.4
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/go-cmd/cmd v1.4.0
+	github.com/jchv/go-webview-selector v0.0.0-20220126075917-13df59bce3cf
+	github.com/jessevdk/go-flags v1.5.0
 	github.com/mattn/go-sqlite3 v1.14.12
 	github.com/parsiya/golnk v0.0.0-20200515071614-5db3107130ce
 	github.com/robfig/cron/v3 v3.0.1
@@ -26,6 +28,8 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/goki/freetype v0.0.0-20181231101311-fa8a33aabaff // indirect
+	github.com/jchv/go-webview2 v0.0.0-20220126073738-2ea27096a5eb // indirect
+	github.com/jchv/go-winloader v0.0.0-20200815041850-dec1ee9a7fd5 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
@@ -38,6 +42,7 @@ require (
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	github.com/tklauser/numcpus v0.3.0 // indirect
+	github.com/webview/webview v0.0.0-20220314230258-a2b7746141c3 // indirect
 	github.com/yuin/goldmark v1.3.8 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
