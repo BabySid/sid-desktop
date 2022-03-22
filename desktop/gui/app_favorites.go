@@ -229,13 +229,27 @@ func (af *appFavorites) addFavor() {
 
 func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 	url := widget.NewEntry()
-	url.Validator = validation.NewRegexp(`\S+`, sidTheme.AppFavoritesAddFavorUrl+" must not be empty")
+	url.Validator = validation.NewRegexp(
+		`(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`,
+		"please input right URL")
+	url.SetPlaceHolder(sidTheme.AppFavoritesAddFavorUrlPlaceHolder)
 
 	name := widget.NewEntry()
 	name.Validator = validation.NewRegexp(`\S+`, sidTheme.AppFavoritesAddFavorName+" must not be empty")
 
 	tags := widget.NewEntry()
 	expand := widget.NewButtonWithIcon(sidTheme.AppFavoritesAddFavorExpand, sidTheme.ResourceExpandDownIcon, nil)
+
+	url.OnSubmitted = func(s string) {
+		tl, err := base.GetWebPageTitle(s)
+		if err != nil {
+			printErr(fmt.Errorf(sidTheme.WebPageProcessErrorFormat, err))
+		}
+
+		if tl != "" {
+			name.SetText(tl)
+		}
+	}
 
 	var rmBtn *widget.Button
 	if favor != nil {

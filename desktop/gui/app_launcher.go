@@ -39,7 +39,7 @@ func (al *appLauncher) LazyInit() error {
 	base.RegisterAtExit(storage.GetAppLauncherDB().Close)
 
 	al.searchEntry = widget.NewEntry()
-	al.searchEntry.SetPlaceHolder(sidTheme.AppLauncherSearchText)
+	al.searchEntry.SetPlaceHolder(sidTheme.AppLauncherSearchPlaceHolder)
 	al.searchEntry.OnChanged = al.searchApp
 	al.searchEntry.OnSubmitted = al.execCommand
 
