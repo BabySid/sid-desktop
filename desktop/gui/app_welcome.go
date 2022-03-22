@@ -5,7 +5,6 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"sid-desktop/desktop/common"
 	sidTheme "sid-desktop/desktop/theme"
 )
 
@@ -33,13 +32,6 @@ func (a *appWelcome) LazyInit() error {
 		container.NewVBox(
 			wel,
 			logo,
-			container.NewHBox(
-				widget.NewHyperlink("百度", common.ParseURL("https://fyne.io/")),
-				widget.NewLabel("-"),
-				widget.NewHyperlink("documentation", common.ParseURL("https://developer.fyne.io/")),
-				widget.NewLabel("-"),
-				widget.NewHyperlink("sponsor", common.ParseURL("https://fyne.io/sponsor/")),
-			),
 		))
 	return nil
 }
