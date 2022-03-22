@@ -1,9 +1,10 @@
 package theme
 
 const (
-	AppTitle   = "SID Desktop"
+	AppTitle   = "Sid Desktop"
 	WelComeMsg = "Welcome to Sid Desktop"
 
+	// QuitAppTitle begins for common messages
 	QuitAppTitle = "Want To Quit?"
 	QuitAppMsg   = "Are you sure to want to quit?"
 
@@ -11,6 +12,11 @@ const (
 	ConfirmText = "OK"
 
 	CannotCloseTitle = "Cannot Close"
+
+	WebPageProcessErrorFormat = "process webpage failed. %s"
+	NetWorkErrorFormat        = "network error. %s"
+	InvalidContentFormat      = "invalid content. %s"
+	InternalErrorFormat       = "there is a internal error: %s"
 
 	// AppWelcomeName begins for built-in apps
 	AppWelcomeName = "WelCome"
@@ -35,6 +41,12 @@ const (
 	AppLauncherConfigStartScanApp        = "Begin to scan app..."
 	AppLauncherConfigFinishScanAppFormat = "Scan App finished. Found %d apps"
 	AppLauncherConfigCannotCloseMsg      = "Index is building. Cannot close"
+	OpenAppLocationFailedFormat          = "open location for %s failed. %s"
+	RunAppFailedFormat                   = "run %s failed. %s"
+	UpdateAppIndexFailedFormat           = "update index for %s failed. %s"
+	RunCommandFailedFormat               = "run command %s failed. %s"
+	RunExplorerFailedFormat              = "run explorer to %s failed. %s"
+	RunAppIndexFailedFormat              = "app index run failed. %s"
 
 	AppFavoritesName                   = "Favorites"
 	AppFavoritesSearchText             = "Type the name, url or tags of favorites"
@@ -53,6 +65,10 @@ const (
 	AppFavoritesAddFavorTags           = "Tags"
 	AppFavoritesAddFavorExpand         = "Expand"
 	AppFavoritesAddFavorShrink         = "Shrink"
+	ProcessFavoritesFailedFormat       = "process favorites failed. %s"
+	OpenFavoritesFailedFormat          = "open favorites failed. %s"
+	ExportFavoritesFailedFormat        = "export favorites failed. %s"
+	ImportFavoritesFailedFormat        = "import favorites failed. %s"
 
 	LogViewerRefreshBtn = "Refresh"
 	LogViewerTitle      = "Show Log"
@@ -63,16 +79,6 @@ const (
 Sid desktop is a desktop software based on [Fyne](https://fyne.io/),  
 
 which is purely built by personal interests.`
-
-	OpenAppLocationFailedFormat = "open location for %s failed. %s"
-	RunAppFailedFormat          = "run %s failed. %s"
-	UpdateAppIndexFailedFormat  = "update index for %s failed. %s"
-	RunCommandFailedFormat      = "run command %s failed. %s"
-	RunExplorerFailedFormat     = "run explorer to %s failed. %s"
-	RunAppIndexFailedFormat     = "app index run failed. %s"
-	OpenFavoritesFailedFormat   = "open favorites failed. %s"
-	ExportFavoritesFailedFormat = "export favorites failed. %s"
-	ImportFavoritesFailedFormat = "import favorites failed. %s"
 
 	// MenuSys begins for menus
 	MenuSys     = "System"
@@ -97,9 +103,4 @@ which is purely built by personal interests.`
 	ToyHotSearchTitle              = "Hot Search(BD)"
 	ToyHotSearchRefreshing         = "Content is Updating"
 	ToyHotSearchRefreshFormat      = "Refresh (%d/%d)"
-
-	WebPageProcessErrorFormat = "process webpage failed. %s"
-	NetWorkErrorFormat        = "network error. %s"
-	InvalidContentFormat      = "invalid content. %s"
-	InternalErrorFormat       = "there is a internal error: %s"
 )
