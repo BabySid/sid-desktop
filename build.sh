@@ -2,4 +2,4 @@
 
 # build desktop
 cd desktop
-go build -o go_build_desktop.exe .
+go build -ldflags -H=windowsgui -o sid_desktop.exe .
