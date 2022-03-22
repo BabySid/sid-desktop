@@ -1,6 +1,8 @@
 package gui
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -22,7 +24,7 @@ var _ appInterface = (*appFavorites)(nil)
 type appFavorites struct {
 	searchEntry  *widget.Entry
 	importFavor  *widget.Button
-	addFavor     *widget.Button
+	newFavor     *widget.Button
 	exportFavor  *widget.Button
 	favorHeader  *widget.List
 	favorList    *widget.List
@@ -42,9 +44,9 @@ func (af *appFavorites) LazyInit() error {
 	af.searchEntry.SetPlaceHolder(sidTheme.AppFavoritesSearchText)
 	af.searchEntry.OnChanged = af.searchFavor
 
-	af.addFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesAddFavorBtnText, sidTheme.ResourceAddFavorIcon, af.addOneFavor)
-	af.importFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesImportBtnText, sidTheme.ResourceImportFavorIcon, nil)
-	af.exportFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesExportBtnText, sidTheme.ResourceExportFavorIcon, nil)
+	af.newFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesAddFavorBtnText, sidTheme.ResourceAddFavorIcon, af.addFavor)
+	af.importFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesImportBtnText, sidTheme.ResourceImportFavorIcon, af.importFavors)
+	af.exportFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesExportBtnText, sidTheme.ResourceExportFavorIcon, af.exportFavors)
 
 	af.favorBinding = binding.NewUntypedList()
 	af.createFavorList()
@@ -53,7 +55,7 @@ func (af *appFavorites) LazyInit() error {
 	af.tabItem.Content = container.NewBorder(
 		container.NewGridWithColumns(2,
 			af.searchEntry,
-			container.NewHBox(layout.NewSpacer(), af.importFavor, af.exportFavor, af.addFavor)), nil, nil, nil,
+			container.NewHBox(layout.NewSpacer(), af.importFavor, af.exportFavor, af.newFavor)), nil, nil, nil,
 		container.NewBorder(af.favorHeader, nil, nil, nil, af.favorList),
 	)
 
@@ -76,6 +78,76 @@ func (af *appFavorites) OpenDefault() bool {
 
 func (af *appFavorites) OnClose() bool {
 	return true
+}
+
+func (af *appFavorites) exportFavors() {
+	d := dialog.NewFileSave(func(closer fyne.URIWriteCloser, err error) {
+		if err != nil {
+			printErr(fmt.Errorf(sidTheme.ExportFavoritesFailedFormat, err))
+			return
+		}
+		if closer != nil {
+			defer closer.Close()
+			favors := af.favorCache.GetFavorites()
+
+			data := ""
+			for _, favor := range favors {
+				t, _ := json.Marshal(favor)
+				if data != "" {
+					data += "\n"
+				}
+				data += string(t)
+			}
+
+			_, err := closer.Write([]byte(data))
+			if err != nil {
+				printErr(fmt.Errorf(sidTheme.ExportFavoritesFailedFormat, err))
+			}
+		}
+	}, globalWin.win)
+	d.Show()
+}
+
+func (af *appFavorites) importFavors() {
+	d := dialog.NewFileOpen(func(closer fyne.URIReadCloser, err error) {
+		if err != nil {
+			printErr(fmt.Errorf(sidTheme.ImportFavoritesFailedFormat, err))
+			return
+		}
+
+		if closer != nil {
+			defer closer.Close()
+
+			data, err := common.ReadURI(closer)
+			if err != nil {
+				printErr(fmt.Errorf(sidTheme.ImportFavoritesFailedFormat, err))
+				return
+			}
+
+			favorBytes := bytes.Split(data, []byte("\n"))
+
+			favors := common.NewFavoritesList()
+			for _, item := range favorBytes {
+				var fav common.Favorites
+
+				err = json.Unmarshal(item, &fav)
+				if err != nil {
+					printErr(fmt.Errorf(sidTheme.ImportFavoritesFailedFormat, err))
+					return
+				}
+
+				favors.Append(fav)
+			}
+
+			err = storage.GetAppFavoritesDB().AddFavoritesList(favors)
+			if err != nil {
+				printErr(fmt.Errorf(sidTheme.ImportFavoritesFailedFormat, err))
+			}
+
+			af.reloadFavorList()
+		}
+	}, globalWin.win)
+	d.Show()
 }
 
 func (af *appFavorites) createFavorList() {
@@ -120,8 +192,7 @@ func (af *appFavorites) createFavorList() {
 
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(sidTheme.AppFavoritesFavorListOp1)
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
-				_ = storage.GetAppFavoritesDB().RmFavorites(favor)
-				af.reloadFavorList()
+				af.editOneFavor(favor)
 			}
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).SetText(sidTheme.AppFavoritesFavorListOp2)
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
@@ -148,15 +219,28 @@ func (af *appFavorites) searchFavor(name string) {
 	}
 }
 
-func (af *appFavorites) addOneFavor() {
+func (af *appFavorites) editOneFavor(favor common.Favorites) {
+	af.showFavorDialog(&favor)
+}
+
+func (af *appFavorites) addFavor() {
+	af.showFavorDialog(nil)
+}
+
+func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
+	url := widget.NewEntry()
+	url.Validator = validation.NewRegexp(`\S+`, sidTheme.AppFavoritesAddFavorUrl+" must not be empty")
+
 	name := widget.NewEntry()
 	name.Validator = validation.NewRegexp(`\S+`, sidTheme.AppFavoritesAddFavorName+" must not be empty")
-	url := widget.NewEntry()
-	url.SetText("https://")
-	url.Validator = validation.NewRegexp(`\S+`, sidTheme.AppFavoritesAddFavorUrl+" must not be empty")
 
 	tags := widget.NewEntry()
 	expand := widget.NewButtonWithIcon(sidTheme.AppFavoritesAddFavorExpand, sidTheme.ResourceExpandDownIcon, nil)
+
+	var rmBtn *widget.Button
+	if favor != nil {
+		rmBtn = widget.NewButtonWithIcon(sidTheme.AppFavoritesRmFavorBtnText, sidTheme.ResourceRmFavorIcon, nil)
+	}
 
 	tagArray := binding.NewStringList()
 	tagList := widget.NewListWithData(
@@ -168,7 +252,25 @@ func (af *appFavorites) addOneFavor() {
 			o.(*widget.Label).Bind(item.(binding.String))
 		},
 	)
+	tags.OnChanged = func(s string) {
+		arr := strings.Split(s, common.FavorTagSep)
+		_ = tagArray.Set(arr)
+	}
+
+	if favor != nil { // edit or remove
+		url.SetText(favor.Url)
+		name.SetText(favor.Name)
+		tags.SetText(strings.Join(favor.Tags, common.FavorTagSep))
+	}
+
 	tagList.Hide()
+
+	var opContainer *fyne.Container
+	if favor != nil {
+		opContainer = container.NewHBox(expand, layout.NewSpacer(), rmBtn)
+	} else {
+		opContainer = container.NewHBox(expand, layout.NewSpacer())
+	}
 	cont := container.NewBorder(
 		container.NewVBox(
 			widget.NewForm(
@@ -176,31 +278,37 @@ func (af *appFavorites) addOneFavor() {
 				widget.NewFormItem(sidTheme.AppFavoritesAddFavorName, name),
 				widget.NewFormItem(sidTheme.AppFavoritesAddFavorTags, tags),
 			),
-			container.NewHBox(expand, layout.NewSpacer()),
+			opContainer,
 		),
 		nil, nil, nil,
 		tagList,
 	)
-
-	tags.OnChanged = func(s string) {
-		arr := strings.Split(s, common.FavorTagSep)
-		_ = tagArray.Set(arr)
-	}
 
 	win := dialog.NewCustomConfirm(
 		sidTheme.AppFavoritesAddFavorTitle, sidTheme.ConfirmText, sidTheme.DismissText,
 		cont, func(b bool) {
 			if b {
 				t, _ := tagArray.Get()
-				favor := common.Favorites{
-					Name:       name.Text,
-					Url:        url.Text,
-					Tags:       t,
-					CreateTime: time.Now().Unix(),
+
+				var tempFavor common.Favorites
+				if favor != nil {
+					tempFavor = *favor
 				}
-				err := storage.GetAppFavoritesDB().AddFavorites(favor)
-				if err != nil {
-					printErr(fmt.Errorf(sidTheme.OpenFavoritesFailedFormat, err))
+				tempFavor.Name = name.Text
+				tempFavor.Url = url.Text
+				tempFavor.Tags = t
+				tempFavor.CreateTime = time.Now().Unix()
+
+				if favor != nil {
+					err := storage.GetAppFavoritesDB().UpdateFavorites(tempFavor)
+					if err != nil {
+						printErr(fmt.Errorf(sidTheme.OpenFavoritesFailedFormat, err))
+					}
+				} else {
+					err := storage.GetAppFavoritesDB().AddFavorites(tempFavor)
+					if err != nil {
+						printErr(fmt.Errorf(sidTheme.OpenFavoritesFailedFormat, err))
+					}
 				}
 
 				af.reloadFavorList()
@@ -221,6 +329,14 @@ func (af *appFavorites) addOneFavor() {
 
 			expand.SetText(sidTheme.AppFavoritesAddFavorShrink)
 			expand.SetIcon(sidTheme.ResourceExpandUpIcon)
+		}
+	}
+
+	if rmBtn != nil {
+		rmBtn.OnTapped = func() {
+			_ = storage.GetAppFavoritesDB().RmFavorites(*favor)
+			af.reloadFavorList()
+			win.Hide()
 		}
 	}
 

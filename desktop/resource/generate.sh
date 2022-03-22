@@ -24,6 +24,7 @@ ${fyne} bundle -pkg theme -name ResourceDefAppIcon -a -o ../theme/icons.go def_a
 
 ${fyne} bundle -pkg theme -name ResourceFavoritesIcon -a -o ../theme/icons.go favor.png
 ${fyne} bundle -pkg theme -name ResourceAddFavorIcon -a -o ../theme/icons.go add_favor.png
+${fyne} bundle -pkg theme -name ResourceRmFavorIcon -a -o ../theme/icons.go rm_favor.png
 ${fyne} bundle -pkg theme -name ResourceEditFavorIcon -a -o ../theme/icons.go edit_favor.png
 ${fyne} bundle -pkg theme -name ResourceOpenFavorIcon -a -o ../theme/icons.go open_favor.png
 ${fyne} bundle -pkg theme -name ResourceExportFavorIcon -a -o ../theme/icons.go export_favor.png

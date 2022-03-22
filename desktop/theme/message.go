@@ -41,6 +41,7 @@ const (
 	AppFavoritesImportBtnText    = "Import"
 	AppFavoritesExportBtnText    = "Export"
 	AppFavoritesAddFavorBtnText  = "Add"
+	AppFavoritesRmFavorBtnText   = "Remove"
 	AppFavoritesFavorListOp1     = "Edit"
 	AppFavoritesFavorListOp2     = "Open"
 	AppFavoritesFavorListHeader1 = "Name(Tags)"
@@ -69,6 +70,8 @@ which is purely built by personal interests.`
 	RunExplorerFailedFormat     = "run explorer to %s failed. %s"
 	RunAppIndexFailedFormat     = "app index run failed. %s"
 	OpenFavoritesFailedFormat   = "open favorites failed. %s"
+	ExportFavoritesFailedFormat = "export favorites failed. %s"
+	ImportFavoritesFailedFormat = "import favorites failed. %s"
 
 	// MenuSys begins for menus
 	MenuSys     = "System"
@@ -93,8 +96,6 @@ which is purely built by personal interests.`
 	ToyHotSearchTitle              = "Hot Search(BD)"
 	ToyHotSearchRefreshing         = "Content is Updating"
 	ToyHotSearchRefreshFormat      = "Refresh (%d/%d)"
-
-	NotEmptyValidatorFormat = "%s must not empty"
 
 	NetWorkErrorFormat   = "network error. %s"
 	InvalidContentFormat = "invalid content. %s"

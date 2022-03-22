@@ -78,10 +78,10 @@ const (
 )
 
 type Favorites struct {
-	ID         int64
-	Name       string
-	Url        string
-	Tags       []string
-	CreateTime int64
-	AccessTime int64
+	ID         int64    `json:"-"`
+	Name       string   `json:"name"`
+	Url        string   `json:"url"`
+	Tags       []string `json:"tags"`
+	CreateTime int64    `json:"create_time"`
+	AccessTime int64    `json:"access_time"`
 }
