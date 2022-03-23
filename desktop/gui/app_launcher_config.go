@@ -135,7 +135,7 @@ func newAppLauncherConfig(launcher *appLauncher) *AppLauncherConfig {
 		pathCont))
 
 	alc.Win.SetCloseIntercept(alc.closeHandle)
-	alc.Win.Resize(fyne.NewSize(800, 600))
+	alc.Win.Resize(fyne.NewSize(600, 300))
 	alc.Win.CenterOnScreen()
 	return &alc
 }
