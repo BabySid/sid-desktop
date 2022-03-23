@@ -2,11 +2,11 @@ package common
 
 import (
 	"bufio"
+	"github.com/BabySid/gobase"
 	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"sid-desktop/base"
 )
 
 var _ io.Writer = (*LogWriter)(nil)
@@ -19,13 +19,13 @@ type LogWriterOption struct {
 
 type LogWriter struct {
 	opt      LogWriterOption
-	logCache *base.Queue
+	logCache *gobase.Queue
 }
 
 func NewLogWriter(opt LogWriterOption) *LogWriter {
 	var lw LogWriter
 	lw.opt = opt
-	lw.logCache = base.NewQueue()
+	lw.logCache = gobase.NewQueue()
 	lw.logCache.SetCapacity(opt.CacheCapacity)
 
 	_ = lw.loadLogFromLogFile()

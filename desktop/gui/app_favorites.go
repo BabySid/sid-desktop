@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
-	"sid-desktop/base"
+	"github.com/BabySid/gobase"
 	"sid-desktop/desktop/common"
 	"sid-desktop/desktop/storage"
 	sidTheme "sid-desktop/desktop/theme"
@@ -38,7 +38,7 @@ func (af *appFavorites) LazyInit() error {
 	if err != nil {
 		return err
 	}
-	base.RegisterAtExit(storage.GetAppFavoritesDB().Close)
+	gobase.RegisterAtExit(storage.GetAppFavoritesDB().Close)
 
 	af.searchEntry = widget.NewEntry()
 	af.searchEntry.SetPlaceHolder(sidTheme.AppFavoritesSearchText)
@@ -241,7 +241,7 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 	expand := widget.NewButtonWithIcon(sidTheme.AppFavoritesAddFavorExpand, sidTheme.ResourceExpandDownIcon, nil)
 
 	url.OnSubmitted = func(s string) {
-		tl, err := base.GetWebPageTitle(s)
+		tl, err := gobase.GetWebPageTitle(s)
 		if err != nil {
 			printErr(fmt.Errorf(sidTheme.WebPageProcessErrorFormat, err))
 		}

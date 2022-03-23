@@ -2,14 +2,14 @@ package storage
 
 import (
 	"database/sql"
+	"github.com/BabySid/gobase"
 	"path/filepath"
-	"sid-desktop/base"
 	"sid-desktop/desktop/common/apps"
 	"sync"
 )
 
 type AppLauncherDB struct {
-	sqlite base.SQLite
+	sqlite gobase.SQLite
 	dbName string
 
 	appIndexTbl string
@@ -74,7 +74,7 @@ func (db *AppLauncherDB) NeedInit() (bool, error) {
 		return false, err
 	}
 
-	if base.ContainsString(tables, db.appIndexTbl) < 0 {
+	if gobase.ContainsString(tables, db.appIndexTbl) < 0 {
 		return true, nil
 	}
 

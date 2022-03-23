@@ -6,8 +6,8 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
+	"github.com/BabySid/gobase"
 	"log"
-	"sid-desktop/base"
 	"sid-desktop/desktop/common"
 	sidTheme "sid-desktop/desktop/theme"
 	"time"
@@ -51,8 +51,8 @@ var (
 )
 
 func NewMainWin() *MainWin {
-	base.NewScheduler().Start()
-	base.RegisterAtExit(base.GlobalScheduler.Stop)
+	gobase.NewScheduler().Start()
+	gobase.RegisterAtExit(gobase.GlobalScheduler.Stop)
 
 	var mw MainWin
 	mw.app = app.NewWithID(sidTheme.AppTitle) // Must Set First
@@ -115,7 +115,7 @@ func (mw *MainWin) Run() {
 		//_ = os.Unsetenv("FYNE_FONT")
 		//_ = os.Unsetenv("FYNE_FONT_MONOSPACE")
 
-		base.Exit()
+		gobase.Exit()
 	}()
 
 	go func() {

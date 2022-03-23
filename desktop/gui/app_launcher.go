@@ -8,8 +8,8 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
 	"path/filepath"
-	"sid-desktop/base"
 	"sid-desktop/desktop/common/apps"
 	"sid-desktop/desktop/storage"
 	sidTheme "sid-desktop/desktop/theme"
@@ -36,14 +36,14 @@ func (al *appLauncher) LazyInit() error {
 	if err != nil {
 		return err
 	}
-	base.RegisterAtExit(storage.GetAppLauncherDB().Close)
+	gobase.RegisterAtExit(storage.GetAppLauncherDB().Close)
 
 	al.searchEntry = widget.NewEntry()
 	al.searchEntry.SetPlaceHolder(sidTheme.AppLauncherSearchPlaceHolder)
 	al.searchEntry.OnChanged = al.searchApp
 	al.searchEntry.OnSubmitted = al.execCommand
 
-	al.explorer = widget.NewSelect(base.GetDiskPartitions(), al.openExplorer)
+	al.explorer = widget.NewSelect(gobase.GetDiskPartitions(), al.openExplorer)
 	al.explorer.PlaceHolder = sidTheme.AppLauncherExplorerText
 
 	al.config = widget.NewButtonWithIcon(sidTheme.AppLauncherConfigBtnText, sidTheme.ResourceConfIndexIcon, al.openConfig)
@@ -131,12 +131,12 @@ func (al *appLauncher) createAppList() {
 			if app.AccessTime <= 0 {
 				item.(*fyne.Container).Objects[1].(*widget.Label).SetText("-")
 			} else {
-				item.(*fyne.Container).Objects[1].(*widget.Label).SetText(base.FormatTimeStamp(app.AccessTime))
+				item.(*fyne.Container).Objects[1].(*widget.Label).SetText(gobase.FormatTimeStamp(app.AccessTime))
 			}
 
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(sidTheme.AppLauncherAppListOp1)
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
-				err := base.ExecExplorer([]string{filepath.Dir(app.FullPath)})
+				err := gobase.ExecExplorer([]string{filepath.Dir(app.FullPath)})
 				if err != nil {
 					printErr(fmt.Errorf(sidTheme.OpenAppLocationFailedFormat, app.FullPath, err))
 				}
@@ -204,14 +204,14 @@ func (al *appLauncher) searchApp(name string) {
 }
 
 func (al *appLauncher) execCommand(cmd string) {
-	err := base.ExecApp(cmd)
+	err := gobase.ExecApp(cmd)
 	if err != nil {
 		printErr(fmt.Errorf(sidTheme.RunCommandFailedFormat, cmd, err))
 	}
 }
 
 func (al *appLauncher) openExplorer(dir string) {
-	err := base.ExecExplorer([]string{dir})
+	err := gobase.ExecExplorer([]string{dir})
 	if err != nil {
 		printErr(fmt.Errorf(sidTheme.RunExplorerFailedFormat, dir, err))
 	}

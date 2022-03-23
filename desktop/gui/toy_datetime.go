@@ -6,7 +6,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
-	"sid-desktop/base"
+	"github.com/BabySid/gobase"
 	sidTheme "sid-desktop/desktop/theme"
 	"time"
 )
@@ -43,7 +43,7 @@ func (tdt *toyDateTime) Init() error {
 	// for init
 	tdt.Run()
 
-	_ = base.GlobalScheduler.AddJob("toy_datetime", "*/1 * * * * *", tdt)
+	_ = gobase.GlobalScheduler.AddJob("toy_datetime", "*/1 * * * * *", tdt)
 	// todo assert(err == nil)
 	return nil
 }
@@ -67,12 +67,12 @@ var (
 func (tdt *toyDateTime) Run() {
 	now := time.Now()
 
-	tdt.date.Text = base.FormatTimeStampWithFormat(now.Unix(), base.DateFormat)
+	tdt.date.Text = gobase.FormatTimeStampWithFormat(now.Unix(), gobase.DateFormat)
 	tdt.date.Refresh()
 
 	tdt.week.Text = weekStr[now.Weekday()]
 	tdt.week.Refresh()
 
-	tdt.time.Text = base.FormatTimeStampWithFormat(now.Unix(), base.TimeFormat)
+	tdt.time.Text = gobase.FormatTimeStampWithFormat(now.Unix(), gobase.TimeFormat)
 	tdt.time.Refresh()
 }

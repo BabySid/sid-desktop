@@ -2,6 +2,7 @@ package apps
 
 import (
 	"bytes"
+	"github.com/BabySid/gobase"
 	"image"
 	"image/png"
 	"io/ioutil"
@@ -9,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"sid-desktop/base"
 	"strings"
 	"time"
 
@@ -34,7 +34,7 @@ func init() {
 		DefaultAppPaths = append(DefaultAppPaths, filepath.Join(homeDir, "AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch"))
 	}
 
-	disks := base.GetDiskPartitions()
+	disks := gobase.GetDiskPartitions()
 	programFiles := []string{
 		"Program Files (x86)",
 		"Program Files",

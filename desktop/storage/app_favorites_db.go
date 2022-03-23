@@ -2,15 +2,15 @@ package storage
 
 import (
 	"database/sql"
+	"github.com/BabySid/gobase"
 	"path/filepath"
-	"sid-desktop/base"
 	"sid-desktop/desktop/common"
 	"strings"
 	"sync"
 )
 
 type AppFavoritesDB struct {
-	sqlite base.SQLite
+	sqlite gobase.SQLite
 	dbName string
 
 	appFavoritesTbl string
@@ -75,7 +75,7 @@ func (db *AppFavoritesDB) NeedInit() (bool, error) {
 		return false, err
 	}
 
-	if base.ContainsString(tables, db.appFavoritesTbl) < 0 {
+	if gobase.ContainsString(tables, db.appFavoritesTbl) < 0 {
 		return true, nil
 	}
 

@@ -5,7 +5,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"sid-desktop/base"
+	"github.com/BabySid/gobase"
 	sidTheme "sid-desktop/desktop/theme"
 )
 
@@ -45,8 +45,8 @@ func (trm *toyResourceMonitor) Init() error {
 	trm.widget.Resize(fyne.NewSize(ToyWidth, 150))
 
 	trm.Run()
-	
-	_ = base.GlobalScheduler.AddJob("toy_resource_monitor", "*/1 * * * * *", trm)
+
+	_ = gobase.GlobalScheduler.AddJob("toy_resource_monitor", "*/1 * * * * *", trm)
 
 	return nil
 }
@@ -56,10 +56,10 @@ func (trm *toyResourceMonitor) GetToyCard() *widget.Card {
 }
 
 func (trm *toyResourceMonitor) Run() {
-	trm.cpuIndicator.SetValue(base.GetCPUUsage())
-	trm.memIndicator.SetValue(base.GetMEMUsage())
+	trm.cpuIndicator.SetValue(gobase.GetCPUUsage())
+	trm.memIndicator.SetValue(gobase.GetMEMUsage())
 
-	uptime := base.GetUpTime()
+	uptime := gobase.GetUpTime()
 
 	hr, min, sec := 0, 0, 0
 	if uptime > 3600 {

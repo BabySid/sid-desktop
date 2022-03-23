@@ -2,9 +2,9 @@ package apps
 
 import (
 	"fmt"
+	"github.com/BabySid/gobase"
 	"github.com/sahilm/fuzzy"
 	"runtime"
-	"sid-desktop/base"
 )
 
 type AppList struct {
@@ -86,8 +86,8 @@ type AppInfo struct {
 func (app *AppInfo) Exec() error {
 	switch runtime.GOOS {
 	case "windows":
-		return base.ExecApp(app.FullPath)
+		return gobase.ExecApp(app.FullPath)
 	}
-	base.AssertHere()
+	gobase.AssertHere()
 	return nil
 }

@@ -7,10 +7,10 @@ import (
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
 	"github.com/PuerkitoBio/goquery"
 	"math"
 	"net/http"
-	"sid-desktop/base"
 	sidTheme "sid-desktop/desktop/theme"
 	"strconv"
 	"sync"
@@ -51,7 +51,7 @@ func (ths *toyHotSearch) Init() error {
 			o, _ := data.(binding.Untyped).Get()
 			url := o.(hotSearchURL)
 			src := strconv.Itoa(url.id) + "." + url.text
-			txt := base.CutUTF8(src, 0, 16)
+			txt := gobase.CutUTF8(src, 0, 16)
 			if txt != src {
 				txt += "..."
 			}
@@ -66,10 +66,10 @@ func (ths *toyHotSearch) Init() error {
 			nil, nil, nil, ths.hotList),
 	)
 	ths.widget.Resize(fyne.NewSize(ToyWidth, 240))
-	
+
 	// for init
 	go ths.Run()
-	_ = base.GlobalScheduler.AddJob("toy_hot_search", "0 */30 * * * *", ths)
+	_ = gobase.GlobalScheduler.AddJob("toy_hot_search", "0 */30 * * * *", ths)
 
 	return nil
 }

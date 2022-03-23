@@ -9,7 +9,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"sid-desktop/base"
+	"github.com/BabySid/gobase"
 	"sid-desktop/desktop/common"
 	"sid-desktop/desktop/common/apps"
 	"sid-desktop/desktop/storage"
@@ -76,7 +76,7 @@ func newAppLauncherConfig(launcher *appLauncher) *AppLauncherConfig {
 			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(path)
 			item.(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
 				pathTemp, _ := alc.pathBinding.Get()
-				idx := base.ContainsString(pathTemp, path)
+				idx := gobase.ContainsString(pathTemp, path)
 				pathTemp = append(pathTemp[:idx], pathTemp[idx+1:]...)
 				_ = alc.pathBinding.Set(pathTemp)
 			}
