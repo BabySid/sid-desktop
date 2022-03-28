@@ -6,6 +6,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/data/validation"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
@@ -14,24 +15,26 @@ import (
 	"sid-desktop/desktop/storage"
 	sidTheme "sid-desktop/desktop/theme"
 	"strings"
+	"sync/atomic"
 	"time"
 )
 
 var _ appInterface = (*appScriptRunner)(nil)
 
 type appScriptRunner struct {
-	newScriptBtn  *widget.Button
-	saveScriptBtn *widget.Button
-	runScriptBtn  *widget.Button
-	scriptLineNo  *widget.Label
-	scriptBody    *widget.Entry
-	logLabel      *widget.Label
-	scriptLog     *widget.Entry
-	curScriptFile *common.ScriptFile
-	scriptBinding binding.UntypedList
-	scriptFiles   *widget.List
-	scriptName    *widget.Entry
-	tabItem       *container.TabItem
+	newScriptBtn   *widget.Button
+	saveScriptBtn  *widget.Button
+	runScriptBtn   *widget.Button
+	scriptLineNo   *widget.Label
+	scriptBody     *widget.Entry
+	logLabel       *widget.Label
+	scriptLog      *widget.Entry
+	curScriptFile  *common.ScriptFile
+	scriptBinding  binding.UntypedList
+	scriptFiles    *widget.List
+	scriptName     *widget.Entry
+	runningScripts int32
+	tabItem        *container.TabItem
 }
 
 func (asr *appScriptRunner) LazyInit() error {
@@ -129,7 +132,12 @@ func (asr *appScriptRunner) OpenDefault() bool {
 }
 
 func (asr *appScriptRunner) OnClose() bool {
-	// todo run status
+	v := atomic.LoadInt32(&asr.runningScripts)
+	if v != 0 {
+		dialog.ShowInformation(sidTheme.CannotCloseTitle, sidTheme.AppScriptRunnerCannotCloseMsg, globalWin.win)
+		return false
+	}
+
 	return true
 }
 
@@ -249,13 +257,19 @@ func (asr *appScriptRunner) saveScriptFile() {
 }
 
 func (asr *appScriptRunner) runScriptFile() {
+	atomic.AddInt32(&asr.runningScripts, 1)
+
 	if asr.curScriptFile != nil && asr.curScriptFile.Dirty {
 		asr.saveScriptFile()
 	}
 
 	go func() {
 		runner := common.NewLuaRunner()
-		defer runner.Close()
+		defer func() {
+			runner.Close()
+			atomic.AddInt32(&asr.runningScripts, -1)
+		}()
+
 		ch, err := runner.RunScript(asr.curScriptFile.Cont)
 		if err != nil {
 			cont := asr.scriptLog.Text
@@ -266,8 +280,8 @@ func (asr *appScriptRunner) runScriptFile() {
 		}
 
 		for {
-			log := <-ch
-			if log == "" {
+			log, ok := <-ch
+			if !ok {
 				return
 			}
 

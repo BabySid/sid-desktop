@@ -79,6 +79,9 @@ const (
 	AppScriptRunnerRunLog           = "Log"
 	ProcessScriptRunnerFailedFormat = "process script runner failed. %s"
 	AppScriptRunnerNewScriptName    = "New Script Name"
+	AppScriptRunnerCannotCloseMsg   = "Script is running now. Wait it stop, please"
+
+	AppDevToolsName = "Dev Tools"
 
 	LogViewerRefreshBtn = "Refresh"
 	LogViewerTitle      = "Show Log"
