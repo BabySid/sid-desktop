@@ -72,9 +72,10 @@ const (
 
 	AppScriptRunnerName             = "Script Runner"
 	AppScriptRunnerNewScript        = "New"
+	AppScriptRunnerSaveScript       = "Save"
 	AppScriptRunnerRunScript        = "Run"
 	AppScriptRunnerDelScript        = "Del"
-	AppScriptRunnerCurScriptFormat  = "Script Name: %s"
+	AppScriptRunnerCurScriptName    = "Script Name"
 	AppScriptRunnerRunLog           = "Log"
 	ProcessScriptRunnerFailedFormat = "process script runner failed. %s"
 	AppScriptRunnerNewScriptName    = "New Script Name"

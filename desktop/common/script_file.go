@@ -78,4 +78,5 @@ type ScriptFile struct {
 	Cont       string `json:"content"`
 	CreateTime int64  `json:"create_time"`
 	AccessTime int64  `json:"access_time"`
+	Dirty      bool   `json:"-"`
 }

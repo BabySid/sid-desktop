@@ -44,9 +44,9 @@ func (af *appFavorites) LazyInit() error {
 	af.searchEntry.SetPlaceHolder(sidTheme.AppFavoritesSearchText)
 	af.searchEntry.OnChanged = af.searchFavor
 
-	af.newFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesAddFavorBtnText, sidTheme.ResourceAddFavorIcon, af.addFavor)
-	af.importFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesImportBtnText, sidTheme.ResourceImportFavorIcon, af.importFavors)
-	af.exportFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesExportBtnText, sidTheme.ResourceExportFavorIcon, af.exportFavors)
+	af.newFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesAddFavorBtnText, sidTheme.ResourceAddIcon, af.addFavor)
+	af.importFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesImportBtnText, sidTheme.ResourceImportIcon, af.importFavors)
+	af.exportFavor = widget.NewButtonWithIcon(sidTheme.AppFavoritesExportBtnText, sidTheme.ResourceExportIcon, af.exportFavors)
 
 	af.favorBinding = binding.NewUntypedList()
 	af.createFavorList()
@@ -178,8 +178,8 @@ func (af *appFavorites) createFavorList() {
 				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
 				container.NewHBox(
 					layout.NewSpacer(),
-					widget.NewButtonWithIcon(sidTheme.AppFavoritesFavorListOp1, sidTheme.ResourceEditFavorIcon, nil),
-					widget.NewButtonWithIcon(sidTheme.AppFavoritesFavorListOp2, sidTheme.ResourceOpenFavorIcon, nil)),
+					widget.NewButtonWithIcon(sidTheme.AppFavoritesFavorListOp1, sidTheme.ResourceEditIcon, nil),
+					widget.NewButtonWithIcon(sidTheme.AppFavoritesFavorListOp2, sidTheme.ResourceOpenUrlIcon, nil)),
 			)
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
@@ -253,7 +253,7 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 
 	var rmBtn *widget.Button
 	if favor != nil {
-		rmBtn = widget.NewButtonWithIcon(sidTheme.AppFavoritesRmFavorBtnText, sidTheme.ResourceRmFavorIcon, nil)
+		rmBtn = widget.NewButtonWithIcon(sidTheme.AppFavoritesRmFavorBtnText, sidTheme.ResourceRmIcon, nil)
 	}
 
 	tagArray := binding.NewStringList()

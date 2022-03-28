@@ -5,27 +5,32 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
+	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
+	"path/filepath"
 	"sid-desktop/desktop/common"
 	"sid-desktop/desktop/storage"
 	sidTheme "sid-desktop/desktop/theme"
 	"strings"
+	"time"
 )
 
 var _ appInterface = (*appScriptRunner)(nil)
 
 type appScriptRunner struct {
-	newScript     *widget.Button
-	runScript     *widget.Button
+	newScriptBtn  *widget.Button
+	saveScriptBtn *widget.Button
+	runScriptBtn  *widget.Button
 	scriptLineNo  *widget.Label
-	scriptText    *widget.Entry
+	scriptBody    *widget.Entry
 	logLabel      *widget.Label
 	scriptLog     *widget.Entry
+	curScriptFile *common.ScriptFile
 	scriptBinding binding.UntypedList
 	scriptFiles   *widget.List
-	curScript     *widget.Entry
+	scriptName    *widget.Entry
 	tabItem       *container.TabItem
 }
 
@@ -36,12 +41,13 @@ func (asr *appScriptRunner) LazyInit() error {
 	}
 	gobase.RegisterAtExit(storage.GetAppScriptRunnerDB().Close)
 
-	asr.newScript = widget.NewButton(sidTheme.AppScriptRunnerNewScript, asr.newScriptFile)
-	asr.runScript = widget.NewButton(sidTheme.AppScriptRunnerRunScript, nil)
+	asr.newScriptBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerNewScript, sidTheme.ResourceAddIcon, asr.newScriptFile)
+	asr.saveScriptBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerSaveScript, sidTheme.ResourceSaveIcon, asr.saveScriptFile)
+	asr.runScriptBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerRunScript, sidTheme.ResourceRunIcon, asr.runScriptFile)
 
 	asr.scriptLineNo = widget.NewLabel("1")
-	asr.scriptText = widget.NewMultiLineEntry()
-	asr.scriptText.OnChanged = func(s string) {
+	asr.scriptBody = widget.NewMultiLineEntry()
+	asr.scriptBody.OnChanged = func(s string) {
 		ln := strings.Count(s, "\n")
 		nu := ""
 		for i := 1; i <= ln+1; i++ {
@@ -49,28 +55,41 @@ func (asr *appScriptRunner) LazyInit() error {
 		}
 
 		asr.scriptLineNo.SetText(nu)
+
+		if asr.curScriptFile != nil {
+			asr.curScriptFile.Dirty = true
+		}
 	}
 
 	asr.logLabel = widget.NewLabel(sidTheme.AppScriptRunnerRunLog)
 	asr.scriptLog = widget.NewMultiLineEntry()
 
-	asr.curScript = widget.NewEntry()
-	asr.curScript.SetText(fmt.Sprintf(sidTheme.AppScriptRunnerCurScriptFormat, ""))
-	asr.curScript.OnChanged = func(s string) {
+	asr.scriptName = widget.NewEntry()
+	asr.scriptName.Validator = validation.NewRegexp(`\S+`, sidTheme.AppScriptRunnerCurScriptName+" must not be empty")
+	asr.scriptName.SetPlaceHolder(sidTheme.AppScriptRunnerCurScriptName)
+	asr.scriptName.OnChanged = func(s string) {
 		if !strings.HasSuffix(s, ".lua") {
-			// now we support .lua only
-			asr.curScript.SetText(s + ".lua")
+			// Support .lua only nnow
+			asr.scriptName.SetText(s + ".lua")
+		}
+
+		if asr.curScriptFile != nil {
+			asr.curScriptFile.Dirty = true
 		}
 	}
 
 	asr.scriptBinding = binding.NewUntypedList()
 	asr.createScriptList()
 	asr.scriptFiles.OnSelected = func(id widget.ListItemID) {
-		sf, _ := asr.scriptBinding.GetValue(id)
-		file := sf.(common.ScriptFile)
-		asr.curScript.SetText(file.Name)
+		if asr.curScriptFile != nil && asr.curScriptFile.Dirty {
+			asr.saveScriptFile()
+		}
 
-		asr.scriptText.SetText(file.Cont)
+		sf, _ := asr.scriptBinding.GetValue(id)
+		file, _ := sf.(common.ScriptFile)
+		asr.curScriptFile = &file
+		asr.scriptName.SetText(asr.curScriptFile.Name)
+		asr.scriptBody.SetText(asr.curScriptFile.Cont)
 	}
 
 	asr.tabItem = container.NewTabItemWithIcon(sidTheme.AppScriptRunnerName, sidTheme.ResourceScriptRunnerIcon, nil)
@@ -78,19 +97,19 @@ func (asr *appScriptRunner) LazyInit() error {
 	scriptPanel := container.NewVSplit(
 		container.NewBorder(
 			container.NewGridWithColumns(2,
-				asr.curScript,
-				container.NewHBox(layout.NewSpacer(), asr.runScript)),
+				asr.scriptName,
+				container.NewHBox(layout.NewSpacer(), asr.saveScriptBtn, asr.runScriptBtn)),
 			nil, asr.scriptLineNo, nil,
-			asr.scriptText),
+			asr.scriptBody),
 		container.NewBorder(container.NewHBox(asr.logLabel, layout.NewSpacer()), nil, nil, nil,
 			asr.scriptLog),
 	)
 	scriptPanel.SetOffset(0.8)
 
-	contPanel := container.NewHSplit(container.NewBorder(container.NewHBox(layout.NewSpacer(), asr.newScript),
+	contPanel := container.NewHSplit(container.NewBorder(container.NewHBox(layout.NewSpacer(), asr.newScriptBtn),
 		nil, nil, nil,
 		asr.scriptFiles), scriptPanel)
-	contPanel.SetOffset(0.2)
+	contPanel.SetOffset(0.3)
 
 	asr.tabItem.Content = contPanel
 
@@ -112,6 +131,7 @@ func (asr *appScriptRunner) OpenDefault() bool {
 }
 
 func (asr *appScriptRunner) OnClose() bool {
+	// todo run status
 	return true
 }
 
@@ -120,19 +140,32 @@ func (asr *appScriptRunner) createScriptList() {
 	asr.scriptFiles = widget.NewListWithData(
 		asr.scriptBinding,
 		func() fyne.CanvasObject {
+			// todo lua icon
 			return container.NewHBox(
+				widget.NewIcon(sidTheme.ResourceLuaIcon),
 				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
-				widget.NewButton(sidTheme.AppScriptRunnerDelScript, nil))
+				layout.NewSpacer(),
+				widget.NewButtonWithIcon(sidTheme.AppScriptRunnerDelScript, sidTheme.ResourceRmIcon, nil))
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
 			o, _ := data.(binding.Untyped).Get()
 			file := o.(common.ScriptFile)
 
-			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(file.Name)
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(file.Name)
 
-			item.(*fyne.Container).Objects[1].(*widget.Button).SetText(sidTheme.AppScriptRunnerDelScript)
-			item.(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[3].(*widget.Button).SetText(sidTheme.AppScriptRunnerDelScript)
+			item.(*fyne.Container).Objects[3].(*widget.Button).OnTapped = func() {
+				err := storage.GetAppScriptRunnerDB().DelScriptFile(file)
+				if err != nil {
+					printErr(fmt.Errorf(sidTheme.ProcessScriptRunnerFailedFormat, err))
+					return
+				}
 
+				if asr.curScriptFile != nil && asr.curScriptFile.ID == file.ID {
+					asr.curScriptFile = nil
+				}
+
+				asr.reloadScriptFiles()
 			}
 		},
 	)
@@ -171,7 +204,63 @@ func (asr *appScriptRunner) loadScriptFilesFromDB() {
 }
 
 func (asr *appScriptRunner) newScriptFile() {
-	asr.curScript.SetText(sidTheme.AppScriptRunnerNewScriptName)
-	asr.scriptText.SetText("")
+	docID := 0
+	files, _ := asr.scriptBinding.Get()
+	for _, file := range files {
+		if filepath.Base(file.(common.ScriptFile).Name) == sidTheme.AppScriptRunnerNewScriptName {
+			docID++
+			fmt.Println(docID)
+		}
+	}
+
+	if docID == 0 {
+		asr.scriptName.SetText(sidTheme.AppScriptRunnerNewScriptName)
+	} else {
+		asr.scriptName.SetText(sidTheme.AppScriptRunnerNewScriptName + fmt.Sprintf("%d", docID))
+	}
+
+	asr.curScriptFile = nil
+	asr.scriptBody.SetText("")
 	asr.scriptLog.SetText("")
+}
+
+func (asr *appScriptRunner) saveScriptFile() {
+	if asr.curScriptFile == nil {
+		asr.curScriptFile = &common.ScriptFile{
+			Name:       asr.scriptName.Text,
+			Cont:       asr.scriptBody.Text,
+			CreateTime: time.Now().Unix(),
+			AccessTime: time.Now().Unix(),
+		}
+		err := storage.GetAppScriptRunnerDB().AddScriptFile(*asr.curScriptFile)
+		if err != nil {
+			printErr(fmt.Errorf(sidTheme.ProcessScriptRunnerFailedFormat, err))
+		}
+	} else {
+		asr.curScriptFile.Name = asr.scriptName.Text
+		asr.curScriptFile.Cont = asr.scriptBody.Text
+		asr.curScriptFile.AccessTime = time.Now().Unix()
+		err := storage.GetAppScriptRunnerDB().UpdateScriptFile(*asr.curScriptFile)
+		if err != nil {
+			printErr(fmt.Errorf(sidTheme.ProcessScriptRunnerFailedFormat, err))
+		}
+	}
+
+	asr.curScriptFile.Dirty = false
+	asr.reloadScriptFiles()
+}
+
+func (asr *appScriptRunner) runScriptFile() {
+	if asr.curScriptFile != nil && asr.curScriptFile.Dirty {
+		asr.saveScriptFile()
+	}
+
+	// todo run
+	fmt.Println(asr.curScriptFile.Name)
+}
+
+func (asr *appScriptRunner) setCurScriptDirty(dirty bool) {
+	if asr.curScriptFile != nil {
+		asr.curScriptFile.Dirty = dirty
+	}
 }

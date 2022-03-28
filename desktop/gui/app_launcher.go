@@ -114,7 +114,7 @@ func (al *appLauncher) createAppList() {
 				container.NewHBox(
 					layout.NewSpacer(),
 					widget.NewButtonWithIcon("", sidTheme.ResourceOpenDirIcon, nil),
-					widget.NewButtonWithIcon("", sidTheme.ResourceRunAppIcon, nil)),
+					widget.NewButtonWithIcon("", sidTheme.ResourceRunIcon, nil)),
 			)
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {

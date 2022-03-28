@@ -20,20 +20,21 @@ ${fyne} bundle -pkg theme -name ResourceRmDirIcon -a -o ../theme/icons.go rm_dir
 
 ${fyne} bundle -pkg theme -name ResourceConfIndexIcon -a -o ../theme/icons.go config_index.png
 
-${fyne} bundle -pkg theme -name ResourceRunAppIcon -a -o ../theme/icons.go run_app.png
+${fyne} bundle -pkg theme -name ResourceRunIcon -a -o ../theme/icons.go run.png
 ${fyne} bundle -pkg theme -name ResourceDefAppIcon -a -o ../theme/icons.go def_app.png
 
 ${fyne} bundle -pkg theme -name ResourceFavoritesIcon -a -o ../theme/icons.go favor.png
-${fyne} bundle -pkg theme -name ResourceAddFavorIcon -a -o ../theme/icons.go add_favor.png
-${fyne} bundle -pkg theme -name ResourceRmFavorIcon -a -o ../theme/icons.go rm_favor.png
-${fyne} bundle -pkg theme -name ResourceEditFavorIcon -a -o ../theme/icons.go edit_favor.png
-${fyne} bundle -pkg theme -name ResourceOpenFavorIcon -a -o ../theme/icons.go open_favor.png
-${fyne} bundle -pkg theme -name ResourceExportFavorIcon -a -o ../theme/icons.go export_favor.png
-${fyne} bundle -pkg theme -name ResourceImportFavorIcon -a -o ../theme/icons.go import_favor.png
+${fyne} bundle -pkg theme -name ResourceAddIcon -a -o ../theme/icons.go add.png
+${fyne} bundle -pkg theme -name ResourceRmIcon -a -o ../theme/icons.go rm.png
+${fyne} bundle -pkg theme -name ResourceEditIcon -a -o ../theme/icons.go edit.png
+${fyne} bundle -pkg theme -name ResourceSaveIcon -a -o ../theme/icons.go save.png
+${fyne} bundle -pkg theme -name ResourceOpenUrlIcon -a -o ../theme/icons.go open_url.png
+${fyne} bundle -pkg theme -name ResourceExportIcon -a -o ../theme/icons.go export.png
+${fyne} bundle -pkg theme -name ResourceImportIcon -a -o ../theme/icons.go import.png
 
 ${fyne} bundle -pkg theme -name ResourceExpandDownIcon -a -o ../theme/icons.go expand_down.png
 ${fyne} bundle -pkg theme -name ResourceExpandUpIcon -a -o ../theme/icons.go expand_up.png
 
-
+${fyne} bundle -pkg theme -name ResourceLuaIcon -a -o ../theme/icons.go lua.png
 
 # use https://github.com/lusingander/fyne-theme-generator to generate theme file
