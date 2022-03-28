@@ -26,6 +26,9 @@ func newToolBar() *toolBar {
 		widget.NewToolbarAction(sidTheme.ResourceScriptRunnerIcon, func() {
 			openApp(sidTheme.AppScriptRunnerName)
 		}),
+		widget.NewToolbarAction(sidTheme.ResourceDevToolsIcon, func() {
+			//openApp(sidTheme.AppScriptRunnerName)
+		}),
 		widget.NewToolbarSeparator(),
 		widget.NewToolbarAction(sidTheme.ResourceLogViewerIcon, func() {
 			newLogViewer().Win.Show()
