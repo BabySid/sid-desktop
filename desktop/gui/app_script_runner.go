@@ -66,7 +66,7 @@ func (asr *appScriptRunner) LazyInit() error {
 	asr.scriptLog = widget.NewMultiLineEntry()
 
 	asr.scriptName = widget.NewEntry()
-	asr.scriptName.Validator = validation.NewRegexp(`\S+`, sidTheme.AppScriptRunnerCurScriptName+" must not be empty")
+	asr.scriptName.Validator = validation.NewRegexp(`\S+`, sidTheme.AppScriptRunnerScriptNameValidateMsg)
 	asr.scriptName.SetPlaceHolder(sidTheme.AppScriptRunnerCurScriptName)
 	asr.scriptName.OnChanged = func(s string) {
 		if !strings.HasSuffix(s, ".lua") {
@@ -231,9 +231,14 @@ func (asr *appScriptRunner) newScriptFile() {
 }
 
 func (asr *appScriptRunner) saveScriptFile() {
+	txt := strings.Trim(asr.scriptName.Text, "\t ")
+	if txt == "" {
+		dialog.ShowInformation(sidTheme.AppScriptRunnerName, sidTheme.AppScriptRunnerScriptNameValidateMsg, globalWin.win)
+		return
+	}
 	if asr.curScriptFile == nil {
 		asr.curScriptFile = &common.ScriptFile{
-			Name:       asr.scriptName.Text,
+			Name:       txt,
 			Cont:       asr.scriptBody.Text,
 			CreateTime: time.Now().Unix(),
 			AccessTime: time.Now().Unix(),
@@ -243,7 +248,7 @@ func (asr *appScriptRunner) saveScriptFile() {
 			printErr(fmt.Errorf(sidTheme.ProcessScriptRunnerFailedFormat, err))
 		}
 	} else {
-		asr.curScriptFile.Name = asr.scriptName.Text
+		asr.curScriptFile.Name = txt
 		asr.curScriptFile.Cont = asr.scriptBody.Text
 		asr.curScriptFile.AccessTime = time.Now().Unix()
 		err := storage.GetAppScriptRunnerDB().UpdateScriptFile(*asr.curScriptFile)
@@ -257,13 +262,16 @@ func (asr *appScriptRunner) saveScriptFile() {
 }
 
 func (asr *appScriptRunner) runScriptFile() {
-	atomic.AddInt32(&asr.runningScripts, 1)
-
 	if asr.curScriptFile != nil && asr.curScriptFile.Dirty {
 		asr.saveScriptFile()
 	}
 
+	if asr.curScriptFile == nil || asr.curScriptFile.Name == "" {
+		return
+	}
+
 	go func() {
+		atomic.AddInt32(&asr.runningScripts, 1)
 		runner := common.NewLuaRunner()
 		defer func() {
 			runner.Close()
