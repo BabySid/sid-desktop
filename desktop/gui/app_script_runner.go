@@ -56,9 +56,7 @@ func (asr *appScriptRunner) LazyInit() error {
 
 		asr.scriptLineNo.SetText(nu)
 
-		if asr.curScriptFile != nil {
-			asr.curScriptFile.Dirty = true
-		}
+		asr.setCurScriptDirty(true)
 	}
 
 	asr.logLabel = widget.NewLabel(sidTheme.AppScriptRunnerRunLog)
@@ -73,20 +71,20 @@ func (asr *appScriptRunner) LazyInit() error {
 			asr.scriptName.SetText(s + ".lua")
 		}
 
-		if asr.curScriptFile != nil {
-			asr.curScriptFile.Dirty = true
-		}
+		asr.setCurScriptDirty(true)
 	}
 
 	asr.scriptBinding = binding.NewUntypedList()
 	asr.createScriptList()
 	asr.scriptFiles.OnSelected = func(id widget.ListItemID) {
-		if asr.curScriptFile != nil && asr.curScriptFile.Dirty {
-			asr.saveScriptFile()
-		}
-
 		sf, _ := asr.scriptBinding.GetValue(id)
 		file, _ := sf.(common.ScriptFile)
+
+		if asr.curScriptFile != nil && asr.curScriptFile.Dirty && asr.curScriptFile.ID != file.ID {
+			asr.saveScriptFile()
+			asr.setCurScriptDirty(false)
+		}
+
 		asr.curScriptFile = &file
 		asr.scriptName.SetText(asr.curScriptFile.Name)
 		asr.scriptBody.SetText(asr.curScriptFile.Cont)
@@ -246,7 +244,7 @@ func (asr *appScriptRunner) saveScriptFile() {
 		}
 	}
 
-	asr.curScriptFile.Dirty = false
+	asr.setCurScriptDirty(false)
 	asr.reloadScriptFiles()
 }
 
@@ -255,8 +253,31 @@ func (asr *appScriptRunner) runScriptFile() {
 		asr.saveScriptFile()
 	}
 
-	// todo run
-	fmt.Println(asr.curScriptFile.Name)
+	go func() {
+		runner := common.NewLuaRunner()
+		defer runner.Close()
+		ch, err := runner.RunScript(asr.curScriptFile.Cont)
+		if err != nil {
+			cont := asr.scriptLog.Text
+			cont += err.Error()
+			asr.scriptLog.SetText(cont)
+
+			asr.scriptLog.CursorRow = strings.Count(cont, "\n")
+		}
+
+		for {
+			log := <-ch
+			if log == "" {
+				return
+			}
+
+			cont := asr.scriptLog.Text
+			cont += log
+			asr.scriptLog.SetText(cont)
+
+			asr.scriptLog.CursorRow = strings.Count(cont, "\n")
+		}
+	}()
 }
 
 func (asr *appScriptRunner) setCurScriptDirty(dirty bool) {

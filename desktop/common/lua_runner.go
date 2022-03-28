@@ -2,7 +2,6 @@ package common
 
 import (
 	"bytes"
-	"fmt"
 	luaHttp "github.com/cjoudrey/gluahttp"
 	lua "github.com/yuin/gopher-lua"
 	"io"
@@ -21,7 +20,8 @@ func NewLuaRunner() *LuaRunner {
 	}
 
 	l.handle.PreloadModule("http", luaHttp.NewHttpModule(&http.Client{}).Loader)
-	luaJson.Preload(l.handle)
+	l.handle.PreloadModule("json", luaJson.Loader)
+
 	return l
 }
 
@@ -29,7 +29,7 @@ func (l *LuaRunner) Close() {
 	l.handle.Close()
 }
 
-func (l *LuaRunner) RunScript(cont string) {
+func (l *LuaRunner) RunScript(cont string) (<-chan string, error) {
 	old := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
@@ -37,40 +37,15 @@ func (l *LuaRunner) RunScript(cont string) {
 	outC := make(chan string)
 	go func() {
 		var buf bytes.Buffer
-		io.Copy(&buf, r)
+		_, _ = io.Copy(&buf, r)
 		outC <- buf.String()
 	}()
-	if err := l.handle.DoString(`
-
-        local http = require("http")
-		local json = require("json")
-
-        response, error_message = http.request("POST", "http://", {
-            timeout="30s",
-            headers={
-                Accept="*/*"
-            },
-			body=[[{
-				"sqlquery": "select * from mytable"}
-			]]
-        })
-		
-		print(response.status_code)
-		print(response.body)
-		print(error_message)
-		
-		body = json.decode(response.body)
-		print(body.code)
-		print(body.msg)
-
-    `); err != nil {
-		panic(err)
+	if err := l.handle.DoString(cont); err != nil {
+		return outC, err
 	}
 
-	// back to normal state
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old // restoring the real stdout
-	out := <-outC
 
-	fmt.Println("aha: ", out)
+	return outC, nil
 }
