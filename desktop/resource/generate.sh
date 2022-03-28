@@ -12,6 +12,7 @@ ${fyne} bundle -pkg theme -name ResourceWelIcon -a -o ../theme/icons.go wel.png
 ${fyne} bundle -pkg theme -name ResourceLauncherIcon -a -o ../theme/icons.go app_launcher.png
 ${fyne} bundle -pkg theme -name ResourceLogViewerIcon -a -o ../theme/icons.go log_viewer.png
 ${fyne} bundle -pkg theme -name ResourceAboutIcon -a -o ../theme/icons.go about.png
+${fyne} bundle -pkg theme -name ResourceScriptRunnerIcon -a -o ../theme/icons.go script.png
 
 ${fyne} bundle -pkg theme -name ResourceOpenDirIcon -a -o ../theme/icons.go open_dir.png
 ${fyne} bundle -pkg theme -name ResourceAddDirIcon -a -o ../theme/icons.go add_dir.png
@@ -32,5 +33,7 @@ ${fyne} bundle -pkg theme -name ResourceImportFavorIcon -a -o ../theme/icons.go 
 
 ${fyne} bundle -pkg theme -name ResourceExpandDownIcon -a -o ../theme/icons.go expand_down.png
 ${fyne} bundle -pkg theme -name ResourceExpandUpIcon -a -o ../theme/icons.go expand_up.png
+
+
 
 # use https://github.com/lusingander/fyne-theme-generator to generate theme file

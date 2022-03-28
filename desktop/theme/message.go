@@ -70,6 +70,15 @@ const (
 	ExportFavoritesFailedFormat        = "export favorites failed. %s"
 	ImportFavoritesFailedFormat        = "import favorites failed. %s"
 
+	AppScriptRunnerName             = "Script Runner"
+	AppScriptRunnerNewScript        = "New"
+	AppScriptRunnerRunScript        = "Run"
+	AppScriptRunnerDelScript        = "Del"
+	AppScriptRunnerCurScriptFormat  = "Script Name: %s"
+	AppScriptRunnerRunLog           = "Log"
+	ProcessScriptRunnerFailedFormat = "process script runner failed. %s"
+	AppScriptRunnerNewScriptName    = "New Script Name"
+
 	LogViewerRefreshBtn = "Refresh"
 	LogViewerTitle      = "Show Log"
 

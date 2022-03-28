@@ -15,5 +15,6 @@ var (
 		&appWelcome{},
 		&appLauncher{},
 		&appFavorites{},
+		&appScriptRunner{},
 	}
 )
