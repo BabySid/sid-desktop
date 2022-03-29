@@ -9,6 +9,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
 	"github.com/PuerkitoBio/goquery"
+	"log"
 	"math"
 	"net/http"
 	sidTheme "sid-desktop/desktop/theme"
@@ -128,6 +129,8 @@ func (ths *toyHotSearch) Run() {
 	if ths.nextPage.Disabled() {
 		ths.nextPage.Enable()
 	}
+
+	log.Printf(sidTheme.ToyHotSearchUpdateComplete)
 }
 
 func (ths *toyHotSearch) updateHotLinks(urls []hotSearchURL) {

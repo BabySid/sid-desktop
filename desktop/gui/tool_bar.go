@@ -27,7 +27,7 @@ func newToolBar() *toolBar {
 			openApp(sidTheme.AppScriptRunnerName)
 		}),
 		widget.NewToolbarAction(sidTheme.ResourceDevToolsIcon, func() {
-			//openApp(sidTheme.AppScriptRunnerName)
+			openApp(sidTheme.AppDevToolsName)
 		}),
 		widget.NewToolbarSeparator(),
 		widget.NewToolbarAction(sidTheme.ResourceLogViewerIcon, func() {

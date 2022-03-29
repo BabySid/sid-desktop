@@ -83,7 +83,10 @@ const (
 	AppScriptRunnerCannotCloseMsg        = "Script is running now. Wait it stop or stop it, please"
 	AppScriptRunnerScriptNameValidateMsg = AppScriptRunnerCurScriptName + " must not be empty"
 
-	AppDevToolsName = "Dev Tools"
+	AppDevToolsName        = "Dev Tools"
+	AppDevToolsCodecName   = "Encode/Decode"
+	AppDevToolsRegexName   = "Regex"
+	AppDevToolsHttpCliName = "Http Client"
 
 	LogViewerRefreshBtn = "Refresh"
 	LogViewerTitle      = "Show Log"
@@ -120,4 +123,5 @@ The Source code is [sid-desttop](https://github.com/BabySid/sid-desktop).`
 	ToyHotSearchTitle              = "Hot Search(BD)"
 	ToyHotSearchRefreshing         = "Content is Updating"
 	ToyHotSearchRefreshFormat      = "Refresh (%d/%d)"
+	ToyHotSearchUpdateComplete     = "hot search update complete"
 )

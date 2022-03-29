@@ -16,5 +16,6 @@ var (
 		&appLauncher{},
 		&appFavorites{},
 		&appScriptRunner{},
+		&appDevTools{},
 	}
 )
