@@ -77,7 +77,7 @@ const (
 	AppScriptRunnerStopScript            = "Stop"
 	AppScriptRunnerDelScript             = "Del"
 	AppScriptRunnerCurScriptName         = "Script Name"
-	AppScriptRunnerRunLog                = "Log"
+	AppScriptRunnerClearLog              = "Clear Log"
 	ProcessScriptRunnerFailedFormat      = "process script runner failed. %s"
 	AppScriptRunnerNewScriptName         = "New Script Name"
 	AppScriptRunnerCannotCloseMsg        = "Script is running now. Wait it stop or stop it, please"

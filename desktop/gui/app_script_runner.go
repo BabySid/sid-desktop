@@ -33,12 +33,12 @@ type appScriptRunner struct {
 	saveScriptBtn  *widget.Button
 	stopScriptBtn  *widget.Button
 	runScriptBtn   *widget.Button
-	scriptLineNo   *widget.Label
+	clearLogBtn    *widget.Button
+	scriptPos      *widget.Label
 	scriptBody     *widget.Entry
-	logLabel       *widget.Label
 	scriptLog      *widget.Entry
-	scriptStatus   sync.Map // id -> *scriptStatus
-	curScriptFile  *common.ScriptFile
+	scriptStatus   sync.Map           // id -> *scriptStatus
+	curScriptFile  *common.ScriptFile // only set on saveScript or onSelect
 	scriptBinding  binding.UntypedList
 	scriptFiles    *widget.List
 	scriptName     *widget.Entry
@@ -60,46 +60,49 @@ func (asr *appScriptRunner) LazyInit() error {
 
 	asr.newScriptBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerNewScript, sidTheme.ResourceAddIcon, asr.newScriptFile)
 	asr.saveScriptBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerSaveScript, sidTheme.ResourceSaveIcon, asr.saveScriptFile)
+	asr.saveScriptBtn.Disable()
 	asr.runScriptBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerRunScript, sidTheme.ResourceRunIcon, asr.runScriptFile)
 	asr.stopScriptBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerStopScript, sidTheme.ResourceStopIcon, asr.killScriptFile)
+	asr.stopScriptBtn.Disable()
 
-	asr.scriptLineNo = widget.NewLabel("1")
 	asr.scriptBody = widget.NewMultiLineEntry()
 	asr.scriptBody.OnChanged = func(s string) {
 		if asr.curScriptFile == nil {
 			return
 		}
+
 		if s == asr.curScriptFile.Cont {
 			return
 		}
 
-		ln := strings.Count(s, "\n")
-		nu := ""
-		for i := 1; i <= ln+1; i++ {
-			nu += fmt.Sprintf("%d\n", i)
-		}
-
-		asr.scriptLineNo.SetText(nu)
-
 		asr.setCurScriptDirty(asr.curScriptFile.ID, true)
 	}
 
-	asr.logLabel = widget.NewLabel(sidTheme.AppScriptRunnerRunLog)
+	asr.scriptPos = widget.NewLabel("")
+	asr.scriptBody.OnCursorChanged = func() {
+		asr.scriptPos.SetText(fmt.Sprintf("Row: %d, Col: %d", asr.scriptBody.CursorRow+1, asr.scriptBody.CursorColumn+1))
+	}
+
 	asr.scriptLog = widget.NewMultiLineEntry()
+	asr.clearLogBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerClearLog, sidTheme.ResourceClearIcon, func() {
+		asr.scriptLog.SetText("")
+	})
 
 	asr.scriptName = widget.NewEntry()
 	asr.scriptName.Validator = validation.NewRegexp(`\S+`, sidTheme.AppScriptRunnerScriptNameValidateMsg)
 	asr.scriptName.SetPlaceHolder(sidTheme.AppScriptRunnerCurScriptName)
 	asr.scriptName.OnChanged = func(s string) {
-		if asr.curScriptFile == nil {
-			return
-		}
-		if s == asr.curScriptFile.Name {
-			return
-		}
 		if !strings.HasSuffix(s, ".lua") {
 			// Support .lua only now
 			asr.scriptName.SetText(s + ".lua")
+		}
+
+		if asr.curScriptFile == nil {
+			return
+		}
+
+		if s == asr.curScriptFile.Name {
+			return
 		}
 
 		asr.setCurScriptDirty(asr.curScriptFile.ID, true)
@@ -131,9 +134,9 @@ func (asr *appScriptRunner) LazyInit() error {
 			container.NewGridWithColumns(2,
 				asr.scriptName,
 				container.NewHBox(layout.NewSpacer(), asr.saveScriptBtn, asr.stopScriptBtn, asr.runScriptBtn)),
-			nil, asr.scriptLineNo, nil,
+			nil, nil, nil,
 			asr.scriptBody),
-		container.NewBorder(container.NewHBox(asr.logLabel, layout.NewSpacer()), nil, nil, nil,
+		container.NewBorder(container.NewHBox(asr.clearLogBtn, layout.NewSpacer(), asr.scriptPos), nil, nil, nil,
 			asr.scriptLog),
 	)
 	scriptPanel.SetOffset(0.8)
@@ -187,17 +190,7 @@ func (asr *appScriptRunner) createScriptList() {
 			o, _ := data.(binding.Untyped).Get()
 			file := o.(common.ScriptFile)
 
-			name := file.Name
-			status := asr.getScriptStatus(file.ID)
-			if status != nil {
-				if status.Cmd != nil {
-					name += "(R)"
-				}
-				if status.Dirty {
-					name += "*"
-				}
-			}
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(name)
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(file.Name)
 
 			item.(*fyne.Container).Objects[3].(*widget.Button).SetText(sidTheme.AppScriptRunnerDelScript)
 			item.(*fyne.Container).Objects[3].(*widget.Button).OnTapped = func() {
@@ -211,6 +204,7 @@ func (asr *appScriptRunner) createScriptList() {
 					asr.curScriptFile = nil
 				}
 
+				asr.removeScriptStatus(file.ID)
 				asr.reloadScriptFiles()
 			}
 		},
@@ -266,6 +260,7 @@ func (asr *appScriptRunner) newScriptFile() {
 	}
 
 	asr.curScriptFile = nil
+	asr.saveScriptBtn.Enable()
 	asr.scriptBody.SetText("")
 	asr.scriptLog.SetText("")
 }
@@ -363,7 +358,6 @@ func (asr *appScriptRunner) runScriptFile() {
 		defer func() {
 			atomic.AddInt32(&asr.runningScripts, -1)
 			asr.setCurScriptRunningHandle(scriptFile.ID, nil)
-			asr.reloadScriptFiles()
 		}()
 
 		for {
@@ -377,11 +371,17 @@ func (asr *appScriptRunner) runScriptFile() {
 	}()
 
 	status := <-s
-	asr.appendScriptLog(fmt.Sprintf("script [%s] exit with %d\n", scriptFile.Name, status.Exit))
+	asr.appendScriptLog(fmt.Sprintf("script [%s] exit with %d", scriptFile.Name, status.Exit))
 }
 
 func (asr *appScriptRunner) appendScriptLog(newLog string) {
-	txt := asr.scriptLog.Text + "\n"
+	if strings.Trim(newLog, " \t\n") == "" {
+		return
+	}
+	txt := asr.scriptLog.Text
+	if txt != "" {
+		txt += "\n"
+	}
 	txt += newLog
 	asr.scriptLog.CursorRow = strings.Count(txt, "\n")
 	asr.scriptLog.SetText(txt)
@@ -396,6 +396,12 @@ func (asr *appScriptRunner) setCurScriptDirty(id int32, dirty bool) {
 		}
 	}
 
+	if dirty {
+		asr.saveScriptBtn.Enable()
+	} else {
+		asr.saveScriptBtn.Disable()
+	}
+
 	asr.scriptStatus.Store(id, status)
 }
 
@@ -404,8 +410,18 @@ func (asr *appScriptRunner) setCurScriptRunningHandle(id int32, c *cmd.Cmd) {
 	if status == nil {
 		status = &scriptStatus{
 			Dirty: false,
-			Cmd:   c,
+			Cmd:   nil,
 		}
+	}
+
+	status.Cmd = c
+
+	if c == nil {
+		asr.runScriptBtn.Enable()
+		asr.stopScriptBtn.Disable()
+	} else {
+		asr.runScriptBtn.Disable()
+		asr.stopScriptBtn.Enable()
 	}
 
 	asr.scriptStatus.Store(id, status)
@@ -417,4 +433,8 @@ func (asr *appScriptRunner) getScriptStatus(id int32) *scriptStatus {
 	}
 
 	return nil
+}
+
+func (asr *appScriptRunner) removeScriptStatus(id int32) {
+	asr.scriptStatus.Delete(id)
 }

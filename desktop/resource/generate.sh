@@ -23,6 +23,7 @@ ${fyne} bundle -pkg theme -name ResourceConfIndexIcon -a -o ../theme/icons.go co
 
 ${fyne} bundle -pkg theme -name ResourceRunIcon -a -o ../theme/icons.go run.png
 ${fyne} bundle -pkg theme -name ResourceStopIcon -a -o ../theme/icons.go stop.png
+${fyne} bundle -pkg theme -name ResourceClearIcon -a -o ../theme/icons.go clear.png
 ${fyne} bundle -pkg theme -name ResourceDefAppIcon -a -o ../theme/icons.go def_app.png
 
 ${fyne} bundle -pkg theme -name ResourceFavoritesIcon -a -o ../theme/icons.go favor.png

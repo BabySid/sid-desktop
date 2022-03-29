@@ -46,7 +46,7 @@ func main() {
 
 	err = lua.RunScript(script.Content)
 	if err != nil {
-		log.Printf("script[%s] run failed. %s\n", opt.ScriptFile, err)
+		log.Printf("script[%s] run failed. %s\n", script.Title, err)
 		return
 	}
 
