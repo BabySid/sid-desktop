@@ -73,10 +73,9 @@ func (s *ScriptFileList) Debug() {
 }
 
 type ScriptFile struct {
-	ID         int64  `json:"-"`
+	ID         int32  `json:"-"`
 	Name       string `json:"name"`
 	Cont       string `json:"content"`
 	CreateTime int64  `json:"create_time"`
 	AccessTime int64  `json:"access_time"`
-	Dirty      bool   `json:"-"`
 }
