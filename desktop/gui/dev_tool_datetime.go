@@ -36,13 +36,51 @@ type devToolDateTime struct {
 	content fyne.CanvasObject
 }
 
+const (
+	tsUnit1 = "Second"
+	tsUnit2 = "MilliSecond"
+
+	dtLayoutS1 = "2006-01-02 15:04:05"
+	dtLayoutS2 = "2006/01/02 15:04:05"
+	dtLayoutS3 = "2006-01-02"
+	dtLayoutS4 = "2006/01/02"
+	dtLayoutS5 = "15:04:05"
+
+	dtLayoutMS1 = "2006-01-02 15:04:05.000"
+	dtLayoutMS2 = "2006/01/02 15:04:05.000"
+	dtLayoutMS3 = "2006-01-02"
+	dtLayoutMS4 = "2006/01/02"
+	dtLayoutMS5 = "15:04:05.000"
+)
+
+var (
+	timeStampUnit = []string{
+		tsUnit1,
+		tsUnit2,
+	}
+	dateTimeFormatS = []string{
+		dtLayoutS1,
+		dtLayoutS2,
+		dtLayoutS3,
+		dtLayoutS4,
+		dtLayoutS5,
+	}
+	dateTimeFormatMS = []string{
+		dtLayoutMS1,
+		dtLayoutMS2,
+		dtLayoutMS3,
+		dtLayoutMS4,
+		dtLayoutMS5,
+	}
+)
+
 func (d *devToolDateTime) CreateView() fyne.CanvasObject {
 	if d.content != nil {
 		return d.content
 	}
 
 	// common components
-	d.controlBtn = widget.NewButton(sidTheme.AppDevToolsDateTimeStartBtnName, func() {
+	d.controlBtn = widget.NewButtonWithIcon(sidTheme.AppDevToolsDateTimeStartBtnName, sidTheme.ResourceRunIcon, func() {
 
 	})
 
@@ -53,26 +91,41 @@ func (d *devToolDateTime) CreateView() fyne.CanvasObject {
 	})
 	d.nowTimeStampBtn.Alignment = widget.ButtonAlignLeading
 
-	d.timeStampUnitTsToDt = widget.NewSelect([]string{}, func(s string) {
-
+	d.timeStampUnitTsToDt = widget.NewSelect(timeStampUnit, func(s string) {
+		if s == tsUnit1 {
+			d.dateTimeFormatTsToDt.Options = dateTimeFormatS
+		}
+		if s == tsUnit2 {
+			d.dateTimeFormatTsToDt.Options = dateTimeFormatMS
+			d.dateTimeFormatTsToDt.PlaceHolder = dtLayoutMS1
+		}
+		d.dateTimeFormatTsToDt.SetSelectedIndex(0)
 	})
-	d.dateTimeFormatTsToDt = widget.NewSelect([]string{}, func(s string) {
 
-	})
+	d.dateTimeFormatTsToDt = widget.NewSelect(dateTimeFormatS, nil)
+
+	d.timeStampUnitTsToDt.SetSelectedIndex(0)
+	d.dateTimeFormatTsToDt.PlaceHolder = dtLayoutS1
+	d.dateTimeFormatTsToDt.SetSelectedIndex(0)
 
 	d.fromTimeStampEntry = widget.NewEntry()
 	d.toDateTimeEntry = widget.NewEntry()
 
-	fromTsToDtCont := widget.NewForm()
-	fromTsToDtCont.Append(sidTheme.AppDevToolsDateTimeNowTSName, d.nowTimeStampBtn)
-	fromTsToDtCont.Append(sidTheme.AppDevToolsDateTimeTimeStampName, d.fromTimeStampEntry)
-	fromTsToDtCont.Append(sidTheme.AppDevToolsDateTimeDateTimeName, d.toDateTimeEntry)
+	fromTsToDtCont := widget.NewForm(
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeNowTSName, d.nowTimeStampBtn),
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeTimeStampName, d.fromTimeStampEntry),
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeDateTimeName, d.toDateTimeEntry),
+	)
+
 	fromTsToDtCont.SubmitText = sidTheme.AppDevToolsDateTimeConvertBtnName
 	fromTsToDtCont.OnSubmit = func() {
 		fmt.Println("fromTsToDtCont")
 	}
 
-	fromTsToDtCard := widget.NewCard("", sidTheme.AppDevToolsDateTimeFromTsToDtTitle, fromTsToDtCont)
+	fromTsToDtCard := container.NewVBox(
+		container.NewHBox(layout.NewSpacer(), d.timeStampUnitTsToDt, d.dateTimeFormatTsToDt),
+		widget.NewCard("", sidTheme.AppDevToolsDateTimeFromTsToDtTitle, fromTsToDtCont),
+	)
 
 	// from datetime to ts
 	d.nowDateTimeBtn = widget.NewButton("2020-01-10 12:23:23", func() {
@@ -80,27 +133,42 @@ func (d *devToolDateTime) CreateView() fyne.CanvasObject {
 	})
 	d.nowDateTimeBtn.Alignment = widget.ButtonAlignLeading
 
-	d.timeStampUnitDtToTs = widget.NewSelect([]string{}, func(s string) {
-
+	d.timeStampUnitDtToTs = widget.NewSelect(timeStampUnit, func(s string) {
+		if s == tsUnit1 {
+			d.dateTimeFormatDtToTs.Options = dateTimeFormatS
+		}
+		if s == tsUnit2 {
+			d.dateTimeFormatDtToTs.Options = dateTimeFormatMS
+			d.dateTimeFormatDtToTs.PlaceHolder = dtLayoutMS1
+		}
+		d.dateTimeFormatDtToTs.SetSelectedIndex(0)
 	})
-	d.dateTimeFormatDtToTs = widget.NewSelect([]string{}, func(s string) {
 
-	})
+	d.dateTimeFormatDtToTs = widget.NewSelect(dateTimeFormatS, nil)
+
+	d.timeStampUnitDtToTs.SetSelectedIndex(0)
+	d.dateTimeFormatDtToTs.PlaceHolder = dtLayoutS1
+	d.dateTimeFormatDtToTs.SetSelectedIndex(0)
 
 	d.fromDateTimeEntry = widget.NewEntry()
 	d.toTimeStampEntry = widget.NewEntry()
 
-	fromDtToTsCont := widget.NewForm()
-	fromDtToTsCont.Append(sidTheme.AppDevToolsDateTimeNowDateTimeName, d.nowDateTimeBtn)
-	fromDtToTsCont.Append(sidTheme.AppDevToolsDateTimeDateTimeName, d.fromDateTimeEntry)
-	fromDtToTsCont.Append(sidTheme.AppDevToolsDateTimeTimeStampName, d.toTimeStampEntry)
+	fromDtToTsCont := widget.NewForm(
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeNowDateTimeName, d.nowDateTimeBtn),
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeDateTimeName, d.fromDateTimeEntry),
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeTimeStampName, d.toTimeStampEntry),
+	)
 	fromDtToTsCont.SubmitText = sidTheme.AppDevToolsDateTimeConvertBtnName
 	fromDtToTsCont.OnSubmit = func() {
 		fmt.Println("fromDtToTsCont")
 	}
-	fromDtToTsCard := widget.NewCard("", sidTheme.AppDevToolsDateTimeFromDtToTsTitle, fromDtToTsCont)
+
+	fromDtToTsCard := container.NewVBox(
+		container.NewHBox(layout.NewSpacer(), d.timeStampUnitDtToTs, d.dateTimeFormatDtToTs),
+		widget.NewCard("", sidTheme.AppDevToolsDateTimeFromDtToTsTitle, fromDtToTsCont),
+	)
 
 	d.content = container.NewBorder(container.NewHBox(layout.NewSpacer(), d.controlBtn), nil, nil, nil,
-		container.NewGridWithRows(2, fromTsToDtCard, fromDtToTsCard))
+		container.NewVBox(fromTsToDtCard, fromDtToTsCard, layout.NewSpacer()))
 	return d.content
 }
