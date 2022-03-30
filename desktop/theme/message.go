@@ -18,6 +18,8 @@ const (
 	InvalidContentFormat      = "invalid content. %s"
 	InternalErrorFormat       = "there is a internal error: %s"
 
+	TextCursorPosFormat = "Row:%d Col:%d"
+
 	// AppWelcomeName begins for built-in apps
 	AppWelcomeName = "WelCome"
 
@@ -83,10 +85,30 @@ const (
 	AppScriptRunnerCannotCloseMsg        = "Script is running now. Wait it stop or stop it, please"
 	AppScriptRunnerScriptNameValidateMsg = AppScriptRunnerCurScriptName + " must not be empty"
 
-	AppDevToolsName        = "Dev Tools"
-	AppDevToolsCodecName   = "Encode/Decode"
-	AppDevToolsRegexName   = "Regex"
-	AppDevToolsHttpCliName = "Http Client"
+	AppDevToolsName                    = "Dev Tools"
+	AppDevToolsTextProcName            = "Text Process"
+	AppDevToolsJsonProcName            = "Json"
+	AppDevToolsCompressJsonName        = "Compress"
+	AppDevToolsPrettyJsonName          = "Pretty"
+	AppDevToolsBase64ProcName          = "Base64"
+	AppDevToolsBase64EncodeName        = "Encode"
+	AppDevToolsBase64DecodeName        = "Decode"
+	AppDevToolsBase64UrlModeName       = "URL/FileName"
+	AppDevToolsBase64FillModeName      = "Fill With '='"
+	AppDevToolsBase64InputName         = "input"
+	AppDevToolsBase64OutputName        = "output"
+	AppDevToolsCliName                 = "Client"
+	AppDevToolsHttpCliName             = "Http Client"
+	AppDevToolsDateTimeName            = "DateTime"
+	AppDevToolsDateTimeFromTsToDtTitle = "From Timestamp to DateTime"
+	AppDevToolsDateTimeFromDtToTsTitle = "From DateTime to Timestamp"
+	AppDevToolsDateTimeNowTSName       = "Now Timestamp"
+	AppDevToolsDateTimeNowDateTimeName = "Now DateTime"
+	AppDevToolsDateTimeTimeStampName   = "Timestamp"
+	AppDevToolsDateTimeDateTimeName    = "DateTime"
+	AppDevToolsDateTimeStartBtnName    = "Start"
+	AppDevToolsDateTimeStopBtnName     = "Stop"
+	AppDevToolsDateTimeConvertBtnName  = "Convert"
 
 	LogViewerRefreshBtn = "Refresh"
 	LogViewerTitle      = "Show Log"

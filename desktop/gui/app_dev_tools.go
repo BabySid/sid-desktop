@@ -7,27 +7,58 @@ import (
 	sidTheme "sid-desktop/desktop/theme"
 )
 
+var (
+	devToolIndex = map[string][]string{
+		"":                               {sidTheme.AppDevToolsTextProcName, sidTheme.AppDevToolsCliName, sidTheme.AppDevToolsDateTimeName},
+		sidTheme.AppDevToolsTextProcName: {sidTheme.AppDevToolsJsonProcName, sidTheme.AppDevToolsBase64ProcName},
+		sidTheme.AppDevToolsCliName:      {sidTheme.AppDevToolsHttpCliName},
+	}
+
+	devTools = map[string]devToolInterface{
+		sidTheme.AppDevToolsJsonProcName:   &devToolJson{},
+		sidTheme.AppDevToolsBase64ProcName: &devToolBase64{},
+		sidTheme.AppDevToolsDateTimeName:   &devToolDateTime{},
+	}
+)
+
+type devToolInterface interface {
+	CreateView() fyne.CanvasObject
+}
+
 var _ appInterface = (*appDevTools)(nil)
 
 type appDevTools struct {
 	contTree *widget.Tree
+	content  *fyne.Container
 	tabItem  *container.TabItem
 }
 
 func (adt *appDevTools) LazyInit() error {
 	adt.contTree = widget.NewTree(
 		func(id widget.TreeNodeID) []widget.TreeNodeID {
-			return []string{"a", "b", "c"}
+			return devToolIndex[id]
 		}, func(id widget.TreeNodeID) bool {
-			return true
+			children, ok := devToolIndex[id]
+			return ok && len(children) > 0
 		}, func(b bool) fyne.CanvasObject {
-			return widget.NewLabel("a")
+			return widget.NewLabel("")
 		}, func(id widget.TreeNodeID, b bool, obj fyne.CanvasObject) {
-			obj.(*widget.Label).SetText("title")
+			obj.(*widget.Label).SetText(id)
 		})
 
+	adt.contTree.OnSelected = func(id widget.TreeNodeID) {
+		if obj, ok := devTools[id]; ok {
+			adt.content.Objects = []fyne.CanvasObject{obj.CreateView()}
+			adt.content.Refresh()
+		}
+	}
+
 	adt.tabItem = container.NewTabItemWithIcon(sidTheme.AppDevToolsName, sidTheme.ResourceDevToolsIcon, nil)
-	adt.tabItem.Content = container.NewHSplit(adt.contTree, widget.NewLabel("this is content"))
+	adt.content = container.NewMax()
+	panel := container.NewHSplit(adt.contTree, adt.content)
+	panel.SetOffset(0.3)
+	adt.tabItem.Content = panel
+
 	return nil
 }
 

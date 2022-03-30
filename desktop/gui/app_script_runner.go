@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
 	"github.com/go-cmd/cmd"
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 	"google.golang.org/protobuf/encoding/protojson"
 	"io/ioutil"
 	"os"
@@ -80,7 +80,7 @@ func (asr *appScriptRunner) LazyInit() error {
 
 	asr.scriptPos = widget.NewLabel("")
 	asr.scriptBody.OnCursorChanged = func() {
-		asr.scriptPos.SetText(fmt.Sprintf("Row: %d, Col: %d", asr.scriptBody.CursorRow+1, asr.scriptBody.CursorColumn+1))
+		asr.scriptPos.SetText(fmt.Sprintf(sidTheme.TextCursorPosFormat, asr.scriptBody.CursorRow+1, asr.scriptBody.CursorColumn+1))
 	}
 
 	asr.scriptLog = widget.NewMultiLineEntry()
