@@ -18,6 +18,7 @@ var (
 		sidTheme.AppDevToolsJsonProcName:   &devToolJson{},
 		sidTheme.AppDevToolsBase64ProcName: &devToolBase64{},
 		sidTheme.AppDevToolsDateTimeName:   &devToolDateTime{},
+		sidTheme.AppDevToolsHttpCliName:    &devToolHttpClient{},
 	}
 )
 
