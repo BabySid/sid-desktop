@@ -1,7 +1,7 @@
 fyne.io/fyne/v2 v2.1.4 h1:bt1+28++kAzRzPB0GM2EuSV4cnl8rXNX4cjfd8G06Rc=
 fyne.io/fyne/v2 v2.1.4/go.mod h1:p+E/Dh+wPW8JwR2DVcsZ9iXgR9ZKde80+Y+40Is54AQ=
-github.com/BabySid/gobase v0.0.0-20220330082214-991b0d98b523 h1:TD4lrBCYhmzt8D52LTXj7fXZlRVH/AnXe2/gSTeDsNY=
-github.com/BabySid/gobase v0.0.0-20220330082214-991b0d98b523/go.mod h1:psRlcjEywZdxNf9jp6IdYY7VcAsYPtcnLHYQ+dWG5uw=
+github.com/BabySid/gobase v0.0.0-20220331031815-bcf2143b2dcb h1:qSjcs/JFtZv1x+vwWYe1cS3W/MC5eqD5kzMZegNbyPw=
+github.com/BabySid/gobase v0.0.0-20220331031815-bcf2143b2dcb/go.mod h1:psRlcjEywZdxNf9jp6IdYY7VcAsYPtcnLHYQ+dWG5uw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v0.4.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/Kodeworks/golang-image-ico v0.0.0-20141118225523-73f0f4cfade9/go.mod h1:7uhhqiBaR4CpN0k9rMjOtjpcfGd6DG2m04zQxKnWQ0I=

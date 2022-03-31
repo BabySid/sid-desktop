@@ -100,6 +100,8 @@ const (
 	AppDevToolsCliName                 = "Client"
 	AppDevToolsHttpCliName             = "Http Client"
 	AppDevToolsDateTimeName            = "DateTime"
+	AppDevToolsDateTimeTSUnit          = "TimeStamp Unit"
+	AppDevToolsDateTimeDTFormat        = "DateTime Format"
 	AppDevToolsDateTimeFromTsToDtTitle = "From Timestamp to DateTime"
 	AppDevToolsDateTimeFromDtToTsTitle = "From DateTime to Timestamp"
 	AppDevToolsDateTimeNowTSName       = "Now Timestamp"

@@ -1,12 +1,14 @@
 package gui
 
 import (
-	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
 	sidTheme "sid-desktop/desktop/theme"
+	"strconv"
+	"time"
 )
 
 var _ devToolInterface = (*devToolDateTime)(nil)
@@ -14,6 +16,8 @@ var _ devToolInterface = (*devToolDateTime)(nil)
 type devToolDateTime struct {
 	// common components
 	controlBtn *widget.Button
+	done       chan bool
+	timer      *time.Ticker
 
 	// from ts to datetime
 	nowTimeStampBtn *widget.Button
@@ -80,58 +84,74 @@ func (d *devToolDateTime) CreateView() fyne.CanvasObject {
 	}
 
 	// common components
-	d.controlBtn = widget.NewButtonWithIcon(sidTheme.AppDevToolsDateTimeStartBtnName, sidTheme.ResourceRunIcon, func() {
-
+	d.controlBtn = widget.NewButtonWithIcon(sidTheme.AppDevToolsDateTimeStopBtnName, sidTheme.ResourceStopIcon, func() {
+		if d.controlBtn.Text == sidTheme.AppDevToolsDateTimeStopBtnName {
+			d.stopTimer()
+			d.controlBtn.SetText(sidTheme.AppDevToolsDateTimeStartBtnName)
+			d.controlBtn.SetIcon(sidTheme.ResourceRunIcon)
+		} else {
+			d.startTimer()
+			d.controlBtn.SetText(sidTheme.AppDevToolsDateTimeStopBtnName)
+			d.controlBtn.SetIcon(sidTheme.ResourceStopIcon)
+		}
 	})
 
 	// from ts to datetime
-	d.nowTimeStampBtn = widget.NewButton("1648642283", func() {
-		// now timestamp
-		// tap it to copy to d.fromTimeStampEntry
+	d.nowTimeStampBtn = widget.NewButton("", func() {
+		d.fromTimeStampEntry.SetText(d.nowTimeStampBtn.Text)
 	})
 	d.nowTimeStampBtn.Alignment = widget.ButtonAlignLeading
 
+	d.dateTimeFormatTsToDt = widget.NewSelect([]string{}, nil)
 	d.timeStampUnitTsToDt = widget.NewSelect(timeStampUnit, func(s string) {
 		if s == tsUnit1 {
 			d.dateTimeFormatTsToDt.Options = dateTimeFormatS
 		}
 		if s == tsUnit2 {
 			d.dateTimeFormatTsToDt.Options = dateTimeFormatMS
-			d.dateTimeFormatTsToDt.PlaceHolder = dtLayoutMS1
 		}
+		setSelectLayout(d.dateTimeFormatTsToDt)
 		d.dateTimeFormatTsToDt.SetSelectedIndex(0)
 	})
-
-	d.dateTimeFormatTsToDt = widget.NewSelect(dateTimeFormatS, nil)
-
+	setSelectLayout(d.timeStampUnitTsToDt)
 	d.timeStampUnitTsToDt.SetSelectedIndex(0)
-	d.dateTimeFormatTsToDt.PlaceHolder = dtLayoutS1
-	d.dateTimeFormatTsToDt.SetSelectedIndex(0)
 
 	d.fromTimeStampEntry = widget.NewEntry()
 	d.toDateTimeEntry = widget.NewEntry()
 
 	fromTsToDtCont := widget.NewForm(
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeTSUnit, d.timeStampUnitTsToDt),
 		widget.NewFormItem(sidTheme.AppDevToolsDateTimeNowTSName, d.nowTimeStampBtn),
 		widget.NewFormItem(sidTheme.AppDevToolsDateTimeTimeStampName, d.fromTimeStampEntry),
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeDTFormat, d.dateTimeFormatTsToDt),
 		widget.NewFormItem(sidTheme.AppDevToolsDateTimeDateTimeName, d.toDateTimeEntry),
 	)
 
 	fromTsToDtCont.SubmitText = sidTheme.AppDevToolsDateTimeConvertBtnName
 	fromTsToDtCont.OnSubmit = func() {
-		fmt.Println("fromTsToDtCont")
+		ts, err := strconv.ParseInt(d.fromTimeStampEntry.Text, 10, 64)
+		if err != nil {
+			d.toDateTimeEntry.SetText(err.Error())
+			return
+		}
+
+		if d.timeStampUnitTsToDt.Selected == tsUnit1 {
+			d.toDateTimeEntry.SetText(gobase.FormatTimeStampWithFormat(ts, d.dateTimeFormatTsToDt.Selected))
+		}
+		if d.timeStampUnitTsToDt.Selected == tsUnit2 {
+			d.toDateTimeEntry.SetText(gobase.FormatTimeStampMilliWithFormat(ts, d.dateTimeFormatTsToDt.Selected))
+		}
 	}
 
-	fromTsToDtCard := container.NewVBox(
-		container.NewHBox(layout.NewSpacer(), d.timeStampUnitTsToDt, d.dateTimeFormatTsToDt),
-		widget.NewCard("", sidTheme.AppDevToolsDateTimeFromTsToDtTitle, fromTsToDtCont),
-	)
+	fromTsToDtCard := widget.NewCard("", sidTheme.AppDevToolsDateTimeFromTsToDtTitle, fromTsToDtCont)
 
 	// from datetime to ts
-	d.nowDateTimeBtn = widget.NewButton("2020-01-10 12:23:23", func() {
-
+	d.nowDateTimeBtn = widget.NewButton("", func() {
+		d.fromDateTimeEntry.SetText(d.nowDateTimeBtn.Text)
 	})
 	d.nowDateTimeBtn.Alignment = widget.ButtonAlignLeading
+
+	d.dateTimeFormatDtToTs = widget.NewSelect([]string{}, nil)
 
 	d.timeStampUnitDtToTs = widget.NewSelect(timeStampUnit, func(s string) {
 		if s == tsUnit1 {
@@ -139,36 +159,95 @@ func (d *devToolDateTime) CreateView() fyne.CanvasObject {
 		}
 		if s == tsUnit2 {
 			d.dateTimeFormatDtToTs.Options = dateTimeFormatMS
-			d.dateTimeFormatDtToTs.PlaceHolder = dtLayoutMS1
 		}
+		setSelectLayout(d.dateTimeFormatDtToTs)
 		d.dateTimeFormatDtToTs.SetSelectedIndex(0)
 	})
-
-	d.dateTimeFormatDtToTs = widget.NewSelect(dateTimeFormatS, nil)
-
+	setSelectLayout(d.timeStampUnitDtToTs)
 	d.timeStampUnitDtToTs.SetSelectedIndex(0)
-	d.dateTimeFormatDtToTs.PlaceHolder = dtLayoutS1
-	d.dateTimeFormatDtToTs.SetSelectedIndex(0)
 
 	d.fromDateTimeEntry = widget.NewEntry()
 	d.toTimeStampEntry = widget.NewEntry()
 
 	fromDtToTsCont := widget.NewForm(
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeDTFormat, d.dateTimeFormatDtToTs),
 		widget.NewFormItem(sidTheme.AppDevToolsDateTimeNowDateTimeName, d.nowDateTimeBtn),
 		widget.NewFormItem(sidTheme.AppDevToolsDateTimeDateTimeName, d.fromDateTimeEntry),
+		widget.NewFormItem(sidTheme.AppDevToolsDateTimeTSUnit, d.timeStampUnitDtToTs),
 		widget.NewFormItem(sidTheme.AppDevToolsDateTimeTimeStampName, d.toTimeStampEntry),
 	)
 	fromDtToTsCont.SubmitText = sidTheme.AppDevToolsDateTimeConvertBtnName
 	fromDtToTsCont.OnSubmit = func() {
-		fmt.Println("fromDtToTsCont")
+		t, err := time.Parse(d.dateTimeFormatDtToTs.Selected, d.fromDateTimeEntry.Text)
+		if err != nil {
+			d.toTimeStampEntry.SetText(err.Error())
+			return
+		}
+
+		if d.timeStampUnitDtToTs.Selected == tsUnit1 {
+			d.toTimeStampEntry.SetText(strconv.Itoa(int(t.Unix())))
+		}
+		if d.timeStampUnitDtToTs.Selected == tsUnit2 {
+			d.toTimeStampEntry.SetText(strconv.FormatInt(t.UnixMilli(), 10))
+		}
 	}
 
-	fromDtToTsCard := container.NewVBox(
-		container.NewHBox(layout.NewSpacer(), d.timeStampUnitDtToTs, d.dateTimeFormatDtToTs),
-		widget.NewCard("", sidTheme.AppDevToolsDateTimeFromDtToTsTitle, fromDtToTsCont),
-	)
+	fromDtToTsCard := widget.NewCard("", sidTheme.AppDevToolsDateTimeFromDtToTsTitle, fromDtToTsCont)
 
 	d.content = container.NewBorder(container.NewHBox(layout.NewSpacer(), d.controlBtn), nil, nil, nil,
-		container.NewVBox(fromTsToDtCard, fromDtToTsCard, layout.NewSpacer()))
+		container.NewScroll(container.NewVBox(fromTsToDtCard, fromDtToTsCard, layout.NewSpacer())))
+
+	d.done = make(chan bool)
+	d.startTimer()
+
 	return d.content
+}
+
+// getMaxLengthItem returns the maxOption for widget.Select Layout
+// https://github.com/fyne-io/fyne/issues/2881
+func setSelectLayout(sel *widget.Select) {
+	value := ""
+	for _, item := range sel.Options {
+		if len(item) > len(value) {
+			value = item
+		}
+	}
+
+	sel.PlaceHolder = value
+}
+
+func (d *devToolDateTime) startTimer() {
+	d.timer = time.NewTicker(time.Second * 1)
+	go func() {
+		defer func() {
+			d.timer.Stop()
+		}()
+
+		for {
+			select {
+			case <-d.timer.C:
+				now := time.Now()
+				if d.timeStampUnitTsToDt.Selected == tsUnit1 {
+					d.nowTimeStampBtn.SetText(strconv.Itoa(int(now.Unix())))
+				}
+				if d.timeStampUnitTsToDt.Selected == tsUnit2 {
+					d.nowTimeStampBtn.SetText(strconv.Itoa(int(now.UnixMilli())))
+				}
+
+				if d.timeStampUnitDtToTs.Selected == tsUnit1 {
+					d.nowDateTimeBtn.SetText(gobase.FormatTimeStampWithFormat(now.Unix(), d.dateTimeFormatDtToTs.Selected))
+				}
+				if d.timeStampUnitDtToTs.Selected == tsUnit2 {
+					d.nowDateTimeBtn.SetText(gobase.FormatTimeStampMilliWithFormat(now.UnixMilli(), d.dateTimeFormatDtToTs.Selected))
+				}
+
+			case <-d.done:
+				return
+			}
+		}
+	}()
+}
+
+func (d *devToolDateTime) stopTimer() {
+	d.done <- true
 }
