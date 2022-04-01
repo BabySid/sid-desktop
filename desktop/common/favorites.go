@@ -28,9 +28,10 @@ func (s *FavoritesList) Find(name string) *FavoritesList {
 }
 
 func (s *FavoritesList) UpdateFavorites(d Favorites) {
-	for _, app := range s.favors {
+	for i, app := range s.favors {
 		if app.ID == d.ID {
 			app = d
+			s.favors[i] = app
 			return
 		}
 	}

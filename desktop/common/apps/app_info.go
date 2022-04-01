@@ -29,9 +29,10 @@ func (s *AppList) Find(name string) *AppList {
 }
 
 func (s *AppList) UpdateAppInfo(d AppInfo) {
-	for _, app := range s.apps {
+	for i, app := range s.apps {
 		if app.AppID == d.AppID {
 			app.AccessTime = d.AccessTime
+			s.apps[i] = app
 			return
 		}
 	}
