@@ -2,7 +2,6 @@ package common
 
 import (
 	"fmt"
-	"fyne.io/fyne/v2/data/binding"
 	"github.com/sahilm/fuzzy"
 	"strings"
 	"time"
@@ -10,13 +9,20 @@ import (
 
 var (
 	// BuiltInHttpRequestHeader zero-value means calculated when request is sent
+	//builtInHttpRequestHeader = map[string]interface{}{
+	//	"Accept":          "*/*",
+	//	"Accept-Encoding": "gzip, deflate, br",
+	//	"Connection":      "keep-alive",
+	//	"Content-Length":  0,
+	//	"User-Agent":      "Sid Desktop",
+	//	"Content-Type":    "application/json",
+	//}
 	builtInHttpRequestHeader = map[string]interface{}{
-		"Accept":          "*/*",
-		"Accept-Encoding": "gzip, deflate, br",
-		"Connection":      "keep-alive",
-		"Content-Length":  0,
-		"User-Agent":      "Sid Desktop",
-		"Content-Type":    "application/json",
+		"0": "0",
+		"1": "1",
+		"2": "2",
+		"3": "3",
+		"4": "4",
 	}
 	defMethod = "POST"
 
@@ -40,25 +46,20 @@ type HttpHeader struct {
 	Value interface{} `json:"value"`
 }
 
-type HttpHeaderBinding struct {
-	Key   binding.String
-	Value binding.String
-}
-
-func NewHttpHeaderBinding() *HttpHeaderBinding {
-	return &HttpHeaderBinding{
-		Key:   binding.NewString(),
-		Value: binding.NewString(),
+func NewHttpHeader() *HttpHeader {
+	return &HttpHeader{
+		Key:   "",
+		Value: nil,
 	}
 }
 
-func NewBuiltInHttpHeaderBinding() []interface{} {
+func NewBuiltInHttpHeader() []interface{} {
 	rs := make([]interface{}, 0)
 	for k, v := range builtInHttpRequestHeader {
-		header := NewHttpHeaderBinding()
-		header.Key.Set(k)
-		header.Value.Set(fmt.Sprintf("%v", v))
-
+		header := &HttpHeader{
+			Key:   k,
+			Value: v,
+		}
 		rs = append(rs, header)
 	}
 

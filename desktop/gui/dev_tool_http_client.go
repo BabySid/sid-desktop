@@ -1,10 +1,12 @@
 package gui
 
 import (
+	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
 	"sid-desktop/desktop/common"
 	"strings"
 )
@@ -41,7 +43,7 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 	d.method.SetSelectedIndex(0)
 	d.url = widget.NewEntry()
 	d.url.SetPlaceHolder("url")
-	d.sendRequest = widget.NewButton("Send", nil)
+	d.sendRequest = widget.NewButton("Send", d.sendHttpRequest)
 
 	d.createRequestView()
 	d.createResponseView()
@@ -57,11 +59,32 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 	return d.content
 }
 
+func (d *devToolHttpClient) sendHttpRequest() {
+	for i := 0; i < d.reqHeaderBinding.Length(); i++ {
+		obj, _ := d.reqHeaderBinding.GetValue(i)
+		header := obj.(*common.HttpHeader)
+		fmt.Println(i, header.Key, header.Value)
+	}
+}
+
+func (d *devToolHttpClient) DataChanged() {
+	fmt.Println("data changed")
+
+	data, _ := d.reqHeaderBinding.Get()
+	for i, d := range data {
+		h := d.(*common.HttpHeader)
+		fmt.Print(i, h, " ")
+	}
+
+	fmt.Println()
+}
+
 func (d *devToolHttpClient) createRequestView() {
 	d.reqHeaderBinding = binding.NewUntypedList()
 
-	d.reqHeaderBinding.Set(common.NewBuiltInHttpHeaderBinding())
-	d.reqHeaderBinding.Append(common.NewHttpHeaderBinding())
+	d.reqHeaderBinding.Set(common.NewBuiltInHttpHeader())
+	d.reqHeaderBinding.Append(common.NewHttpHeader())
+	d.reqHeaderBinding.AddListener(d)
 
 	d.requestHeader = widget.NewListWithData(
 		d.reqHeaderBinding,
@@ -74,24 +97,37 @@ func (d *devToolHttpClient) createRequestView() {
 		},
 		func(item binding.DataItem, obj fyne.CanvasObject) {
 			o, _ := item.(binding.Untyped).Get()
-			header := o.(*common.HttpHeaderBinding)
+			header := o.(*common.HttpHeader)
+
+			arr, _ := d.reqHeaderBinding.Get()
+			lineNo := ContainsInterface(arr, header)
+			gobase.True(lineNo >= 0)
 
 			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Entry)
-			key.Bind(header.Key)
+			key.SetText(header.Key)
 			key.SetPlaceHolder("key")
 			key.OnChanged = func(s string) {
-				header.Key.Set(s)
-				//d.reqHeaderBinding.set
-				if s != "" {
-					if d.reqHeaderBinding.Length() <= 1 {
-						d.reqHeaderBinding.Append(common.NewHttpHeaderBinding())
-					}
-				}
+				fmt.Printf("set key %d %s->%s\n", lineNo, header.Key, s)
+
+				header.Key = s
+
+				//if lineNo == d.reqHeaderBinding.Length()-1 {
+				//	d.reqHeaderBinding.Append(common.NewHttpHeader())
+				//}
 			}
 
 			value := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Entry)
-			value.Bind(header.Value)
+			if header.Value != nil {
+				value.SetText(fmt.Sprintf("%v", header.Value))
+			} else {
+				value.SetText("")
+			}
+
 			value.SetPlaceHolder("value")
+			value.OnChanged = func(s string) {
+				fmt.Printf("set value %d %s->%s\n", lineNo, header.Value, s)
+				header.Value = s
+			}
 
 			rm := obj.(*fyne.Container).Objects[1].(*widget.Button)
 
@@ -101,18 +137,15 @@ func (d *devToolHttpClient) createRequestView() {
 			}
 
 			rm.OnTapped = func() {
-				//tmp, _ := d.reqHeaderBinding.Get()
-				//for i, h := range tmp {
-				//	if h == o {
-				//		if i+1 > len(tmp) {
-				//			tmp = append(tmp[:i], tmp[:]...)
-				//		} else {
-				//			tmp = append(tmp[:i], tmp[i+1:]...)
-				//		}
-				//
-				//		d.reqHeaderBinding.Set(tmp)
-				//	}
-				//}
+				fmt.Println("remove", lineNo)
+				tmp, _ := d.reqHeaderBinding.Get()
+				tmp = append(tmp[:lineNo], tmp[lineNo+1:]...)
+				for i, x := range tmp {
+					h := x.(*common.HttpHeader)
+					fmt.Print(i, h, " ")
+				}
+				fmt.Println()
+				d.reqHeaderBinding.Set(tmp)
 			}
 		},
 	)
@@ -134,7 +167,7 @@ func (d *devToolHttpClient) createRequestView() {
 
 func (d *devToolHttpClient) createResponseView() {
 	d.respHeaderBinding = binding.NewUntypedList()
-	d.respHeaderBinding.Set(common.NewBuiltInHttpHeaderBinding())
+	d.respHeaderBinding.Set(common.NewBuiltInHttpHeader())
 
 	d.responseHeader = widget.NewListWithData(
 		d.reqHeaderBinding,
@@ -147,14 +180,14 @@ func (d *devToolHttpClient) createResponseView() {
 		},
 		func(item binding.DataItem, obj fyne.CanvasObject) {
 			o, _ := item.(binding.Untyped).Get()
-			header := o.(*common.HttpHeaderBinding)
+			header := o.(*common.HttpHeader)
 
 			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Entry)
-			key.Bind(header.Key)
+			key.SetText(header.Key)
 			key.Disable()
 
 			value := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Entry)
-			value.Bind(header.Value)
+			value.SetText(fmt.Sprintf("%v", header.Value))
 			value.Disable()
 		},
 	)
@@ -192,4 +225,14 @@ func filteredListForSelect(filter *string) (resultList []string) {
 		}
 		return resultList
 	}
+}
+
+func ContainsInterface(array []interface{}, val interface{}) int {
+	for i, item := range array {
+		if item == val {
+			return i
+		}
+	}
+
+	return -1
 }
