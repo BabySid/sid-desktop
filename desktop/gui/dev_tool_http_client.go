@@ -79,7 +79,7 @@ func (d *devToolHttpClient) createRequestView() {
 	d.reqHeaderBinding = binding.NewUntypedList()
 
 	d.reqHeaderBinding.Set(common.NewBuiltInHttpHeader())
-	//d.reqHeaderBinding.Append(common.NewHttpHeader())
+	d.reqHeaderBinding.Append(common.NewHttpHeader())
 
 	d.requestHeader = widget.NewListWithData(
 		d.reqHeaderBinding,
@@ -130,7 +130,7 @@ func (d *devToolHttpClient) createRequestView() {
 			if d.reqHeaderBinding.Length() == 1 {
 				rm.Disable()
 			}
-
+			
 			rm.OnTapped = func() {
 				tmp, _ := d.reqHeaderBinding.Get()
 				tmp = append(tmp[:lineNo], tmp[lineNo+1:]...)
