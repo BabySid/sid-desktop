@@ -1,7 +1,6 @@
 package gui
 
 import (
-	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
@@ -13,11 +12,9 @@ import (
 var _ devToolInterface = (*devToolHttpClient)(nil)
 
 type devToolHttpClient struct {
-	method       *widget.Select
-	url          *widget.Entry
-	sendRequest  *widget.Button
-	hideRequest  *widget.Button
-	hideResponse *widget.Button
+	method      *widget.Select
+	url         *widget.Entry
+	sendRequest *widget.Button
 
 	reqBodyArea      *container.AppTabs
 	reqHeaderBinding binding.UntypedList
@@ -45,33 +42,15 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 	d.url = widget.NewEntry()
 	d.url.SetPlaceHolder("url")
 	d.sendRequest = widget.NewButton("Send", nil)
-	d.hideRequest = widget.NewButton("Hide Request", func() {
-		if d.reqBodyArea.Visible() {
-			d.reqBodyArea.Hide()
-			d.hideRequest.SetText("Show Request")
-		} else {
-			d.reqBodyArea.Show()
-			d.hideRequest.SetText("Hide Request")
-		}
-	})
-	d.hideResponse = widget.NewButton("Hide Response", func() {
-		if d.respBodyArea.Visible() {
-			d.respBodyArea.Hide()
-			d.hideResponse.SetText("Show Request")
-		} else {
-			d.respBodyArea.Show()
-			d.hideResponse.SetText("Hide Request")
-		}
-	})
 
 	d.createRequestView()
 	d.createResponseView()
 
 	area := container.NewVSplit(d.reqBodyArea, d.respBodyArea)
-	area.SetOffset(0.1)
+	area.SetOffset(0.5)
 
 	d.content = container.NewBorder(
-		container.NewBorder(nil, nil, d.method, container.NewHBox(d.sendRequest, d.hideRequest, d.hideResponse), d.url),
+		container.NewBorder(nil, nil, d.method, d.sendRequest, d.url),
 		nil, nil, nil,
 		area)
 
@@ -79,34 +58,61 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 }
 
 func (d *devToolHttpClient) createRequestView() {
-	var req common.HttpRequest
-	common.InitHttpRequest(&req)
-
 	d.reqHeaderBinding = binding.NewUntypedList()
-	d.reqHeaderBinding.Set(req.AsInterfaceArray())
+
+	d.reqHeaderBinding.Set(common.NewBuiltInHttpHeaderBinding())
+	d.reqHeaderBinding.Append(common.NewHttpHeaderBinding())
 
 	d.requestHeader = widget.NewListWithData(
 		d.reqHeaderBinding,
 		func() fyne.CanvasObject {
 			return container.NewBorder(nil, nil, nil, widget.NewButton("Remove", nil),
 				container.NewGridWithColumns(2,
-					widget.NewSelectEntry(common.HttpHeaderName),
+					widget.NewEntry(),
 					widget.NewEntry(),
 				))
 		},
 		func(item binding.DataItem, obj fyne.CanvasObject) {
 			o, _ := item.(binding.Untyped).Get()
-			header := o.(common.HttpHeader)
+			header := o.(*common.HttpHeaderBinding)
 
-			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.SelectEntry)
-			key.SetText(header.Key)
+			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Entry)
+			key.Bind(header.Key)
+			key.SetPlaceHolder("key")
+			key.OnChanged = func(s string) {
+				header.Key.Set(s)
+				//d.reqHeaderBinding.set
+				if s != "" {
+					if d.reqHeaderBinding.Length() <= 1 {
+						d.reqHeaderBinding.Append(common.NewHttpHeaderBinding())
+					}
+				}
+			}
 
 			value := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Entry)
-			value.SetText(fmt.Sprintf("%v", header.Value))
+			value.Bind(header.Value)
+			value.SetPlaceHolder("value")
 
 			rm := obj.(*fyne.Container).Objects[1].(*widget.Button)
+
+			rm.Enable()
+			if d.reqHeaderBinding.Length() == 1 {
+				rm.Disable()
+			}
+
 			rm.OnTapped = func() {
-				fmt.Println(header)
+				//tmp, _ := d.reqHeaderBinding.Get()
+				//for i, h := range tmp {
+				//	if h == o {
+				//		if i+1 > len(tmp) {
+				//			tmp = append(tmp[:i], tmp[:]...)
+				//		} else {
+				//			tmp = append(tmp[:i], tmp[i+1:]...)
+				//		}
+				//
+				//		d.reqHeaderBinding.Set(tmp)
+				//	}
+				//}
 			}
 		},
 	)
@@ -127,30 +133,29 @@ func (d *devToolHttpClient) createRequestView() {
 }
 
 func (d *devToolHttpClient) createResponseView() {
-	var req common.HttpRequest
-	common.InitHttpRequest(&req)
-
 	d.respHeaderBinding = binding.NewUntypedList()
-	d.respHeaderBinding.Set(req.AsInterfaceArray())
+	d.respHeaderBinding.Set(common.NewBuiltInHttpHeaderBinding())
 
 	d.responseHeader = widget.NewListWithData(
 		d.reqHeaderBinding,
 		func() fyne.CanvasObject {
 			return container.NewBorder(nil, nil, nil, nil,
 				container.NewGridWithColumns(2,
-					widget.NewSelectEntry(common.HttpHeaderName),
+					widget.NewEntry(),
 					widget.NewEntry(),
 				))
 		},
 		func(item binding.DataItem, obj fyne.CanvasObject) {
 			o, _ := item.(binding.Untyped).Get()
-			header := o.(common.HttpHeader)
+			header := o.(*common.HttpHeaderBinding)
 
-			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.SelectEntry)
-			key.SetText(header.Key)
+			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Entry)
+			key.Bind(header.Key)
+			key.Disable()
 
 			value := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Entry)
-			value.SetText(fmt.Sprintf("%v", header.Value))
+			value.Bind(header.Value)
+			value.Disable()
 		},
 	)
 

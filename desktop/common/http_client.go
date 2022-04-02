@@ -2,7 +2,7 @@ package common
 
 import (
 	"fmt"
-	"github.com/BabySid/gobase"
+	"fyne.io/fyne/v2/data/binding"
 	"github.com/sahilm/fuzzy"
 	"strings"
 	"time"
@@ -40,6 +40,31 @@ type HttpHeader struct {
 	Value interface{} `json:"value"`
 }
 
+type HttpHeaderBinding struct {
+	Key   binding.String
+	Value binding.String
+}
+
+func NewHttpHeaderBinding() *HttpHeaderBinding {
+	return &HttpHeaderBinding{
+		Key:   binding.NewString(),
+		Value: binding.NewString(),
+	}
+}
+
+func NewBuiltInHttpHeaderBinding() []interface{} {
+	rs := make([]interface{}, 0)
+	for k, v := range builtInHttpRequestHeader {
+		header := NewHttpHeaderBinding()
+		header.Key.Set(k)
+		header.Value.Set(fmt.Sprintf("%v", v))
+
+		rs = append(rs, header)
+	}
+
+	return rs
+}
+
 type HttpRequest struct {
 	ID     int64  `json:"-"`
 	Method string `json:"method"`
@@ -49,32 +74,6 @@ type HttpRequest struct {
 
 	CreateTime int64 `json:"create_time"`
 	AccessTime int64 `json:"access_time"`
-}
-
-func InitHttpRequest(req *HttpRequest) {
-	gobase.True(req != nil)
-
-	req.Method = defMethod
-	req.ReqHeader = make([]HttpHeader, 0)
-
-	for k, v := range builtInHttpRequestHeader {
-		header := HttpHeader{
-			Key:   k,
-			Value: v,
-		}
-		req.ReqHeader = append(req.ReqHeader, header)
-	}
-
-	req.CreateTime = time.Now().Unix()
-	req.AccessTime = time.Now().Unix()
-}
-
-func (s *HttpRequest) AsInterfaceArray() []interface{} {
-	rs := make([]interface{}, len(s.ReqHeader), len(s.ReqHeader))
-	for i := range s.ReqHeader {
-		rs[i] = s.ReqHeader[i]
-	}
-	return rs
 }
 
 type HttpRequestList struct {
