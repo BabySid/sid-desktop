@@ -8,6 +8,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
 	"sid-desktop/desktop/common"
+	"strconv"
 	"strings"
 )
 
@@ -60,31 +61,25 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 }
 
 func (d *devToolHttpClient) sendHttpRequest() {
-	for i := 0; i < d.reqHeaderBinding.Length(); i++ {
-		obj, _ := d.reqHeaderBinding.GetValue(i)
-		header := obj.(*common.HttpHeader)
-		fmt.Println(i, header.Key, header.Value)
+	//for i := 0; i < d.reqHeaderBinding.Length(); i++ {
+	//	obj, _ := d.reqHeaderBinding.GetValue(i)
+	//	header := obj.(*common.HttpHeader)
+	//	fmt.Println(i, header.Key, header.Value)
+	//}
+	i, _ := strconv.Atoi(d.url.Text)
+	arr, _ := d.reqHeaderBinding.Get()
+	if len(arr) == 0 {
+		return
 	}
-}
-
-func (d *devToolHttpClient) DataChanged() {
-	fmt.Println("data changed")
-
-	data, _ := d.reqHeaderBinding.Get()
-	for i, d := range data {
-		h := d.(*common.HttpHeader)
-		fmt.Print(i, h, " ")
-	}
-
-	fmt.Println()
+	arr = append(arr[:i], arr[i+1:]...)
+	d.reqHeaderBinding.Set(arr)
 }
 
 func (d *devToolHttpClient) createRequestView() {
 	d.reqHeaderBinding = binding.NewUntypedList()
 
 	d.reqHeaderBinding.Set(common.NewBuiltInHttpHeader())
-	d.reqHeaderBinding.Append(common.NewHttpHeader())
-	d.reqHeaderBinding.AddListener(d)
+	//d.reqHeaderBinding.Append(common.NewHttpHeader())
 
 	d.requestHeader = widget.NewListWithData(
 		d.reqHeaderBinding,
@@ -106,15 +101,15 @@ func (d *devToolHttpClient) createRequestView() {
 			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Entry)
 			key.SetText(header.Key)
 			key.SetPlaceHolder("key")
-			key.OnChanged = func(s string) {
-				fmt.Printf("set key %d %s->%s\n", lineNo, header.Key, s)
-
-				header.Key = s
-
-				//if lineNo == d.reqHeaderBinding.Length()-1 {
-				//	d.reqHeaderBinding.Append(common.NewHttpHeader())
-				//}
-			}
+			//key.OnChanged = func(s string) {
+			//	fmt.Printf("set key %d %s->%s\n", lineNo, header.Key, s)
+			//
+			//	header.Key = s
+			//
+			//	//if lineNo == d.reqHeaderBinding.Length()-1 {
+			//	//	d.reqHeaderBinding.Append(common.NewHttpHeader())
+			//	//}
+			//}
 
 			value := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Entry)
 			if header.Value != nil {
@@ -124,10 +119,10 @@ func (d *devToolHttpClient) createRequestView() {
 			}
 
 			value.SetPlaceHolder("value")
-			value.OnChanged = func(s string) {
-				fmt.Printf("set value %d %s->%s\n", lineNo, header.Value, s)
-				header.Value = s
-			}
+			//value.OnChanged = func(s string) {
+			//	fmt.Printf("set value %d %s->%s\n", lineNo, header.Value, s)
+			//	header.Value = s
+			//}
 
 			rm := obj.(*fyne.Container).Objects[1].(*widget.Button)
 
@@ -137,14 +132,8 @@ func (d *devToolHttpClient) createRequestView() {
 			}
 
 			rm.OnTapped = func() {
-				fmt.Println("remove", lineNo)
 				tmp, _ := d.reqHeaderBinding.Get()
 				tmp = append(tmp[:lineNo], tmp[lineNo+1:]...)
-				for i, x := range tmp {
-					h := x.(*common.HttpHeader)
-					fmt.Print(i, h, " ")
-				}
-				fmt.Println()
 				d.reqHeaderBinding.Set(tmp)
 			}
 		},
