@@ -8,8 +8,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
 	"sid-desktop/desktop/common"
-	"strconv"
-	"strings"
 )
 
 var _ devToolInterface = (*devToolHttpClient)(nil)
@@ -61,18 +59,11 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 }
 
 func (d *devToolHttpClient) sendHttpRequest() {
-	//for i := 0; i < d.reqHeaderBinding.Length(); i++ {
-	//	obj, _ := d.reqHeaderBinding.GetValue(i)
-	//	header := obj.(*common.HttpHeader)
-	//	fmt.Println(i, header.Key, header.Value)
-	//}
-	i, _ := strconv.Atoi(d.url.Text)
-	arr, _ := d.reqHeaderBinding.Get()
-	if len(arr) == 0 {
-		return
+	for i := 0; i < d.reqHeaderBinding.Length(); i++ {
+		obj, _ := d.reqHeaderBinding.GetValue(i)
+		header := obj.(*common.HttpHeader)
+		fmt.Println(i, header.Key, header.Value)
 	}
-	arr = append(arr[:i], arr[i+1:]...)
-	d.reqHeaderBinding.Set(arr)
 }
 
 func (d *devToolHttpClient) createRequestView() {
@@ -84,10 +75,14 @@ func (d *devToolHttpClient) createRequestView() {
 	d.requestHeader = widget.NewListWithData(
 		d.reqHeaderBinding,
 		func() fyne.CanvasObject {
+			key := widget.NewSelectEntry(common.HttpHeaderName)
+			key.SetPlaceHolder("key")
+			value := widget.NewEntry()
+			value.SetPlaceHolder("value")
 			return container.NewBorder(nil, nil, nil, widget.NewButton("Remove", nil),
 				container.NewGridWithColumns(2,
-					widget.NewEntry(),
-					widget.NewEntry(),
+					key,
+					value,
 				))
 		},
 		func(item binding.DataItem, obj fyne.CanvasObject) {
@@ -95,42 +90,32 @@ func (d *devToolHttpClient) createRequestView() {
 			header := o.(*common.HttpHeader)
 
 			arr, _ := d.reqHeaderBinding.Get()
-			lineNo := ContainsInterface(arr, header)
+			lineNo := gobase.ContainsInterface(arr, header)
 			gobase.True(lineNo >= 0)
 
-			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Entry)
+			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.SelectEntry)
+			key.OnChanged = nil
 			key.SetText(header.Key)
-			key.SetPlaceHolder("key")
-			//key.OnChanged = func(s string) {
-			//	fmt.Printf("set key %d %s->%s\n", lineNo, header.Key, s)
-			//
-			//	header.Key = s
-			//
-			//	//if lineNo == d.reqHeaderBinding.Length()-1 {
-			//	//	d.reqHeaderBinding.Append(common.NewHttpHeader())
-			//	//}
-			//}
-
-			value := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Entry)
-			if header.Value != nil {
-				value.SetText(fmt.Sprintf("%v", header.Value))
-			} else {
-				value.SetText("")
+			key.OnChanged = func(s string) {
+				header.Key = s
+				if lineNo == d.reqHeaderBinding.Length()-1 {
+					d.reqHeaderBinding.Append(common.NewHttpHeader())
+				}
+				key.SetOptions(common.FilterOption(s, common.HttpHeaderName))
 			}
 
-			value.SetPlaceHolder("value")
-			//value.OnChanged = func(s string) {
-			//	fmt.Printf("set value %d %s->%s\n", lineNo, header.Value, s)
-			//	header.Value = s
-			//}
+			value := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Entry)
+			value.OnChanged = nil
+			value.SetText(fmt.Sprintf("%v", header.Value))
+			value.OnChanged = func(s string) {
+				header.Value = s
+			}
 
 			rm := obj.(*fyne.Container).Objects[1].(*widget.Button)
-
 			rm.Enable()
 			if d.reqHeaderBinding.Length() == 1 {
 				rm.Disable()
 			}
-			
 			rm.OnTapped = func() {
 				tmp, _ := d.reqHeaderBinding.Get()
 				tmp = append(tmp[:lineNo], tmp[lineNo+1:]...)
@@ -200,28 +185,4 @@ func (d *devToolHttpClient) createResponseView() {
 
 func (d *devToolHttpClient) loadHttpRequest(req *common.HttpRequest) {
 
-}
-
-func filteredListForSelect(filter *string) (resultList []string) {
-	allOptionsList := []string{"hello", "world", "123"}
-	if filter == nil || *filter == "" {
-		return allOptionsList
-	} else {
-		for _, option := range allOptionsList {
-			if strings.Contains(option, *filter) {
-				resultList = append(resultList, option)
-			}
-		}
-		return resultList
-	}
-}
-
-func ContainsInterface(array []interface{}, val interface{}) int {
-	for i, item := range array {
-		if item == val {
-			return i
-		}
-	}
-
-	return -1
 }

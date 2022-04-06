@@ -17,7 +17,7 @@ var (
 	//	"User-Agent":      "Sid Desktop",
 	//	"Content-Type":    "application/json",
 	//}
-	builtInHttpRequestHeader = map[string]interface{}{
+	builtInHttpRequestHeader = map[string]string{
 		"0": "0",
 		"1": "1",
 		"2": "2",
@@ -42,14 +42,14 @@ var (
 )
 
 type HttpHeader struct {
-	Key   string      `json:"key"`
-	Value interface{} `json:"value"`
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
 
 func NewHttpHeader() *HttpHeader {
 	return &HttpHeader{
 		Key:   "",
-		Value: nil,
+		Value: "",
 	}
 }
 
