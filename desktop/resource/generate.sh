@@ -43,5 +43,6 @@ ${fyne} bundle -pkg theme -name ResourceExpandDownIcon -a -o ../theme/icons.go e
 ${fyne} bundle -pkg theme -name ResourceExpandUpIcon -a -o ../theme/icons.go expand_up.png
 
 ${fyne} bundle -pkg theme -name ResourceLuaIcon -a -o ../theme/icons.go lua.png
+${fyne} bundle -pkg theme -name ResourceHttpIcon -a -o ../theme/icons.go http.png
 
 # use https://github.com/lusingander/fyne-theme-generator to generate theme file

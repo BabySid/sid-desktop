@@ -2,38 +2,26 @@ package common
 
 import (
 	"fmt"
+	"github.com/BabySid/gobase"
 	"github.com/sahilm/fuzzy"
+	"io/ioutil"
+	"net/http"
 	"strings"
 	"time"
 )
 
 var (
 	// BuiltInHttpRequestHeader zero-value means calculated when request is sent
-	//builtInHttpRequestHeader = map[string]interface{}{
-	//	"Accept":          "*/*",
-	//	"Accept-Encoding": "gzip, deflate, br",
-	//	"Connection":      "keep-alive",
-	//	"Content-Length":  0,
-	//	"User-Agent":      "Sid Desktop",
-	//	"Content-Type":    "application/json",
-	//}
 	builtInHttpRequestHeader = map[string]string{
-		"0": "0",
-		"1": "1",
-		"2": "2",
-		"3": "3",
-		"4": "4",
+		"Accept":          "*/*",
+		"Accept-Encoding": "gzip, deflate, br",
+		"Connection":      "keep-alive",
+		"Content-Length":  "<calculated when request is sent>",
+		"User-Agent":      "Sid Desktop",
+		"Content-Type":    "application/json",
 	}
-	defMethod = "POST"
 
-	HttpHeaderName = []string{
-		"Accept",
-		"Accept-Encoding",
-		"Connection",
-		"Content-Length",
-		"User-Agent",
-		"Content-Type",
-	}
+	httpHeaderName []string
 
 	HttpMethod = []string{
 		"POST",
@@ -44,6 +32,19 @@ var (
 type HttpHeader struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
+}
+
+func BuiltInHttpHeaderName() []string {
+	if httpHeaderName != nil {
+		return httpHeaderName
+	}
+
+	httpHeaderName = make([]string, 0)
+	for k, _ := range builtInHttpRequestHeader {
+		httpHeaderName = append(httpHeaderName, k)
+	}
+
+	return httpHeaderName
 }
 
 func NewHttpHeader() *HttpHeader {
@@ -144,4 +145,40 @@ func (s *HttpRequestList) Debug() {
 	for _, req := range s.requests {
 		fmt.Println(req.ID, req.Method, req.Url, req.ReqHeader, req.CreateTime, req.AccessTime)
 	}
+}
+
+func DoHttpRequest(method string, url string, reqBody string, header map[string]string) (string, http.Header, []byte, error) {
+	client := &http.Client{}
+
+	var req *http.Request
+	var err error
+
+	switch method {
+	case "POST":
+		req, err = http.NewRequest(method, url, strings.NewReader(reqBody))
+	case "GET":
+		req, err = http.NewRequest(method, url, nil)
+	default:
+		gobase.AssertHere()
+	}
+
+	if err != nil {
+		return "", nil, nil, err
+	}
+
+	for k, v := range header {
+		if k != "" && k != "Content-Length" {
+			req.Header.Add(k, v)
+		}
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", nil, nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	return resp.Status, resp.Header, body, err
 }
