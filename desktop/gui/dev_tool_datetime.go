@@ -14,6 +14,7 @@ import (
 var _ devToolInterface = (*devToolDateTime)(nil)
 
 type devToolDateTime struct {
+	devToolAdapter
 	// common components
 	controlBtn *widget.Button
 	done       chan bool
@@ -36,8 +37,6 @@ type devToolDateTime struct {
 
 	fromDateTimeEntry *widget.Entry
 	toTimeStampEntry  *widget.Entry
-
-	content fyne.CanvasObject
 }
 
 const (

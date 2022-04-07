@@ -22,6 +22,7 @@ import (
 var _ appInterface = (*appFavorites)(nil)
 
 type appFavorites struct {
+	appAdapter
 	searchEntry  *widget.Entry
 	importFavor  *widget.Button
 	newFavor     *widget.Button
@@ -30,7 +31,6 @@ type appFavorites struct {
 	favorList    *widget.List
 	favorBinding binding.UntypedList
 	favorCache   *common.FavoritesList
-	tabItem      *container.TabItem
 }
 
 func (af *appFavorites) LazyInit() error {
@@ -64,20 +64,8 @@ func (af *appFavorites) LazyInit() error {
 	return nil
 }
 
-func (af *appFavorites) GetTabItem() *container.TabItem {
-	return af.tabItem
-}
-
 func (af *appFavorites) GetAppName() string {
 	return sidTheme.AppFavoritesName
-}
-
-func (af *appFavorites) OpenDefault() bool {
-	return false
-}
-
-func (af *appFavorites) OnClose() bool {
-	return true
 }
 
 func (af *appFavorites) exportFavors() {

@@ -5,6 +5,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
 	"sid-desktop/desktop/storage"
 	sidTheme "sid-desktop/desktop/theme"
 )
@@ -26,17 +27,37 @@ var (
 
 type devToolInterface interface {
 	CreateView() fyne.CanvasObject
+	AfterDBInit()
+}
+
+var _ devToolInterface = (*devToolAdapter)(nil)
+
+type devToolAdapter struct {
+	content fyne.CanvasObject
+}
+
+func (d devToolAdapter) CreateView() fyne.CanvasObject {
+	panic("implement CreateView")
+}
+
+func (d devToolAdapter) AfterDBInit() {
 }
 
 var _ appInterface = (*appDevTools)(nil)
 
 type appDevTools struct {
+	appAdapter
 	contTree *widget.Tree
 	content  *fyne.Container
-	tabItem  *container.TabItem
 }
 
 func (adt *appDevTools) LazyInit() error {
+	err := storage.GetAppDevToolDB().Open(globalWin.app.Storage().RootURI().Path())
+	if err != nil {
+		return err
+	}
+	gobase.RegisterAtExit(storage.GetAppDevToolDB().Close)
+
 	adt.contTree = widget.NewTree(
 		func(id widget.TreeNodeID) []widget.TreeNodeID {
 			return devToolIndex[id]
@@ -69,20 +90,8 @@ func (adt *appDevTools) LazyInit() error {
 	return nil
 }
 
-func (adt *appDevTools) GetTabItem() *container.TabItem {
-	return adt.tabItem
-}
-
 func (adt *appDevTools) GetAppName() string {
 	return sidTheme.AppDevToolsName
-}
-
-func (adt *appDevTools) OpenDefault() bool {
-	return false
-}
-
-func (adt *appDevTools) OnClose() bool {
-	return true
 }
 
 func (adt *appDevTools) initDB() {
@@ -95,7 +104,7 @@ func (adt *appDevTools) initDB() {
 	if !need {
 		return
 	}
-	
+
 	err = storage.GetAppDevToolDB().Init()
 	if err != nil {
 		printErr(fmt.Errorf(sidTheme.AppDevToolsFailedFormat, err))

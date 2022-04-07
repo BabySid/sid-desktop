@@ -12,12 +12,11 @@ import (
 var _ toyInterface = (*toyResourceMonitor)(nil)
 
 type toyResourceMonitor struct {
+	toyAdapter
 	cpuIndicator *widget.ProgressBar
 	memIndicator *widget.ProgressBar
 
 	upTime *widget.Label
-
-	widget *widget.Card
 }
 
 func (trm *toyResourceMonitor) Init() error {
@@ -49,10 +48,6 @@ func (trm *toyResourceMonitor) Init() error {
 	_ = gobase.GlobalScheduler.AddJob("toy_resource_monitor", "*/1 * * * * *", trm)
 
 	return nil
-}
-
-func (trm *toyResourceMonitor) GetToyCard() *widget.Card {
-	return trm.widget
 }
 
 func (trm *toyResourceMonitor) Run() {

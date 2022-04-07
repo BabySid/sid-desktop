@@ -19,6 +19,7 @@ import (
 var _ appInterface = (*appLauncher)(nil)
 
 type appLauncher struct {
+	appAdapter
 	searchEntry *widget.Entry
 	explorer    *widget.Select
 	config      *widget.Button
@@ -28,7 +29,6 @@ type appLauncher struct {
 	appBinding  binding.UntypedList
 	appHistory  *apps.AppList
 	appCache    *apps.AppList
-	tabItem     *container.TabItem
 }
 
 func (al *appLauncher) LazyInit() error {
@@ -64,16 +64,8 @@ func (al *appLauncher) LazyInit() error {
 	return nil
 }
 
-func (al *appLauncher) GetTabItem() *container.TabItem {
-	return al.tabItem
-}
-
 func (al *appLauncher) GetAppName() string {
 	return sidTheme.AppLauncherName
-}
-
-func (al *appLauncher) OpenDefault() bool {
-	return false
 }
 
 func (al *appLauncher) OnClose() bool {

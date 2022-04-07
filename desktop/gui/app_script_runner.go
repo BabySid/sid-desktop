@@ -29,6 +29,7 @@ import (
 var _ appInterface = (*appScriptRunner)(nil)
 
 type appScriptRunner struct {
+	appAdapter
 	newScriptBtn   *widget.Button
 	saveScriptBtn  *widget.Button
 	stopScriptBtn  *widget.Button
@@ -43,7 +44,6 @@ type appScriptRunner struct {
 	scriptFiles    *widget.List
 	scriptName     *widget.Entry
 	runningScripts int32
-	tabItem        *container.TabItem
 }
 
 type scriptStatus struct {
@@ -153,16 +153,8 @@ func (asr *appScriptRunner) LazyInit() error {
 	return nil
 }
 
-func (asr *appScriptRunner) GetTabItem() *container.TabItem {
-	return asr.tabItem
-}
-
 func (asr *appScriptRunner) GetAppName() string {
 	return sidTheme.AppScriptRunnerName
-}
-
-func (asr *appScriptRunner) OpenDefault() bool {
-	return false
 }
 
 func (asr *appScriptRunner) OnClose() bool {

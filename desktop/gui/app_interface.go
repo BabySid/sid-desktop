@@ -19,3 +19,29 @@ var (
 		&appDevTools{},
 	}
 )
+
+var _ appInterface = (*appAdapter)(nil)
+
+type appAdapter struct {
+	tabItem *container.TabItem
+}
+
+func (a appAdapter) LazyInit() error {
+	panic("implement LazyInit")
+}
+
+func (a appAdapter) GetTabItem() *container.TabItem {
+	return a.tabItem
+}
+
+func (a appAdapter) GetAppName() string {
+	panic("implement GetAppName()")
+}
+
+func (a appAdapter) OpenDefault() bool {
+	return false
+}
+
+func (a appAdapter) OnClose() bool {
+	return true
+}

@@ -13,6 +13,7 @@ import (
 var _ devToolInterface = (*devToolBase64)(nil)
 
 type devToolBase64 struct {
+	devToolAdapter
 	urlChk  *widget.Check
 	fillChk *widget.Check
 
@@ -21,8 +22,6 @@ type devToolBase64 struct {
 
 	inputText  *widget.Entry
 	outputText *widget.Entry
-
-	content fyne.CanvasObject
 }
 
 func (d *devToolBase64) CreateView() fyne.CanvasObject {

@@ -20,6 +20,8 @@ import (
 var _ devToolInterface = (*devToolHttpClient)(nil)
 
 type devToolHttpClient struct {
+	devToolAdapter
+
 	method        *widget.Select
 	url           *widget.Entry
 	sendRequest   *widget.Button
@@ -47,8 +49,6 @@ type devToolHttpClient struct {
 	responseBodyType  *widget.RadioGroup
 	prettyRespJson    *widget.Button
 	respStatus        *widget.Label
-
-	content fyne.CanvasObject
 }
 
 func (d *devToolHttpClient) CreateView() fyne.CanvasObject {

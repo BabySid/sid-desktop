@@ -11,7 +11,7 @@ import (
 var _ appInterface = (*appWelcome)(nil)
 
 type appWelcome struct {
-	tabItem *container.TabItem
+	appAdapter
 }
 
 func (a *appWelcome) LazyInit() error {
@@ -36,18 +36,10 @@ func (a *appWelcome) LazyInit() error {
 	return nil
 }
 
-func (a *appWelcome) GetTabItem() *container.TabItem {
-	return a.tabItem
-}
-
 func (a *appWelcome) GetAppName() string {
 	return sidTheme.AppWelcomeName
 }
 
 func (a *appWelcome) OpenDefault() bool {
-	return true
-}
-
-func (a *appWelcome) OnClose() bool {
 	return true
 }

@@ -14,11 +14,10 @@ import (
 var _ toyInterface = (*toyDateTime)(nil)
 
 type toyDateTime struct {
+	toyAdapter
 	date *canvas.Text
 	week *canvas.Text
 	time *canvas.Text
-
-	widget *widget.Card
 }
 
 func (tdt *toyDateTime) Init() error {
@@ -46,10 +45,6 @@ func (tdt *toyDateTime) Init() error {
 	_ = gobase.GlobalScheduler.AddJob("toy_datetime", "*/1 * * * * *", tdt)
 	// todo assert(err == nil)
 	return nil
-}
-
-func (tdt *toyDateTime) GetToyCard() *widget.Card {
-	return tdt.widget
 }
 
 var (

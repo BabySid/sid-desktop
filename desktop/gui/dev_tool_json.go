@@ -13,6 +13,7 @@ import (
 var _ devToolInterface = (*devToolJson)(nil)
 
 type devToolJson struct {
+	devToolAdapter
 	compressBtn     *widget.Button
 	compressJsonPos *widget.Label
 	prettyBtn       *widget.Button
@@ -20,8 +21,6 @@ type devToolJson struct {
 
 	compressJsonText *widget.Entry
 	prettyJsonText   *widget.Entry
-
-	content fyne.CanvasObject
 }
 
 const (

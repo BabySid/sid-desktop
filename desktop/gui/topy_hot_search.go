@@ -20,6 +20,7 @@ import (
 var _ toyInterface = (*toyHotSearch)(nil)
 
 type toyHotSearch struct {
+	toyAdapter
 	hotList        *widget.List
 	hotListBinding binding.UntypedList
 	hotLinksMutex  *sync.Mutex
@@ -28,8 +29,6 @@ type toyHotSearch struct {
 	titleLabel *widget.Label
 	curPage    int
 	nextPage   *widget.Button
-
-	widget *widget.Card
 }
 
 func (ths *toyHotSearch) Init() error {
@@ -73,10 +72,6 @@ func (ths *toyHotSearch) Init() error {
 	_ = gobase.GlobalScheduler.AddJob("toy_hot_search", "0 */30 * * * *", ths)
 
 	return nil
-}
-
-func (ths *toyHotSearch) GetToyCard() *widget.Card {
-	return ths.widget
 }
 
 var (
