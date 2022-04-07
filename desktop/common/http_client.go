@@ -12,15 +12,19 @@ import (
 
 var (
 	// BuiltInHttpRequestHeader zero-value means calculated when request is sent
-	builtInHttpRequestHeader = map[string]string{
-		"Accept":          "*/*",
-		"Accept-Encoding": "gzip, deflate, br",
-		"Connection":      "keep-alive",
-		"Content-Length":  "<calculated when request is sent>",
-		"User-Agent":      "Sid Desktop",
-		"Content-Type":    "application/json",
+	builtInHttpRequestHeader = []*HttpHeader{
+		{Key: "Accept", Value: "*/*"},
+		{Key: "Accept-Encoding", Value: "gzip, deflate, br"},
+		{Key: "Connection", Value: "keep-alive"},
+		{Key: "Content-Length", Value: "<calculated when request is sent>"},
+		{Key: "User-Agent", Value: "Sid Desktop"},
+		{Key: "Content-Type", Value: "application/json"},
 	}
 
+	AuthHeader = HttpHeader{
+		Key:   "Authorization",
+		Value: "<calculated when request is sent>",
+	}
 	httpHeaderName []string
 
 	HttpMethod = []string{
@@ -40,8 +44,8 @@ func BuiltInHttpHeaderName() []string {
 	}
 
 	httpHeaderName = make([]string, 0)
-	for k, _ := range builtInHttpRequestHeader {
-		httpHeaderName = append(httpHeaderName, k)
+	for _, header := range builtInHttpRequestHeader {
+		httpHeaderName = append(httpHeaderName, header.Key)
 	}
 
 	return httpHeaderName
@@ -56,10 +60,10 @@ func NewHttpHeader() *HttpHeader {
 
 func NewBuiltInHttpHeader() []interface{} {
 	rs := make([]interface{}, 0)
-	for k, v := range builtInHttpRequestHeader {
+	for _, header := range builtInHttpRequestHeader {
 		header := &HttpHeader{
-			Key:   k,
-			Value: v,
+			Key:   header.Key,
+			Value: header.Value,
 		}
 		rs = append(rs, header)
 	}

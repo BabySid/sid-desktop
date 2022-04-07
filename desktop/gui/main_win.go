@@ -8,6 +8,7 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"github.com/BabySid/gobase"
 	"log"
+	"os"
 	"sid-desktop/desktop/common"
 	sidTheme "sid-desktop/desktop/theme"
 	"time"
@@ -28,6 +29,7 @@ func init() {
 	// set env to support chinese
 	//_ = os.Setenv("FYNE_FONT", "./resource/Microsoft-YaHei.ttf")
 	//_ = os.Setenv("FYNE_FONT_MONOSPACE", "./resource/Microsoft-YaHei.ttf")
+	_ = os.Setenv("FYNE_SCALE", "0.8")
 }
 
 //func setAPPID() {
@@ -53,6 +55,8 @@ var (
 func NewMainWin() *MainWin {
 	gobase.NewScheduler().Start()
 	gobase.RegisterAtExit(gobase.GlobalScheduler.Stop)
+
+	//_ = sidTheme.InitSettings()
 
 	var mw MainWin
 	mw.app = app.NewWithID(sidTheme.AppTitle) // Must Set First
@@ -114,6 +118,7 @@ func (mw *MainWin) Run() {
 	defer func() {
 		//_ = os.Unsetenv("FYNE_FONT")
 		//_ = os.Unsetenv("FYNE_FONT_MONOSPACE")
+		_ = os.Unsetenv("FYNE_SCALE")
 
 		gobase.Exit()
 	}()

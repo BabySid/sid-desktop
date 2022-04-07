@@ -54,10 +54,12 @@ func (adt *appDevTools) LazyInit() error {
 		}
 	}
 
+	adt.contTree.OpenAllBranches()
+
 	adt.tabItem = container.NewTabItemWithIcon(sidTheme.AppDevToolsName, sidTheme.ResourceDevToolsIcon, nil)
 	adt.content = container.NewMax()
 	panel := container.NewHSplit(adt.contTree, adt.content)
-	panel.SetOffset(0.3)
+	panel.SetOffset(0.15)
 	adt.tabItem.Content = panel
 
 	return nil
