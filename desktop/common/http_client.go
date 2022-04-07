@@ -76,7 +76,9 @@ type HttpRequest struct {
 	Method string `json:"method"`
 	Url    string `json:"url"`
 
-	ReqHeader []HttpHeader `json:"req_header"`
+	ReqHeader   []HttpHeader `json:"req_header"`
+	ReqBody     []byte       `json:"req_body"`
+	ReqBodyType string       `json:"req_body_type"`
 
 	CreateTime int64 `json:"create_time"`
 	AccessTime int64 `json:"access_time"`
@@ -118,6 +120,10 @@ func (s *HttpRequestList) Set(d []HttpRequest) {
 	s.requests = d
 }
 
+func (s *HttpRequestList) Append(d HttpRequest) {
+	s.requests = append(s.requests, d)
+}
+
 func (s *HttpRequestList) Upsert(d HttpRequest) {
 	d.Method = strings.ToUpper(d.Method)
 
@@ -147,7 +153,7 @@ func (s *HttpRequestList) GetHttpRequest() []HttpRequest {
 
 func (s *HttpRequestList) Debug() {
 	for _, req := range s.requests {
-		fmt.Println(req.ID, req.Method, req.Url, req.ReqHeader, req.CreateTime, req.AccessTime)
+		fmt.Println(req.ID, req.Method, req.Url, req.ReqHeader, req.ReqBody, req.ReqBodyType, req.CreateTime, req.AccessTime)
 	}
 }
 

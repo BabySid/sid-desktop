@@ -86,6 +86,7 @@ const (
 	AppScriptRunnerScriptNameValidateMsg = AppScriptRunnerCurScriptName + " must not be empty"
 
 	AppDevToolsName                           = "Dev Tools"
+	AppDevToolsFailedFormat                   = "process app dev tools failed. %s"
 	AppDevToolsTextProcName                   = "Text Process"
 	AppDevToolsJsonProcName                   = "Json"
 	AppDevToolsCompressJsonName               = "Compress"

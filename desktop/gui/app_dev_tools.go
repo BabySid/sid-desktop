@@ -1,9 +1,11 @@
 package gui
 
 import (
+	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
+	"sid-desktop/desktop/storage"
 	sidTheme "sid-desktop/desktop/theme"
 )
 
@@ -62,6 +64,8 @@ func (adt *appDevTools) LazyInit() error {
 	panel.SetOffset(0.15)
 	adt.tabItem.Content = panel
 
+	go adt.initDB()
+
 	return nil
 }
 
@@ -79,4 +83,22 @@ func (adt *appDevTools) OpenDefault() bool {
 
 func (adt *appDevTools) OnClose() bool {
 	return true
+}
+
+func (adt *appDevTools) initDB() {
+	need, err := storage.GetAppDevToolDB().NeedInit()
+	if err != nil {
+		printErr(fmt.Errorf(sidTheme.AppDevToolsFailedFormat, err))
+		return
+	}
+
+	if !need {
+		return
+	}
+	
+	err = storage.GetAppDevToolDB().Init()
+	if err != nil {
+		printErr(fmt.Errorf(sidTheme.AppDevToolsFailedFormat, err))
+		return
+	}
 }
