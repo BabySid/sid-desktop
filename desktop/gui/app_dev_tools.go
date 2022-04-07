@@ -101,13 +101,15 @@ func (adt *appDevTools) initDB() {
 		return
 	}
 
-	if !need {
-		return
+	if need {
+		err = storage.GetAppDevToolDB().Init()
+		if err != nil {
+			printErr(fmt.Errorf(sidTheme.AppDevToolsFailedFormat, err))
+			return
+		}
 	}
 
-	err = storage.GetAppDevToolDB().Init()
-	if err != nil {
-		printErr(fmt.Errorf(sidTheme.AppDevToolsFailedFormat, err))
-		return
+	for _, tool := range devTools {
+		tool.AfterDBInit()
 	}
 }

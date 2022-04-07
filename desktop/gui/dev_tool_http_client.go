@@ -370,6 +370,10 @@ func (d *devToolHttpClient) sendHttpRequest() {
 	d.respHeaderBinding.Set(rs)
 }
 
+func (d *devToolHttpClient) AfterDBInit() {
+	fmt.Println("devToolHttpClient AfterDBInit")
+}
+
 func (d *devToolHttpClient) searchFromHistory() {
 
 }
