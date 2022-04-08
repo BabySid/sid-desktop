@@ -39,9 +39,6 @@ func (d devToolAdapter) CreateView() fyne.CanvasObject {
 	panic("implement CreateView")
 }
 
-func (d devToolAdapter) AfterDBInit() {
-}
-
 var _ appInterface = (*appDevTools)(nil)
 
 type appDevTools struct {
