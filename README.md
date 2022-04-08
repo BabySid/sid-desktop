@@ -5,6 +5,8 @@ It is designed to build applications that provides a collection of commonly tool
 
 It should be noted that this software is built purely for personal interest and can be used for learning and communication. 
 
+# ScreenShorts
+
 # Prerequisites
 
 To build sid-desktop you will need Go version 1.14 or later, a C compiler.
@@ -17,6 +19,12 @@ If you're not sure if that's all installed or you don't know how then check out 
   - Favorites
   - ScriptRunner
     - Support Lua
+  - Dev Tools
+    - Codec
+      - base64
+      - Json
+    - DateTime
+    - HttpClient
 - Desktop Toys
   - Resource Monitor
   - DateTime
