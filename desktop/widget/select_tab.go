@@ -46,6 +46,10 @@ func NewSelectTab(items ...*SelectItem) *SelectTab {
 	return st
 }
 
+func (st *SelectTab) SetSelected(s string) {
+	st.sel.SetSelected(s)
+}
+
 type SelectItem struct {
 	Text    string
 	Content fyne.CanvasObject

@@ -6,11 +6,14 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
+	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
+	"net/http"
 	"sid-desktop/desktop/common"
+	"sid-desktop/desktop/storage"
 	sidTheme "sid-desktop/desktop/theme"
 	sidWidget "sid-desktop/desktop/widget"
 	"strings"
@@ -49,6 +52,9 @@ type devToolHttpClient struct {
 	responseBodyType  *widget.RadioGroup
 	prettyRespJson    *widget.Button
 	respStatus        *widget.Label
+
+	// search
+	searchWin fyne.Window
 }
 
 func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
@@ -61,6 +67,7 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 	d.method.SetSelectedIndex(0)
 
 	d.url = widget.NewEntry()
+	d.url.Validator = validation.NewRegexp(`\S+`, sidTheme.AppDevToolsHttpCliUrlValidateMsg)
 	d.url.SetPlaceHolder(sidTheme.AppDevToolsHttpCliUrlPlaceHolder)
 	d.url.OnChanged = func(s string) {
 		if !strings.HasPrefix(s, "http://") && !strings.HasPrefix(s, "https://") {
@@ -74,7 +81,7 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 		d.sendHttpRequest)
 	d.searchHistory = widget.NewButtonWithIcon(sidTheme.AppDevToolsHttpCliSearchHisName,
 		sidTheme.ResourceSearchIcon,
-		d.searchFromHistory)
+		d.openSearchWin)
 
 	d.createRequestView()
 	d.createResponseView()
@@ -243,7 +250,7 @@ func (d *devToolHttpClient) addBasicAuthForReqHeader() {
 	}
 
 	auth := common.AuthHeader
-	auth.Value = "Basic " + base64.StdEncoding.EncodeToString([]byte(d.requestBasicAuthUser.Text+":"+d.requestBasicAuthPass.Text))
+	auth.Value = common.EncodeBasicAuth(d.requestBasicAuthUser.Text, d.requestBasicAuthPass.Text)
 	_ = d.reqHeaderBinding.Prepend(&auth)
 }
 
@@ -337,15 +344,15 @@ func (d *devToolHttpClient) createResponseView() {
 }
 
 func (d *devToolHttpClient) sendHttpRequest() {
-	header := make(map[string]string)
+	header := make([]common.HttpHeader, 0)
 	arr, _ := d.reqHeaderBinding.Get()
 	for _, item := range arr {
 		h := item.(*common.HttpHeader)
-		header[h.Key] = h.Value
+		header = append(header, *h)
 	}
 
 	begin := time.Now()
-	status, respHeader, body, err := common.DoHttpRequest(d.method.Selected, d.url.Text, d.requestBody.Text, header)
+	code, status, respHeader, body, err := common.DoHttpRequest(d.method.Selected, d.url.Text, d.requestBody.Text, header)
 	cost := time.Since(begin)
 	if err != nil {
 		d.responseBody.SetText(err.Error())
@@ -368,16 +375,58 @@ func (d *devToolHttpClient) sendHttpRequest() {
 		rs = append(rs, header)
 	}
 	d.respHeaderBinding.Set(rs)
+
+	if code >= http.StatusOK && code < http.StatusBadRequest {
+		httpReq := &common.HttpRequest{
+			Method:     d.method.Selected,
+			Url:        d.url.Text,
+			ReqHeader:  header,
+			ReqBody:    []byte(d.requestBody.Text),
+			CreateTime: time.Now().Unix(),
+			AccessTime: time.Now().Unix(),
+		}
+		err = storage.GetAppDevToolDB().UpsertHttpRequest(httpReq)
+		if err != nil {
+			printErr(fmt.Errorf(sidTheme.AppDevToolsFailedFormat, err))
+		}
+	}
 }
 
-func (d *devToolHttpClient) AfterDBInit() {
-	fmt.Println("devToolHttpClient AfterDBInit")
-}
-
-func (d *devToolHttpClient) searchFromHistory() {
-
+func (d *devToolHttpClient) openSearchWin() {
+	if d.searchWin == nil {
+		d.searchWin = newDevToolHttpClientSearch(d).win
+		d.searchWin.Show()
+		d.searchWin.SetOnClosed(func() {
+			d.searchWin = nil
+		})
+	} else {
+		d.searchWin.RequestFocus()
+	}
 }
 
 func (d *devToolHttpClient) loadHttpRequest(req *common.HttpRequest) {
+	d.method.SetSelected(req.Method)
+	d.url.SetText(req.Url)
+	d.requestBody.SetText(string(req.ReqBody))
 
+	rs := make([]interface{}, 0)
+	for _, head := range req.ReqHeader {
+		rs = append(rs, &common.HttpHeader{
+			Key:   head.Key,
+			Value: head.Value,
+		})
+
+		if head.Key == "Content-Type" && strings.Index(head.Value, "application/json") >= 0 {
+			d.requestBodyType.SetSelected(sidTheme.AppDevToolsHttpCliBodyTypeName2)
+		}
+
+		if head.Key == common.AuthHeader.Key && strings.HasPrefix(head.Value, "Basic") {
+			d.reqAuthTab.SetSelected(sidTheme.AppDevToolsHttpCliAuthTypeName2)
+
+			user, pass := common.DecodeBasicAuth(head.Value)
+			d.requestBasicAuthUser.SetText(user)
+			d.requestBasicAuthPass.SetText(pass)
+		}
+	}
+	d.reqHeaderBinding.Set(rs)
 }

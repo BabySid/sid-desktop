@@ -27,7 +27,6 @@ var (
 
 type devToolInterface interface {
 	CreateView() fyne.CanvasObject
-	AfterDBInit()
 }
 
 var _ devToolInterface = (*devToolAdapter)(nil)
@@ -107,9 +106,5 @@ func (adt *appDevTools) initDB() {
 			printErr(fmt.Errorf(sidTheme.AppDevToolsFailedFormat, err))
 			return
 		}
-	}
-
-	for _, tool := range devTools {
-		tool.AfterDBInit()
 	}
 }

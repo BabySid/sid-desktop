@@ -1,13 +1,12 @@
 package common
 
 import (
-	"fmt"
+	"encoding/base64"
 	"github.com/BabySid/gobase"
 	"github.com/sahilm/fuzzy"
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
 )
 
 var (
@@ -76,9 +75,8 @@ type HttpRequest struct {
 	Method string `json:"method"`
 	Url    string `json:"url"`
 
-	ReqHeader   []HttpHeader `json:"req_header"`
-	ReqBody     []byte       `json:"req_body"`
-	ReqBodyType string       `json:"req_body_type"`
+	ReqHeader []HttpHeader `json:"req_header"`
+	ReqBody   []byte       `json:"req_body"`
 
 	CreateTime int64 `json:"create_time"`
 	AccessTime int64 `json:"access_time"`
@@ -106,7 +104,7 @@ func (s *HttpRequestList) Find(name string) *HttpRequestList {
 }
 
 func (s *HttpRequestList) String(i int) string {
-	return s.requests[i].Url
+	return s.requests[i].Method + " " + s.requests[i].Url
 }
 
 func (s *HttpRequestList) Len() int {
@@ -120,22 +118,17 @@ func (s *HttpRequestList) Set(d []HttpRequest) {
 	s.requests = d
 }
 
-func (s *HttpRequestList) Append(d HttpRequest) {
-	s.requests = append(s.requests, d)
-}
-
-func (s *HttpRequestList) Upsert(d HttpRequest) {
-	d.Method = strings.ToUpper(d.Method)
-
-	for i, req := range s.requests {
-		if req.Method == d.Method && req.Url == d.Url {
-			d.ID = req.ID
-			d.AccessTime = time.Now().Unix()
-			req = d
-			s.requests[i] = req
-			return
+func (s *HttpRequestList) Get(method, url string) (HttpRequest, bool) {
+	for _, req := range s.requests {
+		if req.Method == method && req.Url == url {
+			return req, true
 		}
 	}
+
+	return HttpRequest{}, false
+}
+
+func (s *HttpRequestList) Append(d HttpRequest) {
 	s.requests = append(s.requests, d)
 }
 
@@ -151,13 +144,28 @@ func (s *HttpRequestList) GetHttpRequest() []HttpRequest {
 	return s.requests
 }
 
-func (s *HttpRequestList) Debug() {
-	for _, req := range s.requests {
-		fmt.Println(req.ID, req.Method, req.Url, req.ReqHeader, req.ReqBody, req.ReqBodyType, req.CreateTime, req.AccessTime)
-	}
+func EncodeBasicAuth(user, pass string) string {
+	return "Basic " + base64.StdEncoding.EncodeToString([]byte(user+":"+pass))
 }
 
-func DoHttpRequest(method string, url string, reqBody string, header map[string]string) (string, http.Header, []byte, error) {
+func DecodeBasicAuth(code string) (string, string) {
+	if len(code) <= len("Basic ") {
+		return "", ""
+	}
+
+	auth, err := base64.StdEncoding.DecodeString(code[len("Basic "):])
+	if err != nil {
+		return "", ""
+	}
+
+	arr := strings.Split(string(auth), ":")
+	if len(arr) != 2 {
+		return "", ""
+	}
+	return arr[0], arr[1]
+}
+
+func DoHttpRequest(method string, url string, reqBody string, headers []HttpHeader) (int, string, http.Header, []byte, error) {
 	client := &http.Client{}
 
 	var req *http.Request
@@ -173,22 +181,22 @@ func DoHttpRequest(method string, url string, reqBody string, header map[string]
 	}
 
 	if err != nil {
-		return "", nil, nil, err
+		return 0, "", nil, nil, err
 	}
 
-	for k, v := range header {
-		if k != "" && k != "Content-Length" {
-			req.Header.Add(k, v)
+	for _, header := range headers {
+		if header.Key != "" && header.Key != "Content-Length" {
+			req.Header.Add(header.Key, header.Value)
 		}
 	}
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", nil, nil, err
+		return 0, "", nil, nil, err
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 
-	return resp.Status, resp.Header, body, err
+	return resp.StatusCode, resp.Status, resp.Header, body, err
 }

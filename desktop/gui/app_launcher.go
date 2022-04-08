@@ -171,7 +171,7 @@ func (al *appLauncher) loadAppInfoFromDB() {
 
 func (al *appLauncher) openConfig() {
 	if al.configWin == nil {
-		al.configWin = newAppLauncherConfig(al).Win
+		al.configWin = newAppLauncherConfig(al).win
 		al.configWin.Show()
 		al.configWin.SetOnClosed(func() {
 			al.configWin = nil

@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-type AppLauncherConfig struct {
+type appLauncherConfig struct {
 	al *appLauncher
 
 	ok      *widget.Button
@@ -28,7 +28,7 @@ type AppLauncherConfig struct {
 
 	pathBinding binding.StringList
 
-	Win fyne.Window
+	win fyne.Window
 }
 
 const (
@@ -37,8 +37,8 @@ const (
 	indexBuildFinished
 )
 
-func newAppLauncherConfig(launcher *appLauncher) *AppLauncherConfig {
-	var alc AppLauncherConfig
+func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
+	var alc appLauncherConfig
 
 	alc.al = launcher
 
@@ -46,7 +46,7 @@ func newAppLauncherConfig(launcher *appLauncher) *AppLauncherConfig {
 	alc.indexBuildLabel = widget.NewLabel("")
 	alc.indexBuildLabel.Hide()
 
-	alc.Win = fyne.CurrentApp().NewWindow(sidTheme.AppLauncherConfigTitle)
+	alc.win = fyne.CurrentApp().NewWindow(sidTheme.AppLauncherConfigTitle)
 
 	alc.pathBinding = binding.NewStringList()
 	addFolder := widget.NewButtonWithIcon(sidTheme.AppLauncherConfigAddDirBtn, sidTheme.ResourceAddDirIcon, func() {
@@ -54,7 +54,7 @@ func newAppLauncherConfig(launcher *appLauncher) *AppLauncherConfig {
 			if uri != nil {
 				_ = alc.pathBinding.Append(uri.Path())
 			}
-		}, alc.Win)
+		}, alc.win)
 		fo.Show()
 	})
 
@@ -126,7 +126,7 @@ func newAppLauncherConfig(launcher *appLauncher) *AppLauncherConfig {
 	})
 	alc.dismiss = widget.NewButtonWithIcon(sidTheme.DismissText, theme.CancelIcon(), alc.closeHandle)
 
-	alc.Win.SetContent(container.NewBorder(top,
+	alc.win.SetContent(container.NewBorder(top,
 		container.NewVBox(
 			alc.indexBuildLabel,
 			container.NewHBox(layout.NewSpacer(), alc.dismiss, alc.ok),
@@ -134,20 +134,20 @@ func newAppLauncherConfig(launcher *appLauncher) *AppLauncherConfig {
 		nil, nil,
 		pathCont))
 
-	alc.Win.SetCloseIntercept(alc.closeHandle)
-	alc.Win.Resize(fyne.NewSize(600, 300))
-	alc.Win.CenterOnScreen()
+	alc.win.SetCloseIntercept(alc.closeHandle)
+	alc.win.Resize(fyne.NewSize(600, 300))
+	alc.win.CenterOnScreen()
 	return &alc
 }
 
-func (alc *AppLauncherConfig) closeHandle() {
+func (alc *appLauncherConfig) closeHandle() {
 	if alc.indexBuildStatus == indexBuilding {
 		dialog.ShowInformation(sidTheme.CannotCloseTitle, sidTheme.AppLauncherConfigCannotCloseMsg, globalWin.win)
 	} else {
-		alc.Win.Close()
+		alc.win.Close()
 	}
 }
 
-func (alc *AppLauncherConfig) notifyAppLauncherBuildIndexFinished() {
+func (alc *appLauncherConfig) notifyAppLauncherBuildIndexFinished() {
 	alc.al.loadAppInfoFromDB()
 }

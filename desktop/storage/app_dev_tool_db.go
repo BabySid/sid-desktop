@@ -17,8 +17,9 @@ type AppDevToolDB struct {
 }
 
 var (
-	appDevToolDB   *AppDevToolDB
-	appDevToolOnce sync.Once
+	appDevToolDB      *AppDevToolDB
+	appDevToolOnce    sync.Once
+	httpClientHisLock sync.Mutex
 )
 
 func GetAppDevToolDB() *AppDevToolDB {
@@ -54,8 +55,7 @@ func (db *AppDevToolDB) createAppDevTool() error {
 			method VARCHAR(16) NOT NULL,
 			url VARCHAR(512) NOT NULL,
 			headers VARCHAR(1024) NOT NULL,
-			body_type VARCHAR(32) NOT NULL,
-			body icon NULL,
+			body BLOB NULL,
 			create_time INTEGER NOT NULL,
 			access_time INTEGER NOT NULL
     	);
@@ -91,7 +91,7 @@ func (db *AppDevToolDB) LoadHttpClientHistory() (*common.HttpRequestList, error)
 		for rows.Next() {
 			var req common.HttpRequest
 			headStr := ""
-			err := rows.Scan(&req.ID, &req.Method, &req.Url, &headStr, &req.ReqBodyType, &req.ReqBody, &req.CreateTime, &req.AccessTime)
+			err := rows.Scan(&req.ID, &req.Method, &req.Url, &headStr, &req.ReqBody, &req.CreateTime, &req.AccessTime)
 			if err != nil {
 				return err
 			}
@@ -102,7 +102,7 @@ func (db *AppDevToolDB) LoadHttpClientHistory() (*common.HttpRequestList, error)
 			reqs.Append(req)
 		}
 		return nil
-	}, "select id, method, url, headers, body_type, body, create_time, access_time from "+db.httpClientHistoryTbl+" order by access_time desc")
+	}, "select id, method, url, headers, body, create_time, access_time from "+db.httpClientHistoryTbl+" order by access_time desc")
 
 	return reqs, err
 }
@@ -114,8 +114,8 @@ func (db *AppDevToolDB) AddHttpRequest(req *common.HttpRequest) error {
 	}
 
 	id, _, err := db.sqlite.Exec("insert into "+db.httpClientHistoryTbl+
-		" (method, url, headers, body_type, body, create_time, access_time) values(?, ?, ?, ?, ?, ?, ?)",
-		req.Method, req.Url, string(header), req.ReqBodyType, req.ReqBody, req.CreateTime, req.AccessTime)
+		" (method, url, headers, body, create_time, access_time) values(?, ?, ?, ?, ?, ?)",
+		req.Method, req.Url, string(header), req.ReqBody, req.CreateTime, req.AccessTime)
 	if err != nil {
 		return err
 	}
@@ -129,7 +129,34 @@ func (db *AppDevToolDB) UpdateHttpRequest(req *common.HttpRequest) error {
 		return err
 	}
 
-	_, _, err = db.sqlite.Exec("update "+db.httpClientHistoryTbl+" set headers = ?, body_type = ?, body = ?, access_time = ? where id = ?",
-		string(header), req.ReqBodyType, req.ReqBody, req.AccessTime, req.ID)
+	_, _, err = db.sqlite.Exec("update "+db.httpClientHistoryTbl+" set headers = ?, body = ?, access_time = ? where id = ?",
+		string(header), req.ReqBody, req.AccessTime, req.ID)
 	return err
+}
+
+func (db *AppDevToolDB) UpsertHttpRequest(req *common.HttpRequest) error {
+	httpClientHisLock.Lock()
+	defer httpClientHisLock.Unlock()
+
+	id := int64(-1)
+	err := db.sqlite.Query(func(rows *sql.Rows) error {
+		if rows.Next() {
+			err := rows.Scan(&id)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+		return nil
+	}, "select id from "+db.httpClientHistoryTbl+" where method = ? and url = ?", req.Method, req.Url)
+	if err != nil {
+		return err
+	}
+
+	if id < 0 {
+		return db.AddHttpRequest(req)
+	}
+
+	req.ID = id
+	return db.UpdateHttpRequest(req)
 }
