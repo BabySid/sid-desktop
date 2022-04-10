@@ -6,7 +6,34 @@ It is designed to build applications that provides a collection of commonly tool
 It should be noted that this software is built purely for personal interest and can be used for learning and communication. 
 
 # ScreenShorts
-
+<div align="center">
+  <table cellpadding="0" cellspacing="0" style="margin: auto; border-collapse: collapse;">
+    <tr style="border: none;">
+      <td style="border: none;">
+        <img src="img/main.png" width="400" height="230" alt="Main UI" />
+      </td>
+      <td style="border: none;">
+        <img src="img/launcher.png" width="400" height="230" alt="App Launcher" />
+      </td>
+    </tr>
+    <tr style="border: none;">
+      <td style="border: none;">
+        <img src="img/favorites.png" width="400" height="230" alt="Main UI" />
+      </td>
+      <td style="border: none;">
+        <img src="img/http.png" width="400" height="230" alt="App Launcher" />
+      </td>
+    </tr>
+     <tr style="border: none;">
+      <td style="border: none;">
+        <img src="img/lua.png" width="400" height="230" alt="Main UI" />
+      </td>
+      <td style="border: none;">
+        <img src="img/json.png" width="400" height="230" alt="App Launcher" />
+      </td>
+    </tr>
+  </table>
+</div>
 # Prerequisites
 
 To build sid-desktop you will need Go version 1.14 or later, a C compiler.
