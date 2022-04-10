@@ -34,6 +34,7 @@ It should be noted that this software is built purely for personal interest and 
     </tr>
   </table>
 </div>
+
 # Prerequisites
 
 To build sid-desktop you will need Go version 1.14 or later, a C compiler.
