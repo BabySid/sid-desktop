@@ -43,7 +43,7 @@ func (al *appLauncher) LazyInit() error {
 	al.searchEntry.OnChanged = al.searchApp
 	al.searchEntry.OnSubmitted = al.execCommand
 
-	al.explorer = widget.NewSelect(gobase.GetDiskPartitions(), al.openExplorer)
+	al.explorer = widget.NewSelect(al.InitExplorerPath(), al.openExplorer)
 	al.explorer.PlaceHolder = sidTheme.AppLauncherExplorerText
 
 	al.config = widget.NewButtonWithIcon(sidTheme.AppLauncherConfigBtnText, sidTheme.ResourceConfIndexIcon, al.openConfig)
@@ -156,6 +156,13 @@ func (al *appLauncher) createAppList() {
 	)
 }
 
+func (al *appLauncher) InitExplorerPath() []string {
+	path := gobase.GetDiskPartitions()
+
+	path = append(path, sidTheme.AppLauncherExplorerSidPathName)
+	return path
+}
+
 func (al *appLauncher) loadAppInfoFromDB() {
 	var err error
 	al.appCache, err = storage.GetAppLauncherDB().LoadAppIndex()
@@ -203,7 +210,13 @@ func (al *appLauncher) execCommand(cmd string) {
 }
 
 func (al *appLauncher) openExplorer(dir string) {
-	err := gobase.ExecExplorer([]string{dir})
+	path := make([]string, 1, 1)
+	if dir == sidTheme.AppLauncherExplorerSidPathName {
+		path[0], _ = filepath.Abs(globalWin.app.Storage().RootURI().Path())
+	} else {
+		path[0] = dir
+	}
+	err := gobase.ExecExplorer(path)
 	if err != nil {
 		printErr(fmt.Errorf(sidTheme.RunExplorerFailedFormat, dir, err))
 	}

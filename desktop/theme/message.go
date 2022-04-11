@@ -26,6 +26,7 @@ const (
 	AppLauncherName                      = "App Launcher"
 	AppLauncherSearchPlaceHolder         = "Type the name of application or `enter` to run directly"
 	AppLauncherExplorerText              = "Explorer"
+	AppLauncherExplorerSidPathName       = "Sid Desktop Path"
 	AppLauncherConfigBtnText             = "Config"
 	AppLauncherCannotCloseMsg            = "Config Window is running now. Close it first, please"
 	AppLauncherAppListHeader1            = "AppIcon/Name"
@@ -152,11 +153,12 @@ The Source code is [sid-desttop](https://github.com/BabySid/sid-desktop).`
 	MenuSys     = "System"
 	MenuSysQuit = "Quit"
 
-	MenuOption        = "Option"
-	MenuOptTheme      = "Theme"
-	MenuOptThemeDark  = "Dark"
-	MenuOptThemeLight = "Light"
-	MenuOptFullScreen = "FullScreen"
+	MenuOption          = "Option"
+	MenuOptTheme        = "Theme"
+	MenuOptThemeDark    = "Dark"
+	MenuOptThemeLight   = "Light"
+	MenuOptFullScreen   = "FullScreen"
+	MenuOptHideWhenQuit = "Hide When Quit"
 
 	MenuHelp      = "Help"
 	MenuHelpLog   = "Show Log"
@@ -172,4 +174,11 @@ The Source code is [sid-desttop](https://github.com/BabySid/sid-desktop).`
 	ToyHotSearchRefreshing         = "Content is Updating"
 	ToyHotSearchRefreshFormat      = "Refresh (%d/%d)"
 	ToyHotSearchUpdateComplete     = "hot search update complete"
+
+	// SysTrayMenuQuitTooltip begins for systray
+	SysTrayMenuQuitTooltip = "Quit Window"
+	SysTrayMenuShow        = "Show"
+	SysTrayMenuShowTooltip = "Show Window"
+	SysTrayMenuHide        = "Hide"
+	SysTrayMenuHideTooltip = "Hide Window"
 )

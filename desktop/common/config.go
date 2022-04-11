@@ -12,12 +12,15 @@ type Config struct {
 	Theme binding.String
 
 	AppLaunchAppSearchPath binding.StringList
+
+	HideWhenQuit binding.Bool
 }
 
 func NewConfig() *Config {
 	c := &Config{
 		Theme:                  binding.NewString(),
 		AppLaunchAppSearchPath: binding.NewStringList(),
+		HideWhenQuit:           binding.NewBool(),
 	}
 
 	_ = c.Theme.Set(
@@ -29,6 +32,8 @@ func NewConfig() *Config {
 	} else {
 		_ = c.AppLaunchAppSearchPath.Set(strings.Split(searchPath, ";"))
 	}
+
+	_ = c.HideWhenQuit.Set(fyne.CurrentApp().Preferences().BoolWithFallback("hide_when_quit", true))
 
 	in := make([]reflect.Value, 1)
 	in[0] = reflect.ValueOf(c)
@@ -48,4 +53,7 @@ func (c *Config) DataChanged() {
 
 	searchPath, _ := c.AppLaunchAppSearchPath.Get()
 	fyne.CurrentApp().Preferences().SetString("app_launch_search_path", strings.Join(searchPath, ";"))
+
+	hideWhenQuit, _ := c.HideWhenQuit.Get()
+	fyne.CurrentApp().Preferences().SetBool("hide_when_quit", hideWhenQuit)
 }

@@ -7,7 +7,8 @@ ${fyne} bundle -pkg theme -name ResourceSidLogo -o logo.go logo.png
 # run in desktop/
 ${make_syso} -o sid.syso -s ./resource/sid.png
 
-${fyne} bundle -pkg theme -name ResourceAppIcon -o icons.go sid.png
+${fyne} bundle -pkg theme -name ResourceAppIcon -o ../theme/icons.go sid.png
+${fyne} bundle -pkg theme -name ResourceSystrayIcon -a -o ../theme/icons.go sid.ico
 ${fyne} bundle -pkg theme -name ResourceWelIcon -a -o ../theme/icons.go wel.png
 ${fyne} bundle -pkg theme -name ResourceLauncherIcon -a -o ../theme/icons.go app_launcher.png
 ${fyne} bundle -pkg theme -name ResourceLogViewerIcon -a -o ../theme/icons.go log_viewer.png

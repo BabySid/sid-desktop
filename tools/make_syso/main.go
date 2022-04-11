@@ -4,6 +4,7 @@ import (
 	"flag"
 	"image"
 	"os"
+	"strings"
 
 	"github.com/tc-hib/winres"
 )
@@ -14,7 +15,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&output, "o", "", "output file")
+	flag.StringVar(&output, "o", "", "output file. ico or syso")
 	flag.StringVar(&src, "s", "", "src png image")
 }
 
@@ -25,8 +26,10 @@ func main() {
 		flag.PrintDefaults()
 		return
 	}
-
-	rs := winres.ResourceSet{}
+	if !strings.HasSuffix(output, ".syso") && !strings.HasSuffix(output, ".ico") {
+		flag.PrintDefaults()
+		return
+	}
 
 	file, err := os.Open(src)
 	if err != nil {
@@ -44,12 +47,24 @@ func main() {
 		panic(err)
 	}
 
-	rs.SetIcon(winres.ID(1), icon)
-
 	out, _ := os.Create(output)
 	defer out.Close()
-	err = rs.WriteObject(out, winres.ArchAMD64)
-	if err != nil {
-		panic(err)
+
+	if strings.HasSuffix(output, ".syso") {
+		rs := winres.ResourceSet{}
+		err = rs.SetIcon(winres.ID(1), icon)
+		if err != nil {
+			panic(err)
+		}
+		err = rs.WriteObject(out, winres.ArchAMD64)
+		if err != nil {
+			panic(err)
+		}
+	}
+	if strings.HasSuffix(output, ".ico") {
+		err = icon.SaveICO(out)
+		if err != nil {
+			panic(err)
+		}
 	}
 }

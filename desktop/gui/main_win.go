@@ -5,7 +5,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/dialog"
 	"github.com/BabySid/gobase"
 	"log"
 	"os"
@@ -14,15 +13,18 @@ import (
 	"time"
 )
 
+type winStatus struct {
+	shown bool
+}
 type MainWin struct {
-	app fyne.App
-	win fyne.Window
-
-	mm   *mainMenu
-	tb   *toolBar
-	toys *toys
-	sb   *statusBar
-	at   *appContainer
+	app   fyne.App
+	win   fyne.Window
+	wStat winStatus
+	mm    *mainMenu
+	tb    *toolBar
+	toys  *toys
+	sb    *statusBar
+	at    *appContainer
 }
 
 func init() {
@@ -50,6 +52,8 @@ var (
 	globalWin       *MainWin
 	globalConfig    *common.Config
 	globalLogWriter *common.LogWriter
+
+	tray *sysTray
 )
 
 func NewMainWin() *MainWin {
@@ -111,6 +115,9 @@ func NewMainWin() *MainWin {
 	mw.win.CenterOnScreen()
 
 	mw.win.SetCloseIntercept(mw.quitHandle)
+	mw.wStat.shown = true
+
+	tray = newSysTray()
 	return globalWin
 }
 
@@ -134,22 +141,45 @@ func (mw *MainWin) Run() {
 	}
 	log.Print(sidTheme.WelComeMsg)
 
+	// set up systray
+	tray.run()
+
 	mw.win.ShowAndRun()
 }
 
 func (mw *MainWin) quitHandle() {
-	// TODO. now, close window directly
-	if true {
-		mw.win.Close()
+	hide, _ := globalConfig.HideWhenQuit.Get()
+	if hide {
+		mw.hideWin()
 		return
 	}
-	d := dialog.NewConfirm(sidTheme.QuitAppTitle, sidTheme.QuitAppMsg, func(b bool) {
-		if b {
-			mw.win.Close()
-		}
-	}, mw.win)
+	mw.closeWin()
+	//d := dialog.NewConfirm(sidTheme.QuitAppTitle, sidTheme.QuitAppMsg, func(b bool) {
+	//	if b {
+	//		mw.win.Close()
+	//	}
+	//}, mw.win)
+	//
+	//d.SetDismissText(sidTheme.DismissText)
+	//d.SetConfirmText(sidTheme.ConfirmText)
+	//d.Show()
+}
 
-	d.SetDismissText(sidTheme.DismissText)
-	d.SetConfirmText(sidTheme.ConfirmText)
-	d.Show()
+func (mw *MainWin) closeWin() {
+	// TODO. now, close window directly
+	mw.win.Close()
+}
+
+func (mw *MainWin) showWin() {
+	mw.win.Show()
+	mw.wStat.shown = true
+
+	tray.setHideMenu()
+}
+
+func (mw *MainWin) hideWin() {
+	mw.win.Hide()
+	mw.wStat.shown = false
+
+	tray.setShowMenu()
 }

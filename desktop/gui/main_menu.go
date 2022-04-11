@@ -14,11 +14,12 @@ type mainMenu struct {
 
 	quit *fyne.MenuItem
 
-	optMenu    *fyne.Menu
-	themeOpt   *fyne.MenuItem
-	themeDark  *fyne.MenuItem
-	themeLight *fyne.MenuItem
-	fullScreen *fyne.MenuItem
+	optMenu      *fyne.Menu
+	themeOpt     *fyne.MenuItem
+	themeDark    *fyne.MenuItem
+	themeLight   *fyne.MenuItem
+	fullScreen   *fyne.MenuItem
+	hideWhenQuit *fyne.MenuItem
 
 	helpMenu  *fyne.Menu
 	sysLog    *fyne.MenuItem
@@ -51,14 +52,14 @@ func newMainMenu() *mainMenu {
 		globalWin.app.Settings().SetTheme(sidTheme.DarkTheme{})
 		mm.themeDark.Checked = true
 		mm.themeLight.Checked = false
-		globalConfig.Theme.Set("__DARK__")
+		_ = globalConfig.Theme.Set("__DARK__")
 	})
 	mm.themeDark.Checked = true
 	mm.themeLight = fyne.NewMenuItem(sidTheme.MenuOptThemeLight, func() {
 		globalWin.app.Settings().SetTheme(sidTheme.LightTheme{})
 		mm.themeDark.Checked = false
 		mm.themeLight.Checked = true
-		globalConfig.Theme.Set("__LIGHT__")
+		_ = globalConfig.Theme.Set("__LIGHT__")
 	})
 	mm.themeLight.Checked = true
 	mm.themeOpt = fyne.NewMenuItem(sidTheme.MenuOptTheme, nil)
@@ -79,11 +80,27 @@ func newMainMenu() *mainMenu {
 		}
 	}
 
+	// Option-HideWhenQuit
+	mm.hideWhenQuit = fyne.NewMenuItem(sidTheme.MenuOptHideWhenQuit, nil)
+	mm.hideWhenQuit.Checked = true
+	mm.hideWhenQuit.Action = func() {
+		hide, _ := globalConfig.HideWhenQuit.Get()
+		if hide {
+			mm.hideWhenQuit.Checked = false
+			_ = globalConfig.HideWhenQuit.Set(false)
+		} else {
+			mm.hideWhenQuit.Checked = true
+			_ = globalConfig.HideWhenQuit.Set(true)
+		}
+	}
+
 	// Option
 	mm.optMenu = fyne.NewMenu(sidTheme.MenuOption,
 		mm.themeOpt,
 		fyne.NewMenuItemSeparator(),
 		mm.fullScreen,
+		fyne.NewMenuItemSeparator(),
+		mm.hideWhenQuit,
 	)
 
 	// Help
@@ -109,9 +126,15 @@ func newMainMenu() *mainMenu {
 
 // current version of fyne don't support menu refresh
 func (mm *mainMenu) resetMenuStatAfterMainWindowShow() {
-	if globalWin.app.Preferences().String("theme") == "__DARK__" {
+	theme, _ := globalConfig.Theme.Get()
+	if theme == "__DARK__" {
 		mm.themeLight.Checked = false
 	} else {
 		mm.themeDark.Checked = false
+	}
+
+	hide, _ := globalConfig.HideWhenQuit.Get()
+	if !hide {
+		mm.hideWhenQuit.Checked = false
 	}
 }
