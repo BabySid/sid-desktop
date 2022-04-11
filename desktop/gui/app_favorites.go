@@ -176,7 +176,12 @@ func (af *appFavorites) createFavorList() {
 
 			name := favor.Name + "(" + strings.Join(favor.Tags, common.FavorTagSep) + ")"
 			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(name)
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(favor.Url)
+
+			localUrl := favor.Url
+			if len(localUrl) > 64 {
+				localUrl = localUrl[:64] + "..."
+			}
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(localUrl)
 
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(sidTheme.AppFavoritesFavorListOp1)
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
@@ -217,9 +222,13 @@ func (af *appFavorites) addFavor() {
 
 func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 	url := widget.NewEntry()
-	url.Validator = validation.NewRegexp(
-		`(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`,
-		"please input right URL")
+	url.OnChanged = func(s string) {
+		if !strings.HasPrefix(s, "http://") && !strings.HasPrefix(s, "https://") {
+			txt := "https://" + s
+			url.CursorColumn = len(txt)
+			url.SetText(txt)
+		}
+	}
 	url.SetPlaceHolder(sidTheme.AppFavoritesAddFavorUrlPlaceHolder)
 
 	name := widget.NewEntry()
