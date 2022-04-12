@@ -69,13 +69,10 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 	d.url = widget.NewEntry()
 	d.url.Validator = validation.NewRegexp(`\S+`, sidTheme.AppDevToolsHttpCliUrlValidateMsg)
 	d.url.SetPlaceHolder(sidTheme.AppDevToolsHttpCliUrlPlaceHolder)
-	d.url.OnChanged = func(s string) {
-		if !strings.HasPrefix(s, "http://") && !strings.HasPrefix(s, "https://") {
-			txt := "http://" + s
-			d.url.CursorColumn = len(txt)
-			d.url.SetText(txt)
-		}
-	}
+	d.url.Validator = validation.NewRegexp(
+		`(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`,
+		"please input right URL")
+
 	d.sendRequest = widget.NewButtonWithIcon(sidTheme.AppDevToolsHttpCliSendReqName,
 		sidTheme.ResourceHttpIcon,
 		d.sendHttpRequest)

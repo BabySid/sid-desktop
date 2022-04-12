@@ -222,13 +222,10 @@ func (af *appFavorites) addFavor() {
 
 func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 	url := widget.NewEntry()
-	url.OnChanged = func(s string) {
-		if !strings.HasPrefix(s, "http://") && !strings.HasPrefix(s, "https://") {
-			txt := "https://" + s
-			url.CursorColumn = len(txt)
-			url.SetText(txt)
-		}
-	}
+	url.Validator = validation.NewRegexp(
+		`(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`,
+		"please input right URL")
+
 	url.SetPlaceHolder(sidTheme.AppFavoritesAddFavorUrlPlaceHolder)
 
 	name := widget.NewEntry()
