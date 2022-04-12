@@ -265,10 +265,12 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 		_ = tagArray.Set(arr)
 	}
 
+	title := sidTheme.AppFavoritesAddFavorTitle
 	if favor != nil { // edit or remove
 		url.SetText(favor.Url)
 		name.SetText(favor.Name)
 		tags.SetText(strings.Join(favor.Tags, common.FavorTagSep))
+		title = sidTheme.AppFavoritesEditFavorTitle
 	}
 
 	tagList.Hide()
@@ -293,7 +295,7 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 	)
 
 	win := dialog.NewCustomConfirm(
-		sidTheme.AppFavoritesAddFavorTitle, sidTheme.ConfirmText, sidTheme.DismissText,
+		title, sidTheme.ConfirmText, sidTheme.DismissText,
 		cont, func(b bool) {
 			if b {
 				t, _ := tagArray.Get()

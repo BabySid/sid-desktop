@@ -62,6 +62,7 @@ const (
 	AppFavoritesFavorListHeader1       = "Name(Tags)"
 	AppFavoritesFavorListHeader2       = "Url"
 	AppFavoritesAddFavorTitle          = "Add Favor"
+	AppFavoritesEditFavorTitle         = "Edit Favor"
 	AppFavoritesAddFavorName           = "Name"
 	AppFavoritesAddFavorUrl            = "Url"
 	AppFavoritesAddFavorUrlPlaceHolder = "Start with 'http(s)://', type `enter` to get title"
