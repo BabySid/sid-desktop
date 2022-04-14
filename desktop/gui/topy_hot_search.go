@@ -51,10 +51,7 @@ func (ths *toyHotSearch) Init() error {
 			o, _ := data.(binding.Untyped).Get()
 			url := o.(hotSearchURL)
 			src := strconv.Itoa(url.id) + "." + url.text
-			txt := gobase.CutUTF8(src, 0, 16)
-			if txt != src {
-				txt += "..."
-			}
+			txt := gobase.CutUTF8(src, 0, 16, "...")
 			item.(*widget.Hyperlink).SetText(txt)
 			_ = item.(*widget.Hyperlink).SetURLFromString(url.url)
 		},

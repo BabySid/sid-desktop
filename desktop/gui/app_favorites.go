@@ -174,13 +174,11 @@ func (af *appFavorites) createFavorList() {
 			o, _ := data.(binding.Untyped).Get()
 			favor := o.(common.Favorites)
 
-			name := favor.Name + "(" + strings.Join(favor.Tags, common.FavorTagSep) + ")"
+			name := gobase.CutUTF8(favor.Name, 0, 32, "...")
+			name += "(" + strings.Join(favor.Tags, common.FavorTagSep) + ")"
 			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(name)
 
-			localUrl := favor.Url
-			if len(localUrl) > 64 {
-				localUrl = localUrl[:64] + "..."
-			}
+			localUrl := gobase.CutUTF8(favor.Url, 0, 64, "...")
 			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(localUrl)
 
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(sidTheme.AppFavoritesFavorListOp1)
