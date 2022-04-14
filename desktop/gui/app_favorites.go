@@ -174,7 +174,7 @@ func (af *appFavorites) createFavorList() {
 			o, _ := data.(binding.Untyped).Get()
 			favor := o.(common.Favorites)
 
-			name := gobase.CutUTF8(favor.Name, 0, 32, "...")
+			name := gobase.CutUTF8(favor.Name, 0, 16, "...")
 			name += "(" + strings.Join(favor.Tags, common.FavorTagSep) + ")"
 			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(name)
 
