@@ -148,7 +148,7 @@ Sid desktop is a desktop software based on [Fyne](https://fyne.io/),
 
 which is purely built by personal interests.
 
-The Source code is [sid-desttop](https://github.com/BabySid/sid-desktop).`
+The Source code is [sid-desktop](https://github.com/BabySid/sid-desktop).`
 
 	// MenuSys begins for menus
 	MenuSys     = "System"
