@@ -306,6 +306,7 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 				tempFavor.Url = url.Text
 				tempFavor.Tags = t
 				tempFavor.CreateTime = time.Now().Unix()
+				tempFavor.AccessTime = time.Now().Unix()
 
 				if favor != nil {
 					err := storage.GetAppFavoritesDB().UpdateFavorites(tempFavor)
