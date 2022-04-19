@@ -53,11 +53,13 @@ func (d *devToolJson) CreateView() fyne.CanvasObject {
 	d.prettyJsonPos = widget.NewLabel("")
 
 	d.compressJsonText = widget.NewMultiLineEntry()
+	d.compressJsonText.Wrapping = fyne.TextWrapWord
 	d.compressJsonText.OnCursorChanged = func() {
 		d.compressJsonPos.SetText(
 			fmt.Sprintf(sidTheme.TextCursorPosFormat, d.compressJsonText.CursorRow+1, d.compressJsonText.CursorColumn+1))
 	}
 	d.prettyJsonText = widget.NewMultiLineEntry()
+	d.prettyJsonText.Wrapping = fyne.TextWrapWord
 	d.prettyJsonText.OnCursorChanged = func() {
 		d.prettyJsonPos.SetText(
 			fmt.Sprintf(sidTheme.TextCursorPosFormat, d.prettyJsonText.CursorRow+1, d.prettyJsonText.CursorColumn+1))

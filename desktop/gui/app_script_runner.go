@@ -66,6 +66,7 @@ func (asr *appScriptRunner) LazyInit() error {
 	asr.stopScriptBtn.Disable()
 
 	asr.scriptBody = widget.NewMultiLineEntry()
+	asr.scriptBody.Wrapping = fyne.TextWrapWord
 	asr.scriptBody.OnChanged = func(s string) {
 		if asr.curScriptFile == nil {
 			return
@@ -84,6 +85,7 @@ func (asr *appScriptRunner) LazyInit() error {
 	}
 
 	asr.scriptLog = widget.NewMultiLineEntry()
+	asr.scriptLog.Wrapping = fyne.TextWrapWord
 	asr.clearLogBtn = widget.NewButtonWithIcon(sidTheme.AppScriptRunnerClearLog, sidTheme.ResourceClearIcon, func() {
 		asr.scriptLog.SetText("")
 	})

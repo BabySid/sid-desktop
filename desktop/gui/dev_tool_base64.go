@@ -52,9 +52,11 @@ func (d *devToolBase64) CreateView() fyne.CanvasObject {
 	d.fillChk.SetChecked(true)
 
 	d.inputText = widget.NewMultiLineEntry()
+	d.inputText.Wrapping = fyne.TextWrapWord
 	d.inputText.SetPlaceHolder(sidTheme.AppDevToolsBase64InputName)
 
 	d.outputText = widget.NewMultiLineEntry()
+	d.outputText.Wrapping = fyne.TextWrapWord
 	d.outputText.SetPlaceHolder(sidTheme.AppDevToolsBase64OutputName)
 
 	cont := container.NewHSplit(d.inputText, d.outputText)

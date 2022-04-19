@@ -202,6 +202,7 @@ func (d *devToolHttpClient) createRequestBody() {
 	d.requestBodyType.SetSelected(sidTheme.AppDevToolsHttpCliBodyTypeName2)
 
 	d.requestBody = widget.NewMultiLineEntry()
+	d.requestBody.Wrapping = fyne.TextWrapWord
 }
 
 func (d *devToolHttpClient) createRequestAuth() {
@@ -329,6 +330,7 @@ func (d *devToolHttpClient) createResponseView() {
 	d.respStatus = widget.NewLabel("")
 
 	d.responseBody = widget.NewMultiLineEntry()
+	d.responseBody.Wrapping = fyne.TextWrapWord
 	d.responseBody.Disable()
 
 	d.respBodyArea = container.NewAppTabs(

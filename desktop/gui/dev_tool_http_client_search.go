@@ -63,6 +63,7 @@ func newDevToolHttpClientSearch(client *devToolHttpClient) *devToolHttpClientSea
 			value.SetText(header.Value)
 		})
 	search.preBody = widget.NewMultiLineEntry()
+	search.preBody.Wrapping = fyne.TextWrapWord
 	search.preBody.Disable()
 
 	preview := widget.NewCard("", sidTheme.AppDevToolsCliPreviewTitle,
