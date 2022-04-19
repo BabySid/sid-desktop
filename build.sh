@@ -4,7 +4,7 @@
 cd desktop && go build -ldflags -H=windowsgui -o sid_desktop.exe . && cd -
 
 # build tools
-cd tools/lua_runner && go build -o lua_runner.exe && cd -
+cd tools/lua_runner && go build -o lua_runner.exe . && cd -
 
 mkdir -p output/bin
 mv desktop/sid_desktop.exe output

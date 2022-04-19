@@ -58,3 +58,12 @@ If you're not sure if that's all installed or you don't know how then check out 
   - DateTime
   - Hot Search
 
+# Installing
+
+Sid-Desktop only supports **Windows** now.
+
+```
+.\build.bat
+```
+
+Then you can find the binary in the directory `output`
