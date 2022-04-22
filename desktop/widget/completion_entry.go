@@ -139,6 +139,7 @@ func newNavigableList(items []string, entry *widget.Entry, setTextFromMenu func(
 		setTextFromMenu: setTextFromMenu,
 		navigate:        navigate,
 		hide:            hide,
+		navigating:      false,
 		items:           items,
 	}
 
@@ -156,8 +157,7 @@ func newNavigableList(items []string, entry *widget.Entry, setTextFromMenu func(
 			if !n.navigating && id > -1 {
 				setTextFromMenu(n.items[id])
 			}
-			n.navigating = false
-			if n.navigate != nil {
+			if n.navigating && n.navigate != nil && id > -1 {
 				n.navigate(n.items[id])
 			}
 		},
