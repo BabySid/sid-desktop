@@ -43,7 +43,7 @@ If you're not sure if that's all installed or you don't know how then check out 
 # Features
 - Applicaiton Container
   - Application Launcher
-    - App Launcher is inspired by [prosper](github.com/ventsislav-georgiev/prosper). You can find app in computer with fuzzy search, and open it directly.
+    - App Launcher is inspired by [prosper](https://github.com/ventsislav-georgiev/prosper). You can find app in computer with fuzzy search, and open it directly.
   - Favorites
   - ScriptRunner
     - Support Lua
