@@ -9,6 +9,7 @@ import (
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
@@ -385,4 +386,8 @@ func (af *appFavorites) initDB() {
 	} else {
 		af.reloadFavorList()
 	}
+}
+
+func (af *appFavorites) ShortCut() fyne.Shortcut {
+	return &desktop.CustomShortcut{KeyName: fyne.Key3, Modifier: desktop.AltModifier}
 }

@@ -7,6 +7,7 @@ import (
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
@@ -431,4 +432,8 @@ func (asr *appScriptRunner) getScriptStatus(id int32) *scriptStatus {
 
 func (asr *appScriptRunner) removeScriptStatus(id int32) {
 	asr.scriptStatus.Delete(id)
+}
+
+func (asr *appScriptRunner) ShortCut() fyne.Shortcut {
+	return &desktop.CustomShortcut{KeyName: fyne.Key4, Modifier: desktop.AltModifier}
 }

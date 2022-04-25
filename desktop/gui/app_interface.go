@@ -1,6 +1,9 @@
 package gui
 
-import "fyne.io/fyne/v2/container"
+import (
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
+)
 
 type appInterface interface {
 	LazyInit() error // run when click on menu or toolbar to run the app
@@ -8,6 +11,7 @@ type appInterface interface {
 	GetAppName() string
 	OpenDefault() bool
 	OnClose() bool
+	ShortCut() fyne.Shortcut
 }
 
 var (
@@ -24,6 +28,10 @@ var _ appInterface = (*appAdapter)(nil)
 
 type appAdapter struct {
 	tabItem *container.TabItem
+}
+
+func (a appAdapter) ShortCut() fyne.Shortcut {
+	panic("implement ShortCut")
 }
 
 func (a appAdapter) LazyInit() error {

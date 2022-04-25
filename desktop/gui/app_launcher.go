@@ -6,6 +6,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
@@ -240,4 +241,8 @@ func (al *appLauncher) initDB() {
 			_ = al.appBinding.Set(al.appHistory.AsInterfaceArray())
 		}
 	}
+}
+
+func (al *appLauncher) ShortCut() fyne.Shortcut {
+	return &desktop.CustomShortcut{KeyName: fyne.Key2, Modifier: desktop.AltModifier}
 }

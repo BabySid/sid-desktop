@@ -118,6 +118,9 @@ func NewMainWin() *MainWin {
 	mw.wStat.shown = true
 
 	tray = newSysTray()
+
+	mw.registerShortCut()
+
 	return globalWin
 }
 
@@ -135,9 +138,9 @@ func (mw *MainWin) Run() {
 		mw.mm.resetMenuStatAfterMainWindowShow()
 	}()
 
-	app, err := mw.at.openDefaultApp()
+	appName, err := mw.at.openDefaultApp()
 	if err != nil {
-		printErr(fmt.Errorf(sidTheme.RunAppFailedFormat, app, err))
+		printErr(fmt.Errorf(sidTheme.RunAppFailedFormat, appName, err))
 	}
 	log.Print(sidTheme.WelComeMsg)
 
@@ -182,4 +185,15 @@ func (mw *MainWin) hideWin() {
 	mw.wStat.shown = false
 
 	tray.setShowMenu()
+}
+
+func (mw *MainWin) registerShortCut() {
+	for _, myApp := range appRegister {
+		mw.win.Canvas().AddShortcut(myApp.ShortCut(), func(_ fyne.Shortcut) {
+			err := globalWin.at.openApp(myApp)
+			if err != nil {
+				printErr(fmt.Errorf(sidTheme.RunAppFailedFormat, myApp.GetAppName(), err))
+			}
+		})
+	}
 }

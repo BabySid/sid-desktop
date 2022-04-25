@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
 	"sid-desktop/desktop/storage"
@@ -104,4 +105,8 @@ func (adt *appDevTools) initDB() {
 			return
 		}
 	}
+}
+
+func (adt *appDevTools) ShortCut() fyne.Shortcut {
+	return &desktop.CustomShortcut{KeyName: fyne.Key5, Modifier: desktop.AltModifier}
 }
