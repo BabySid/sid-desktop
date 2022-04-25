@@ -189,10 +189,12 @@ func (mw *MainWin) hideWin() {
 
 func (mw *MainWin) registerShortCut() {
 	for _, myApp := range appRegister {
-		mw.win.Canvas().AddShortcut(myApp.ShortCut(), func(_ fyne.Shortcut) {
-			err := globalWin.at.openApp(myApp)
+		ap := myApp
+		sc := ap.ShortCut()
+		mw.win.Canvas().AddShortcut(sc, func(_ fyne.Shortcut) {
+			err := globalWin.at.openApp(ap)
 			if err != nil {
-				printErr(fmt.Errorf(sidTheme.RunAppFailedFormat, myApp.GetAppName(), err))
+				printErr(fmt.Errorf(sidTheme.RunAppFailedFormat, ap.GetAppName(), err))
 			}
 		})
 	}
