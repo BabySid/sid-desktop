@@ -34,6 +34,8 @@ func (a *appWelcome) LazyInit() error {
 	for _, myApp := range appRegister {
 		shortCuts.Append(myApp.GetAppName(), widget.NewLabelWithStyle(common.ShortCutName(myApp.ShortCut()), fyne.TextAlignCenter, fyne.TextStyle{}))
 	}
+	shortCuts.Append("Show/Hide", widget.NewLabelWithStyle("Ctrl + Shift + Z", fyne.TextAlignCenter, fyne.TextStyle{}))
+
 	a.tabItem.Content = container.NewCenter(
 		container.NewVBox(
 			wel,
