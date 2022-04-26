@@ -6,6 +6,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"github.com/BabySid/gobase"
+	"golang.design/x/hotkey"
 	"log"
 	"os"
 	"sid-desktop/desktop/common"
@@ -198,4 +199,20 @@ func (mw *MainWin) registerShortCut() {
 			}
 		})
 	}
+
+	go func() {
+		hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyZ)
+		if err := hk.Register(); err != nil {
+			printErr(fmt.Errorf(sidTheme.InternalErrorFormat, err))
+			return
+		}
+		defer hk.Unregister()
+		for range hk.Keydown() {
+			if globalWin.wStat.shown {
+				globalWin.hideWin()
+			} else {
+				globalWin.showWin()
+			}
+		}
+	}()
 }

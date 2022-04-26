@@ -45,10 +45,8 @@ func (s *sysTray) systrayReady() {
 			case <-s.showMenu.ClickedCh:
 				if globalWin.wStat.shown {
 					globalWin.hideWin()
-					s.setShowMenu()
 				} else {
 					globalWin.showWin()
-					s.setHideMenu()
 				}
 			case <-s.quitMenu.ClickedCh:
 				systray.Quit()

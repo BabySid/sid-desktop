@@ -18,6 +18,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/tc-hib/winres v0.0.0-00010101000000-000000000000
 	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
+	golang.design/x/hotkey v0.3.0
 	google.golang.org/protobuf v1.28.0
 	layeh.com/gopher-json v0.0.0-20201124131017-552bb3c4c3bf
 )
