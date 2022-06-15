@@ -11,7 +11,6 @@ import (
 	"os"
 	"sid-desktop/desktop/common"
 	sidTheme "sid-desktop/desktop/theme"
-	"time"
 )
 
 type winStatus struct {
@@ -132,11 +131,6 @@ func (mw *MainWin) Run() {
 		_ = os.Unsetenv("FYNE_SCALE")
 
 		gobase.Exit()
-	}()
-
-	go func() {
-		time.Sleep(1 * time.Second)
-		mw.mm.resetMenuStatAfterMainWindowShow()
 	}()
 
 	appName, err := mw.at.openDefaultApp()

@@ -53,6 +53,7 @@ func newMainMenu() *mainMenu {
 		mm.themeDark.Checked = true
 		mm.themeLight.Checked = false
 		_ = globalConfig.Theme.Set("__DARK__")
+		mm.Refresh()
 	})
 	mm.themeDark.Checked = true
 	mm.themeLight = fyne.NewMenuItem(sidTheme.MenuOptThemeLight, func() {
@@ -60,8 +61,16 @@ func newMainMenu() *mainMenu {
 		mm.themeDark.Checked = false
 		mm.themeLight.Checked = true
 		_ = globalConfig.Theme.Set("__LIGHT__")
+		mm.Refresh()
 	})
 	mm.themeLight.Checked = true
+	theme, _ := globalConfig.Theme.Get()
+	if theme == "__DARK__" {
+		mm.themeLight.Checked = false
+	} else {
+		mm.themeDark.Checked = false
+	}
+
 	mm.themeOpt = fyne.NewMenuItem(sidTheme.MenuOptTheme, nil)
 	mm.themeOpt.ChildMenu = fyne.NewMenu("",
 		mm.themeDark,
@@ -72,12 +81,18 @@ func newMainMenu() *mainMenu {
 	mm.fullScreen = fyne.NewMenuItem(sidTheme.MenuOptFullScreen, nil)
 	mm.fullScreen.Action = func() {
 		if globalWin.win.FullScreen() {
-			//mm.fullItem.Label = "FullScreen"
+			mm.fullScreen.Label = "FullScreen"
 			globalWin.win.SetFullScreen(false)
 		} else {
-			//mm.fullItem.Label = "QuitFullScreen"
+			mm.fullScreen.Label = "QuitFullScreen"
 			globalWin.win.SetFullScreen(true)
 		}
+		mm.Refresh()
+	}
+	if globalWin.win.FullScreen() {
+		mm.fullScreen.Label = "QuitFullScreen"
+	} else {
+		mm.fullScreen.Label = "FullScreen"
 	}
 
 	// Option-HideWhenQuit
@@ -92,6 +107,11 @@ func newMainMenu() *mainMenu {
 			mm.hideWhenQuit.Checked = true
 			_ = globalConfig.HideWhenQuit.Set(true)
 		}
+		mm.Refresh()
+	}
+	hide, _ := globalConfig.HideWhenQuit.Get()
+	if !hide {
+		mm.hideWhenQuit.Checked = false
 	}
 
 	// Option
@@ -122,19 +142,4 @@ func newMainMenu() *mainMenu {
 	)
 
 	return &mm
-}
-
-// current version of fyne don't support menu refresh
-func (mm *mainMenu) resetMenuStatAfterMainWindowShow() {
-	theme, _ := globalConfig.Theme.Get()
-	if theme == "__DARK__" {
-		mm.themeLight.Checked = false
-	} else {
-		mm.themeDark.Checked = false
-	}
-
-	hide, _ := globalConfig.HideWhenQuit.Get()
-	if !hide {
-		mm.hideWhenQuit.Checked = false
-	}
 }
