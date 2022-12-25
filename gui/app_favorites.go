@@ -389,7 +389,7 @@ func (af *appFavorites) initDB() {
 }
 
 func (af *appFavorites) ShortCut() fyne.Shortcut {
-	return &desktop.CustomShortcut{KeyName: fyne.Key3, Modifier: desktop.AltModifier}
+	return &desktop.CustomShortcut{KeyName: fyne.Key3, Modifier: fyne.KeyModifierAlt}
 }
 
 func (af *appFavorites) Icon() fyne.Resource {

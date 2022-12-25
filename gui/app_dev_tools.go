@@ -108,7 +108,7 @@ func (adt *appDevTools) initDB() {
 }
 
 func (adt *appDevTools) ShortCut() fyne.Shortcut {
-	return &desktop.CustomShortcut{KeyName: fyne.Key5, Modifier: desktop.AltModifier}
+	return &desktop.CustomShortcut{KeyName: fyne.Key5, Modifier: fyne.KeyModifierAlt}
 }
 
 func (adt *appDevTools) Icon() fyne.Resource {

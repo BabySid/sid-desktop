@@ -244,7 +244,7 @@ func (al *appLauncher) initDB() {
 }
 
 func (al *appLauncher) ShortCut() fyne.Shortcut {
-	return &desktop.CustomShortcut{KeyName: fyne.Key2, Modifier: desktop.AltModifier}
+	return &desktop.CustomShortcut{KeyName: fyne.Key2, Modifier: fyne.KeyModifierAlt}
 }
 
 func (al *appLauncher) Icon() fyne.Resource {

@@ -55,7 +55,7 @@ func (a *appWelcome) OpenDefault() bool {
 }
 
 func (a *appWelcome) ShortCut() fyne.Shortcut {
-	return &desktop.CustomShortcut{KeyName: fyne.Key1, Modifier: desktop.AltModifier}
+	return &desktop.CustomShortcut{KeyName: fyne.Key1, Modifier: fyne.KeyModifierAlt}
 }
 
 func (a *appWelcome) Icon() fyne.Resource {

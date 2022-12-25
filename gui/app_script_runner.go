@@ -435,7 +435,7 @@ func (asr *appScriptRunner) removeScriptStatus(id int32) {
 }
 
 func (asr *appScriptRunner) ShortCut() fyne.Shortcut {
-	return &desktop.CustomShortcut{KeyName: fyne.Key4, Modifier: desktop.AltModifier}
+	return &desktop.CustomShortcut{KeyName: fyne.Key4, Modifier: fyne.KeyModifierAlt}
 }
 
 func (asr *appScriptRunner) Icon() fyne.Resource {
