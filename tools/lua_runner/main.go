@@ -1,8 +1,8 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/jessevdk/go-flags"
-	"google.golang.org/protobuf/encoding/protojson"
 	"io/ioutil"
 	"log"
 	"os"
@@ -32,8 +32,8 @@ func main() {
 		return
 	}
 
-	var script proto.ScriptRunner
-	err = protojson.Unmarshal(data, &script)
+	var script proto.ScriptRunnerRequest
+	err = json.Unmarshal(data, &script)
 	if err != nil {
 		log.Printf("unmarshal file[%s] failed. %s\n", opt.ScriptFile, err)
 		return

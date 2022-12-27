@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"encoding/json"
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -13,7 +14,6 @@ import (
 	"github.com/BabySid/gobase"
 	"github.com/go-cmd/cmd"
 	uuid "github.com/satori/go.uuid"
-	"google.golang.org/protobuf/encoding/protojson"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -322,17 +322,17 @@ func (asr *appScriptRunner) runScriptFile() {
 	scriptFile := *asr.curScriptFile
 
 	tmpFilePath := filepath.Join(os.TempDir(), uuid.NewV4().String())
-	msg := &proto.ScriptRunner{
+	msg := &proto.ScriptRunnerRequest{
 		Id:      scriptFile.ID,
 		Title:   scriptFile.Name,
 		Content: scriptFile.Cont,
 	}
-	script, err := protojson.Marshal(msg)
+	script, err := json.Marshal(msg)
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessScriptRunnerFailedFormat, err))
 		return
 	}
-	err = ioutil.WriteFile(tmpFilePath, []byte(script), 0600)
+	err = ioutil.WriteFile(tmpFilePath, script, 0600)
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessScriptRunnerFailedFormat, err))
 		return
