@@ -57,6 +57,12 @@ type devToolHttpClient struct {
 	searchWin fyne.Window
 }
 
+const (
+	// more length of response body will result in hang up
+	// https://github.com/fyne-io/fyne/issues/3506
+	devToolHttpClientRespBodyMaxSize = 1024
+)
+
 func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 	if d.content != nil {
 		return d.content
@@ -360,7 +366,13 @@ func (d *devToolHttpClient) sendHttpRequest() {
 	d.respStatus.SetText(fmt.Sprintf(theme.AppDevToolsCliRespStatusFormat, status, cost, len(body)))
 
 	d.responseBodyType.SetSelected(theme.AppDevToolsHttpCliBodyTypeName1)
-	d.responseBody.SetText(string(body))
+	
+	if len(body) > devToolHttpClientRespBodyMaxSize {
+		d.responseBody.SetText(string(body)[:devToolHttpClientRespBodyMaxSize] + "...")
+	} else {
+		d.responseBody.SetText(string(body))
+	}
+
 	rs := make([]interface{}, 0)
 	for k, v := range respHeader {
 		value := strings.Join(v, " ")
