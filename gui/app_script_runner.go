@@ -17,7 +17,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	common2 "sid-desktop/common"
+	"sid-desktop/common"
 	"sid-desktop/proto"
 	"sid-desktop/storage"
 	"sid-desktop/theme"
@@ -39,8 +39,8 @@ type appScriptRunner struct {
 	scriptPos      *widget.Label
 	scriptBody     *widget.Entry
 	scriptLog      *widget.Entry
-	scriptStatus   sync.Map            // id -> *scriptStatus
-	curScriptFile  *common2.ScriptFile // only set on saveScript or onSelect
+	scriptStatus   sync.Map           // id -> *scriptStatus
+	curScriptFile  *common.ScriptFile // only set on saveScript or onSelect
 	scriptBinding  binding.UntypedList
 	scriptFiles    *widget.List
 	scriptName     *widget.Entry
@@ -115,7 +115,7 @@ func (asr *appScriptRunner) LazyInit() error {
 	asr.createScriptList()
 	asr.scriptFiles.OnSelected = func(id widget.ListItemID) {
 		sf, _ := asr.scriptBinding.GetValue(id)
-		file, _ := sf.(common2.ScriptFile)
+		file, _ := sf.(common.ScriptFile)
 
 		if asr.curScriptFile != nil && asr.curScriptFile.ID != file.ID {
 			status := asr.getScriptStatus(asr.curScriptFile.ID)
@@ -183,7 +183,7 @@ func (asr *appScriptRunner) createScriptList() {
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
 			o, _ := data.(binding.Untyped).Get()
-			file := o.(common2.ScriptFile)
+			file := o.(common.ScriptFile)
 
 			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(file.Name)
 
@@ -242,7 +242,7 @@ func (asr *appScriptRunner) newScriptFile() {
 	docID := 0
 	files, _ := asr.scriptBinding.Get()
 	for _, file := range files {
-		if filepath.Base(file.(common2.ScriptFile).Name) == theme.AppScriptRunnerNewScriptName {
+		if filepath.Base(file.(common.ScriptFile).Name) == theme.AppScriptRunnerNewScriptName {
 			docID++
 			fmt.Println(docID)
 		}
@@ -267,7 +267,7 @@ func (asr *appScriptRunner) saveScriptFile() {
 		return
 	}
 	if asr.curScriptFile == nil {
-		asr.curScriptFile = &common2.ScriptFile{
+		asr.curScriptFile = &common.ScriptFile{
 			Name:       txt,
 			Cont:       asr.scriptBody.Text,
 			CreateTime: time.Now().Unix(),
@@ -342,7 +342,7 @@ func (asr *appScriptRunner) runScriptFile() {
 		Buffered:   false,
 		Streaming:  true,
 		BeforeExec: nil,
-	}, common2.GetLuaRunner(), "--script", tmpFilePath)
+	}, common.GetLuaRunner(), "--script", tmpFilePath)
 
 	asr.setCurScriptRunningHandle(scriptFile.ID, c)
 

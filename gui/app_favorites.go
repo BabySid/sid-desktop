@@ -13,7 +13,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
-	common2 "sid-desktop/common"
+	"sid-desktop/common"
 	"sid-desktop/storage"
 	"sid-desktop/theme"
 	"strings"
@@ -31,7 +31,7 @@ type appFavorites struct {
 	favorHeader  *widget.List
 	favorList    *widget.List
 	favorBinding binding.UntypedList
-	favorCache   *common2.FavoritesList
+	favorCache   *common.FavoritesList
 }
 
 func (af *appFavorites) LazyInit() error {
@@ -107,7 +107,7 @@ func (af *appFavorites) importFavors() {
 		if closer != nil {
 			defer closer.Close()
 
-			data, err := common2.ReadURI(closer)
+			data, err := common.ReadURI(closer)
 			if err != nil {
 				printErr(fmt.Errorf(theme.ImportFavoritesFailedFormat, err))
 				return
@@ -115,9 +115,9 @@ func (af *appFavorites) importFavors() {
 
 			favorBytes := bytes.Split(data, []byte("\n"))
 
-			favors := common2.NewFavoritesList()
+			favors := common.NewFavoritesList()
 			for _, item := range favorBytes {
-				var fav common2.Favorites
+				var fav common.Favorites
 
 				err = json.Unmarshal(item, &fav)
 				if err != nil {
@@ -173,10 +173,10 @@ func (af *appFavorites) createFavorList() {
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
 			o, _ := data.(binding.Untyped).Get()
-			favor := o.(common2.Favorites)
+			favor := o.(common.Favorites)
 
 			name := gobase.CutUTF8(favor.Name, 0, 16, "...")
-			name += "(" + strings.Join(favor.Tags, common2.FavorTagSep) + ")"
+			name += "(" + strings.Join(favor.Tags, common.FavorTagSep) + ")"
 			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(name)
 
 			localUrl := gobase.CutUTF8(favor.Url, 0, 64, "...")
@@ -188,7 +188,7 @@ func (af *appFavorites) createFavorList() {
 			}
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppFavoritesFavorListOp2)
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
-				err := globalWin.app.OpenURL(common2.ParseURL(favor.Url))
+				err := globalWin.app.OpenURL(common.ParseURL(favor.Url))
 				if err != nil {
 					printErr(fmt.Errorf(theme.OpenFavoritesFailedFormat, err))
 				}
@@ -211,7 +211,7 @@ func (af *appFavorites) searchFavor(name string) {
 	}
 }
 
-func (af *appFavorites) editOneFavor(favor common2.Favorites) {
+func (af *appFavorites) editOneFavor(favor common.Favorites) {
 	af.showFavorDialog(&favor)
 }
 
@@ -219,7 +219,7 @@ func (af *appFavorites) addFavor() {
 	af.showFavorDialog(nil)
 }
 
-func (af *appFavorites) showFavorDialog(favor *common2.Favorites) {
+func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 	url := widget.NewEntry()
 	url.Validator = validation.NewRegexp(
 		`(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`,
@@ -260,7 +260,7 @@ func (af *appFavorites) showFavorDialog(favor *common2.Favorites) {
 		},
 	)
 	tags.OnChanged = func(s string) {
-		arr := strings.Split(s, common2.FavorTagSep)
+		arr := strings.Split(s, common.FavorTagSep)
 		_ = tagArray.Set(arr)
 	}
 
@@ -268,7 +268,7 @@ func (af *appFavorites) showFavorDialog(favor *common2.Favorites) {
 	if favor != nil { // edit or remove
 		url.SetText(favor.Url)
 		name.SetText(favor.Name)
-		tags.SetText(strings.Join(favor.Tags, common2.FavorTagSep))
+		tags.SetText(strings.Join(favor.Tags, common.FavorTagSep))
 		title = theme.AppFavoritesEditFavorTitle
 	}
 
@@ -299,7 +299,7 @@ func (af *appFavorites) showFavorDialog(favor *common2.Favorites) {
 			if b {
 				t, _ := tagArray.Get()
 
-				var tempFavor common2.Favorites
+				var tempFavor common.Favorites
 				if favor != nil {
 					tempFavor = *favor
 				}

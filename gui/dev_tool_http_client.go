@@ -12,7 +12,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
 	"net/http"
-	common2 "sid-desktop/common"
+	"sid-desktop/common"
 	"sid-desktop/storage"
 	"sid-desktop/theme"
 	sidWidget "sid-desktop/widget"
@@ -62,7 +62,7 @@ func (d *devToolHttpClient) CreateView() fyne.CanvasObject {
 		return d.content
 	}
 
-	d.method = widget.NewSelect(common2.HttpMethod, nil)
+	d.method = widget.NewSelect(common.HttpMethod, nil)
 	d.method.PlaceHolder = d.method.Options[0]
 	d.method.SetSelectedIndex(0)
 
@@ -111,13 +111,13 @@ func (d *devToolHttpClient) createRequestView() {
 func (d *devToolHttpClient) createRequestHeader() {
 	d.reqHeaderBinding = binding.NewUntypedList()
 
-	d.reqHeaderBinding.Set(common2.NewBuiltInHttpHeader())
-	d.reqHeaderBinding.Append(common2.NewHttpHeader())
+	d.reqHeaderBinding.Set(common.NewBuiltInHttpHeader())
+	d.reqHeaderBinding.Append(common.NewHttpHeader())
 
 	d.requestHeader = widget.NewListWithData(
 		d.reqHeaderBinding,
 		func() fyne.CanvasObject {
-			key := widget.NewSelectEntry(common2.BuiltInHttpHeaderName())
+			key := widget.NewSelectEntry(common.BuiltInHttpHeaderName())
 			key.SetPlaceHolder(theme.AppDevToolsHttpCliReqHeaderKeyPlaceHolder)
 			value := widget.NewEntry()
 			value.SetPlaceHolder(theme.AppDevToolsHttpCliReqHeaderValPlaceHolder)
@@ -130,7 +130,7 @@ func (d *devToolHttpClient) createRequestHeader() {
 		},
 		func(item binding.DataItem, obj fyne.CanvasObject) {
 			o, _ := item.(binding.Untyped).Get()
-			header := o.(*common2.HttpHeader)
+			header := o.(*common.HttpHeader)
 
 			arr, _ := d.reqHeaderBinding.Get()
 			lineNo := gobase.ContainsInterface(arr, header)
@@ -147,9 +147,9 @@ func (d *devToolHttpClient) createRequestHeader() {
 			key.OnChanged = func(s string) {
 				header.Key = s
 				if lineNo == d.reqHeaderBinding.Length()-1 {
-					_ = d.reqHeaderBinding.Append(common2.NewHttpHeader())
+					_ = d.reqHeaderBinding.Append(common.NewHttpHeader())
 				}
-				key.SetOptions(common2.FilterOption(s, common2.BuiltInHttpHeaderName()))
+				key.SetOptions(common.FilterOption(s, common.BuiltInHttpHeaderName()))
 			}
 
 			value := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Entry)
@@ -247,8 +247,8 @@ func (d *devToolHttpClient) addBasicAuthForReqHeader() {
 		return
 	}
 
-	auth := common2.AuthHeader
-	auth.Value = common2.EncodeBasicAuth(d.requestBasicAuthUser.Text, d.requestBasicAuthPass.Text)
+	auth := common.AuthHeader
+	auth.Value = common.EncodeBasicAuth(d.requestBasicAuthUser.Text, d.requestBasicAuthPass.Text)
 	_ = d.reqHeaderBinding.Prepend(&auth)
 }
 
@@ -264,12 +264,12 @@ func (d *devToolHttpClient) rmBasicAuthForReqHeader() {
 	_ = d.reqHeaderBinding.Set(headers)
 }
 
-func (d *devToolHttpClient) findAuthHeaderForReqHeader() (int, *common2.HttpHeader) {
+func (d *devToolHttpClient) findAuthHeaderForReqHeader() (int, *common.HttpHeader) {
 	headers, _ := d.reqHeaderBinding.Get()
 
 	for i, obj := range headers {
-		header := obj.(*common2.HttpHeader)
-		if header.Key == common2.AuthHeader.Key {
+		header := obj.(*common.HttpHeader)
+		if header.Key == common.AuthHeader.Key {
 			return i, header
 		}
 	}
@@ -295,7 +295,7 @@ func (d *devToolHttpClient) createResponseView() {
 		},
 		func(item binding.DataItem, obj fyne.CanvasObject) {
 			o, _ := item.(binding.Untyped).Get()
-			header := o.(*common2.HttpHeader)
+			header := o.(*common.HttpHeader)
 
 			key := obj.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Entry)
 			key.SetText(header.Key)
@@ -343,15 +343,15 @@ func (d *devToolHttpClient) createResponseView() {
 }
 
 func (d *devToolHttpClient) sendHttpRequest() {
-	header := make([]common2.HttpHeader, 0)
+	header := make([]common.HttpHeader, 0)
 	arr, _ := d.reqHeaderBinding.Get()
 	for _, item := range arr {
-		h := item.(*common2.HttpHeader)
+		h := item.(*common.HttpHeader)
 		header = append(header, *h)
 	}
 
 	begin := time.Now()
-	code, status, respHeader, body, err := common2.DoHttpRequest(d.method.Selected, d.url.Text, d.requestBody.Text, header)
+	code, status, respHeader, body, err := common.DoHttpRequest(d.method.Selected, d.url.Text, d.requestBody.Text, header)
 	cost := time.Since(begin)
 	if err != nil {
 		d.responseBody.SetText(err.Error())
@@ -367,7 +367,7 @@ func (d *devToolHttpClient) sendHttpRequest() {
 		if k == "Content-Type" && strings.Index(value, "application/json") >= 0 {
 			d.responseBodyType.SetSelected(theme.AppDevToolsHttpCliBodyTypeName2)
 		}
-		header := &common2.HttpHeader{
+		header := &common.HttpHeader{
 			Key:   k,
 			Value: value,
 		}
@@ -376,7 +376,7 @@ func (d *devToolHttpClient) sendHttpRequest() {
 	d.respHeaderBinding.Set(rs)
 
 	if code >= http.StatusOK && code < http.StatusBadRequest {
-		httpReq := &common2.HttpRequest{
+		httpReq := &common.HttpRequest{
 			Method:     d.method.Selected,
 			Url:        d.url.Text,
 			ReqHeader:  header,
@@ -403,14 +403,14 @@ func (d *devToolHttpClient) openSearchWin() {
 	}
 }
 
-func (d *devToolHttpClient) loadHttpRequest(req *common2.HttpRequest) {
+func (d *devToolHttpClient) loadHttpRequest(req *common.HttpRequest) {
 	d.method.SetSelected(req.Method)
 	d.url.SetText(req.Url)
 	d.requestBody.SetText(string(req.ReqBody))
 
 	rs := make([]interface{}, 0)
 	for _, head := range req.ReqHeader {
-		rs = append(rs, &common2.HttpHeader{
+		rs = append(rs, &common.HttpHeader{
 			Key:   head.Key,
 			Value: head.Value,
 		})
@@ -419,10 +419,10 @@ func (d *devToolHttpClient) loadHttpRequest(req *common2.HttpRequest) {
 			d.requestBodyType.SetSelected(theme.AppDevToolsHttpCliBodyTypeName2)
 		}
 
-		if head.Key == common2.AuthHeader.Key && strings.HasPrefix(head.Value, "Basic") {
+		if head.Key == common.AuthHeader.Key && strings.HasPrefix(head.Value, "Basic") {
 			d.reqAuthTab.SetSelected(theme.AppDevToolsHttpCliAuthTypeName2)
 
-			user, pass := common2.DecodeBasicAuth(head.Value)
+			user, pass := common.DecodeBasicAuth(head.Value)
 			d.requestBasicAuthUser.SetText(user)
 			d.requestBasicAuthPass.SetText(pass)
 		}

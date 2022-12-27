@@ -10,7 +10,7 @@ import (
 	"golang.design/x/hotkey"
 	"log"
 	"os"
-	common2 "sid-desktop/common"
+	"sid-desktop/common"
 	"sid-desktop/theme"
 )
 
@@ -51,8 +51,8 @@ func init() {
 
 var (
 	globalWin       *MainWin
-	globalConfig    *common2.Config
-	globalLogWriter *common2.LogWriter
+	globalConfig    *common.Config
+	globalLogWriter *common.LogWriter
 
 	tray *sysTray
 )
@@ -68,12 +68,12 @@ func NewMainWin() *MainWin {
 	mw.app.SetIcon(theme.ResourceAppIcon)
 
 	globalWin = &mw
-	globalConfig = common2.NewConfig()
+	globalConfig = common.NewConfig()
 
 	// Status Bar
 	mw.sb = newStatusBar()
 
-	globalLogWriter = common2.NewLogWriter(common2.LogWriterOption{
+	globalLogWriter = common.NewLogWriter(common.LogWriterOption{
 		CacheCapacity: 256,
 		LogPath:       mw.app.Storage().RootURI().Path(),
 		OnMessage: func(s string) {
