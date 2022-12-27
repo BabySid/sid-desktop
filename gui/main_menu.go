@@ -51,7 +51,7 @@ func newMainMenu() *mainMenu {
 
 	// Option-Theme
 	mm.themeDark = fyne.NewMenuItem(theme.MenuOptThemeDark, func() {
-		globalWin.app.Settings().SetTheme(theme.DarkTheme{})
+		globalWin.app.Settings().SetTheme(theme.DarkTheme)
 		mm.themeDark.Checked = true
 		mm.themeLight.Checked = false
 		_ = globalConfig.Theme.Set("__DARK__")
@@ -59,7 +59,7 @@ func newMainMenu() *mainMenu {
 	})
 	mm.themeDark.Checked = true
 	mm.themeLight = fyne.NewMenuItem(theme.MenuOptThemeLight, func() {
-		globalWin.app.Settings().SetTheme(theme.LightTheme{})
+		globalWin.app.Settings().SetTheme(theme.LightTheme)
 		mm.themeDark.Checked = false
 		mm.themeLight.Checked = true
 		_ = globalConfig.Theme.Set("__LIGHT__")

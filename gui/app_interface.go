@@ -23,6 +23,7 @@ var (
 		&appFavorites{},
 		&appScriptRunner{},
 		&appDevTools{},
+		&appSodor{},
 	}
 )
 

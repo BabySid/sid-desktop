@@ -138,6 +138,24 @@ const (
 	AppDevToolsCliPreviewLoading              = "History is loading ..."
 	AppDevToolsCliPreviewSearchPlaceHolder    = "Search for method/url"
 
+	AppSodorName           = "Sodor"
+	AppSodorJobTabName     = "Jobs"
+	AppSodorJobListName    = "Job List"
+	AppSodorCreateJob      = "New Job"
+	AppSodorJobSearchText  = "Type the name of jobs"
+	AppSodorJobListHeader1 = "Name"
+	AppSodorJobListHeader2 = "CreateTime"
+	AppSodorJobListHeader3 = "UpdateTime"
+	AppSodorJobListOp1     = "Edit"
+	AppSodorJobListOp2     = "View Instance"
+	AppSodorJobListOp3     = "Del"
+
+	AppSodorJobListCannotCloseMsg = "The job list can NOT be closed. :)"
+	AppSodorThomsTabName          = "Thomas"
+	AppSodorFatCtrlTabName        = "Fat Controller"
+	AppSodorAlertGroupTabName     = "Alert Groups"
+	AppSodorAlertPluginTabName    = "Alert Plugins"
+
 	LogViewerRefreshBtn = "Refresh"
 	LogViewerTitle      = "Show Log"
 

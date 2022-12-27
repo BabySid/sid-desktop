@@ -90,9 +90,9 @@ func NewMainWin() *MainWin {
 	preTheme, _ := globalConfig.Theme.Get()
 	switch preTheme {
 	case "__DARK__":
-		mw.app.Settings().SetTheme(theme.DarkTheme{})
+		mw.app.Settings().SetTheme(theme.DarkTheme)
 	case "__LIGHT__":
-		mw.app.Settings().SetTheme(theme.LightTheme{})
+		mw.app.Settings().SetTheme(theme.LightTheme)
 	}
 
 	// Main Menu

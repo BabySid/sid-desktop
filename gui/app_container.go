@@ -91,6 +91,8 @@ func (at *appContainer) initApp(app appInterface) error {
 		if err != nil {
 			return err
 		}
+		// todo. some component maybe invalid until restart when theme is switched
+		// i found that maybe resolved when recalled the lazyinit()
 		at.appStatusMap[app.GetAppName()] = appStatus{lazyInit: true}
 	}
 	return nil

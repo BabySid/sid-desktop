@@ -15,6 +15,7 @@ ${fyne} bundle -pkg theme -name ResourceLogViewerIcon -a -o ../theme/icons.go lo
 ${fyne} bundle -pkg theme -name ResourceAboutIcon -a -o ../theme/icons.go about.png
 ${fyne} bundle -pkg theme -name ResourceScriptRunnerIcon -a -o ../theme/icons.go script.png
 ${fyne} bundle -pkg theme -name ResourceDevToolsIcon -a -o ../theme/icons.go dev_tools.png
+${fyne} bundle -pkg theme -name ResourceSodorIcon -a -o ../theme/icons.go app_sodor.png
 
 ${fyne} bundle -pkg theme -name ResourceOpenDirIcon -a -o ../theme/icons.go open_dir.png
 ${fyne} bundle -pkg theme -name ResourceAddDirIcon -a -o ../theme/icons.go add_dir.png
@@ -46,5 +47,12 @@ ${fyne} bundle -pkg theme -name ResourceExpandUpIcon -a -o ../theme/icons.go exp
 
 ${fyne} bundle -pkg theme -name ResourceLuaIcon -a -o ../theme/icons.go lua.png
 ${fyne} bundle -pkg theme -name ResourceHttpIcon -a -o ../theme/icons.go http.png
+
+${fyne} bundle -pkg theme -name ResourceJobsIcon -a -o ../theme/icons.go jobs.png
+${fyne} bundle -pkg theme -name ResourceFatCtrlIcon -a -o ../theme/icons.go fat_ctrl.png
+${fyne} bundle -pkg theme -name ResourceTrainIcon -a -o ../theme/icons.go train.png
+${fyne} bundle -pkg theme -name ResourceAlertIcon -a -o ../theme/icons.go alert.png
+${fyne} bundle -pkg theme -name ResourceNoticeIcon -a -o ../theme/icons.go notice.png
+${fyne} bundle -pkg theme -name ResourceInstanceIcon -a -o ../theme/icons.go instance.png
 
 # use https://github.com/lusingander/fyne-theme-generator to generate theme file
