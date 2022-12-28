@@ -13,7 +13,7 @@ import (
 	"sid-desktop/common"
 	"sid-desktop/common/apps"
 	"sid-desktop/storage"
-	theme2 "sid-desktop/theme"
+	sidTheme "sid-desktop/theme"
 	"time"
 )
 
@@ -46,10 +46,10 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 	alc.indexBuildLabel = widget.NewLabel("")
 	alc.indexBuildLabel.Hide()
 
-	alc.win = fyne.CurrentApp().NewWindow(theme2.AppLauncherConfigTitle)
+	alc.win = fyne.CurrentApp().NewWindow(sidTheme.AppLauncherConfigTitle)
 
 	alc.pathBinding = binding.NewStringList()
-	addFolder := widget.NewButtonWithIcon(theme2.AppLauncherConfigAddDirBtn, theme2.ResourceAddDirIcon, func() {
+	addFolder := widget.NewButtonWithIcon(sidTheme.AppLauncherConfigAddDirBtn, sidTheme.ResourceAddDirIcon, func() {
 		fo := dialog.NewFolderOpen(func(uri fyne.ListableURI, err error) {
 			if uri != nil {
 				_ = alc.pathBinding.Append(uri.Path())
@@ -59,7 +59,7 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 	})
 
 	fileFilter := widget.NewLabel("*.lnk;*.exe")
-	top := container.NewHBox(widget.NewLabel(theme2.AppLauncherConfigFileFilter), fileFilter, layout.NewSpacer(), addFolder)
+	top := container.NewHBox(widget.NewLabel(sidTheme.AppLauncherConfigFileFilter), fileFilter, layout.NewSpacer(), addFolder)
 
 	common.CopyBindingStringList(alc.pathBinding, globalConfig.AppLaunchAppSearchPath)
 
@@ -69,7 +69,7 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 			return container.NewHBox(
 				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
 				layout.NewSpacer(),
-				widget.NewButtonWithIcon(theme2.AppLauncherConfigRmDirBtn, theme2.ResourceRmDirIcon, nil))
+				widget.NewButtonWithIcon(sidTheme.AppLauncherConfigRmDirBtn, sidTheme.ResourceRmDirIcon, nil))
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
 			path, _ := data.(binding.String).Get()
@@ -83,9 +83,9 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 		},
 	)
 
-	alc.ok = widget.NewButtonWithIcon(theme2.AppLauncherConfigBuildBtn, theme.ConfirmIcon(), func() {
+	alc.ok = widget.NewButtonWithIcon(sidTheme.AppLauncherConfigBuildBtn, theme.ConfirmIcon(), func() {
 		alc.indexBuildStatus = indexBuilding
-		alc.indexBuildLabel.SetText(theme2.AppLauncherConfigIndexBuilding)
+		alc.indexBuildLabel.SetText(sidTheme.AppLauncherConfigIndexBuilding)
 		alc.indexBuildLabel.Show()
 		alc.ok.Disable()
 		alc.dismiss.Disable()
@@ -101,30 +101,30 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 			time.Sleep(200 * time.Millisecond)
 			err := storage.GetAppLauncherDB().Init()
 			if err != nil {
-				printErr(fmt.Errorf(theme2.RunAppIndexFailedFormat, err))
+				printErr(fmt.Errorf(sidTheme.RunAppIndexFailedFormat, err))
 				return
 			}
-			alc.indexBuildLabel.SetText(theme2.AppLauncherConfigStartScanApp)
+			alc.indexBuildLabel.SetText(sidTheme.AppLauncherConfigStartScanApp)
 			time.Sleep(200 * time.Millisecond)
 
 			path, _ := globalConfig.AppLaunchAppSearchPath.Get()
 			appFound, err := apps.InitApps(path)
 			if err != nil {
-				printErr(fmt.Errorf(theme2.RunAppIndexFailedFormat, err))
+				printErr(fmt.Errorf(sidTheme.RunAppIndexFailedFormat, err))
 				return
 			}
 
 			err = storage.GetAppLauncherDB().AddAppToIndex(appFound)
 			if err != nil {
-				printErr(fmt.Errorf(theme2.RunAppIndexFailedFormat, err))
+				printErr(fmt.Errorf(sidTheme.RunAppIndexFailedFormat, err))
 				return
 			}
 			alc.notifyAppLauncherBuildIndexFinished()
 
-			alc.indexBuildLabel.SetText(fmt.Sprintf(theme2.AppLauncherConfigFinishScanAppFormat, appFound.Len()))
+			alc.indexBuildLabel.SetText(fmt.Sprintf(sidTheme.AppLauncherConfigFinishScanAppFormat, appFound.Len()))
 		}()
 	})
-	alc.dismiss = widget.NewButtonWithIcon(theme2.DismissText, theme.CancelIcon(), alc.closeHandle)
+	alc.dismiss = widget.NewButtonWithIcon(sidTheme.DismissText, theme.CancelIcon(), alc.closeHandle)
 
 	alc.win.SetContent(container.NewBorder(top,
 		container.NewVBox(
@@ -142,7 +142,7 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 
 func (alc *appLauncherConfig) closeHandle() {
 	if alc.indexBuildStatus == indexBuilding {
-		dialog.ShowInformation(theme2.CannotCloseTitle, theme2.AppLauncherConfigCannotCloseMsg, globalWin.win)
+		dialog.ShowInformation(sidTheme.CannotCloseTitle, sidTheme.AppLauncherConfigCannotCloseMsg, globalWin.win)
 	} else {
 		alc.win.Close()
 	}

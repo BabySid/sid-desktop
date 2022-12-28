@@ -12,8 +12,8 @@ var _ sodorInterface = (*sodorJobs)(nil)
 type sodorJobs struct {
 	sodorAdapter
 
-	docs     *container.DocTabs
-	mainView *sodorJobsMainView
+	docs    *container.DocTabs
+	jobList *sodorJobList
 }
 
 func (s *sodorJobs) CreateView() fyne.CanvasObject {
@@ -21,9 +21,12 @@ func (s *sodorJobs) CreateView() fyne.CanvasObject {
 		return s.content
 	}
 
-	s.mainView = newSodorJobsMainView()
+	s.jobList = newSodorJobList()
+	s.jobList.createJobHandle = s.createJob
+	s.jobList.editJobHandle = s.editJob
+
 	s.docs = container.NewDocTabs()
-	s.docs.Append(s.mainView.GetTabItem())
+	s.docs.Append(s.jobList.GetTabItem())
 	s.docs.SetTabLocation(container.TabLocationTop)
 	s.docs.CloseIntercept = func(item *container.TabItem) {
 		if item.Text != theme.AppSodorJobListName {
@@ -41,4 +44,13 @@ func (s *sodorJobs) CreateView() fyne.CanvasObject {
 
 	s.content = s.docs
 	return s.content
+}
+
+func (s *sodorJobs) createJob() {
+	info := newSodorJobInfo(123)
+	s.docs.Append(info.tabItem)
+}
+
+func (s *sodorJobs) editJob() {
+
 }
