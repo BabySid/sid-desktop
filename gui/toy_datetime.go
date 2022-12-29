@@ -37,7 +37,7 @@ func (tdt *toyDateTime) Init() error {
 		),
 	)
 
-	tdt.widget.Resize(fyne.NewSize(ToyWidth, 130))
+	tdt.widget.Resize(fyne.NewSize(ToyWidth, 140))
 
 	// for init
 	tdt.Run()

@@ -62,7 +62,7 @@ func (ths *toyHotSearch) Init() error {
 		container.NewBorder(container.NewHBox(ths.titleLabel, layout.NewSpacer(), ths.nextPage),
 			nil, nil, nil, ths.hotList),
 	)
-	ths.widget.Resize(fyne.NewSize(ToyWidth, 240))
+	ths.widget.Resize(fyne.NewSize(ToyWidth, 250))
 
 	// for init
 	go ths.Run()

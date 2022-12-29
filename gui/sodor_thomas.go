@@ -3,13 +3,17 @@ package gui
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/dialog"
+	"sid-desktop/theme"
 )
 
 var _ sodorInterface = (*sodorThomas)(nil)
 
 type sodorThomas struct {
 	sodorAdapter
+
+	docs       *container.DocTabs
+	thomasList *sodorThomasList
 }
 
 func (s *sodorThomas) CreateView() fyne.CanvasObject {
@@ -17,7 +21,24 @@ func (s *sodorThomas) CreateView() fyne.CanvasObject {
 		return s.content
 	}
 
-	s.content = container.NewBorder(nil,
-		nil, nil, nil, widget.NewLabel("thomas"))
+	s.thomasList = newSodorThomasList()
+	s.docs = container.NewDocTabs()
+	s.docs.Append(s.thomasList.GetTabItem())
+	s.docs.SetTabLocation(container.TabLocationTop)
+	s.docs.CloseIntercept = func(item *container.TabItem) {
+		if item.Text != theme.AppSodorThomasListName {
+			s.docs.Remove(item)
+		} else {
+			dialog.ShowInformation(theme.CannotCloseTitle, theme.AppSodorThomasListCannotCloseMsg, globalWin.win)
+		}
+	}
+
+	s.docs.OnSelected = func(item *container.TabItem) {
+		// TODO cannot reappear
+		// Avoid docTabs invalidation due to theme switching
+		item.Content.Refresh()
+	}
+
+	s.content = s.docs
 	return s.content
 }

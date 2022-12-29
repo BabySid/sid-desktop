@@ -41,7 +41,7 @@ func (trm *toyResourceMonitor) Init() error {
 		),
 	)
 
-	trm.widget.Resize(fyne.NewSize(ToyWidth, 150))
+	trm.widget.Resize(fyne.NewSize(ToyWidth, 170))
 
 	trm.Run()
 

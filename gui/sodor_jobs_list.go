@@ -42,10 +42,10 @@ func newSodorJobList() *sodorJobList {
 	s.createJobList()
 
 	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorJobListName, theme.ResourceJobsIcon, nil)
-	s.tabItem.Content = container.NewBorder(container.NewGridWithColumns(2,
-		s.searchEntry,
-		container.NewHBox(layout.NewSpacer(), s.newJob)), nil, nil, nil,
-		container.NewBorder(s.jobHeader, nil, nil, nil, s.jobContentList))
+	s.tabItem.Content = container.NewBorder(
+		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.newJob)),
+		nil, nil, nil,
+		container.NewScroll(container.NewBorder(s.jobHeader, nil, nil, nil, s.jobContentList)))
 	return &s
 }
 
@@ -63,57 +63,62 @@ func (s *sodorJobList) createJobList() {
 			return 1
 		},
 		func() fyne.CanvasObject {
-			return container.NewGridWithColumns(5,
+			return container.NewBorder(nil, nil,
 				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignTrailing, fyne.TextStyle{}))
+				nil,
+				container.NewGridWithColumns(4,
+					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
+					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
+					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
+					widget.NewLabelWithStyle("", fyne.TextAlignTrailing, fyne.TextStyle{})),
+			)
 		},
 		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(theme.AppSodorJobListHeader1)
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorJobListHeader2)
-			item.(*fyne.Container).Objects[2].(*widget.Label).SetText(theme.AppSodorJobListHeader3)
-			item.(*fyne.Container).Objects[3].(*widget.Label).SetText(theme.AppSodorJobListHeader4)
-			item.(*fyne.Container).Objects[4].(*widget.Label).SetText("")
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorJobListHeader1)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(theme.AppSodorJobListHeader2)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorJobListHeader3)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(theme.AppSodorJobListHeader4)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText("")
 		},
 	)
 
 	s.jobContentList = widget.NewListWithData(
 		s.jobListBinding,
 		func() fyne.CanvasObject {
-			return container.NewGridWithColumns(5,
+			return container.NewBorder(nil, nil,
 				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-				container.NewHBox(
-					layout.NewSpacer(),
-					widget.NewButtonWithIcon(theme.AppSodorJobListOp1, theme.ResourceEditIcon, nil),
-					widget.NewButtonWithIcon(theme.AppSodorJobListOp2, theme.ResourceInstanceIcon, nil),
-					widget.NewButtonWithIcon(theme.AppSodorJobListOp3, theme.ResourceRmIcon, nil),
-				),
+				nil,
+				container.NewGridWithColumns(4,
+					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
+					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
+					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
+					container.NewHBox(
+						layout.NewSpacer(),
+						widget.NewButtonWithIcon(theme.AppSodorJobListOp1, theme.ResourceEditIcon, nil),
+						widget.NewButtonWithIcon(theme.AppSodorJobListOp2, theme.ResourceInstanceIcon, nil),
+						widget.NewButtonWithIcon(theme.AppSodorJobListOp3, theme.ResourceRmIcon, nil),
+					)),
 			)
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[0].(*widget.Label).SetText("1")
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText("job name")
-			item.(*fyne.Container).Objects[2].(*widget.Label).SetText("2022-12-12 23:22:15")
-			item.(*fyne.Container).Objects[3].(*widget.Label).SetText("2022-12-15 23:22:15")
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText("1")
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText("job name")
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText("2022-12-12 23:22:15")
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText("2022-12-15 23:22:15")
 
-			item.(*fyne.Container).Objects[4].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorJobListOp1)
-			item.(*fyne.Container).Objects[4].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorJobListOp1)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
 				if s.editJobHandle != nil {
 					s.editJobHandle()
 				}
 			}
-			item.(*fyne.Container).Objects[4].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorJobListOp2)
-			item.(*fyne.Container).Objects[4].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorJobListOp2)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
 
 			}
 
-			item.(*fyne.Container).Objects[4].(*fyne.Container).Objects[3].(*widget.Button).SetText(theme.AppSodorJobListOp3)
-			item.(*fyne.Container).Objects[4].(*fyne.Container).Objects[3].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[3].(*widget.Button).SetText(theme.AppSodorJobListOp3)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[3].(*widget.Button).OnTapped = func() {
 
 			}
 		},

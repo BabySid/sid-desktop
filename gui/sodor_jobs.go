@@ -47,10 +47,13 @@ func (s *sodorJobs) CreateView() fyne.CanvasObject {
 }
 
 func (s *sodorJobs) createJob() {
-	info := newSodorJobInfo(123)
+	info := newSodorJobInfo(0)
 	s.docs.Append(info.tabItem)
+	s.docs.Select(info.tabItem)
 }
 
 func (s *sodorJobs) editJob() {
-
+	info := newSodorJobInfo(1234567890)
+	s.docs.Append(info.tabItem)
+	s.docs.Select(info.tabItem)
 }
