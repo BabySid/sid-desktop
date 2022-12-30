@@ -7,6 +7,7 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	sidTheme "sid-desktop/theme"
+	"strings"
 )
 
 type logViewer struct {
@@ -20,10 +21,9 @@ func newLogViewer() *logViewer {
 	var lv logViewer
 
 	lv.logArea = widget.NewMultiLineEntry()
-	lv.logArea.Disable()
 	lv.logArea.Wrapping = fyne.TextWrapBreak
 
-	lv.initLogContent()
+	go lv.initLogContent()
 
 	lv.refresh = widget.NewButtonWithIcon(sidTheme.LogViewerRefreshBtn, theme.ViewRefreshIcon(), func() {
 		lv.initLogContent()
@@ -42,9 +42,14 @@ func newLogViewer() *logViewer {
 func (lv *logViewer) initLogContent() {
 	cont := ""
 	globalLogWriter.Traversal(func(s string) {
-		cont += s
+		if strings.TrimSpace(s) != "" {
+			cont += s
+		}
 	})
 
-	lv.logArea.CursorRow = globalLogWriter.Size()
 	lv.logArea.SetText(cont)
+	lv.logArea.CursorRow = globalLogWriter.Size()
+	lv.logArea.CursorColumn = 0
+
+	lv.logArea.Refresh()
 }

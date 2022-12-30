@@ -22,6 +22,7 @@ func (s *sodorThomas) CreateView() fyne.CanvasObject {
 	}
 
 	s.thomasList = newSodorThomasList()
+	s.thomasList.viewInstanceHandle = s.viewThomasInstance
 	s.docs = container.NewDocTabs()
 	s.docs.Append(s.thomasList.GetTabItem())
 	s.docs.SetTabLocation(container.TabLocationTop)
@@ -41,4 +42,10 @@ func (s *sodorThomas) CreateView() fyne.CanvasObject {
 
 	s.content = s.docs
 	return s.content
+}
+
+func (s *sodorThomas) viewThomasInstance(thomasID int32) {
+	thomas := newSodorThomasInstance(0)
+	s.docs.Append(thomas.tabItem)
+	s.docs.Select(thomas.tabItem)
 }

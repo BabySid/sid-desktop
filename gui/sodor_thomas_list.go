@@ -4,6 +4,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"sid-desktop/theme"
@@ -19,6 +20,8 @@ type sodorThomasList struct {
 	thomasContentList *widget.List
 
 	thomasListBinding binding.UntypedList
+
+	viewInstanceHandle func(int32)
 }
 
 func newSodorThomasList() *sodorThomasList {
@@ -29,6 +32,7 @@ func newSodorThomasList() *sodorThomasList {
 	s.searchEntry.OnChanged = s.searchThomas
 
 	s.newThomas = widget.NewButtonWithIcon(theme.AppSodorAddThomas, theme.ResourceAddIcon, func() {
+		s.addThomasDialog()
 	})
 
 	s.thomasListBinding = binding.NewUntypedList()
@@ -79,12 +83,12 @@ func (s *sodorThomasList) createThomasList() {
 			)
 		},
 		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorThomasListHeader1)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(theme.AppSodorThomasListHeader2)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorThomasListHeader3)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(theme.AppSodorThomasListHeader4)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText(theme.AppSodorThomasListHeader5)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*widget.Label).SetText(theme.AppSodorThomasListHeader6)
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorThomasInfoID)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(theme.AppSodorThomasInfoVersion)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorThomasInfoHost)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(theme.AppSodorThomasInfoPort)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText(theme.AppSodorThomasInfoPID)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*widget.Label).SetText(theme.AppSodorThomasInfoStatus)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[5].(*widget.Label).SetText("")
 		},
 	)
@@ -118,12 +122,39 @@ func (s *sodorThomasList) createThomasList() {
 
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[5].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorThomasListOp1)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[5].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
-
+				if s.viewInstanceHandle != nil {
+					s.viewInstanceHandle(0)
+				}
 			}
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[5].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorThomasListOp2)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[5].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
-
+				// rm
 			}
 		},
 	)
+}
+
+func (s *sodorThomasList) addThomasDialog() {
+	host := widget.NewEntry()
+	port := widget.NewEntry()
+
+	content := widget.NewForm(
+		widget.NewFormItem(theme.AppSodorThomasInfoHost, host),
+		widget.NewFormItem(theme.AppSodorThomasInfoPort, port),
+	)
+
+	win := dialog.NewCustomConfirm(
+		theme.AppSodorAddThomas, theme.ConfirmText, theme.DismissText,
+		content,
+		func(b bool) {
+			if b {
+
+			}
+		},
+		globalWin.win,
+	)
+
+	win.Resize(fyne.NewSize(400, 200))
+
+	win.Show()
 }

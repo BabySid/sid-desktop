@@ -1,9 +1,12 @@
 package gui
 
 import (
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
-	sidTheme "sid-desktop/theme"
+	"sid-desktop/theme"
 )
 
 type about struct {
@@ -13,8 +16,13 @@ type about struct {
 func newAbout() *about {
 	var a about
 
-	content := widget.NewCard("", "", widget.NewRichTextFromMarkdown(sidTheme.AboutIntro))
-	a.aboutDialog = dialog.NewCustom(sidTheme.AboutTitle, sidTheme.ConfirmText, content, globalWin.win)
+	logo := canvas.NewImageFromResource(theme.ResourceAppIcon)
+	logo.FillMode = canvas.ImageFillOriginal
+	logo.SetMinSize(fyne.NewSize(150*0.8, 200*0.8))
+
+	content := widget.NewCard("", "",
+		container.NewHBox(logo, widget.NewRichTextFromMarkdown(theme.AboutIntro)))
+	a.aboutDialog = dialog.NewCustom(theme.AboutTitle, theme.ConfirmText, content, globalWin.win)
 	return &a
 }
 

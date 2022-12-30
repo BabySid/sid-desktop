@@ -24,6 +24,7 @@ func (s *sodorJobs) CreateView() fyne.CanvasObject {
 	s.jobList = newSodorJobList()
 	s.jobList.createJobHandle = s.createJob
 	s.jobList.editJobHandle = s.editJob
+	s.jobList.viewInstanceHandle = s.viewJobInstance
 
 	s.docs = container.NewDocTabs()
 	s.docs.Append(s.jobList.GetTabItem())
@@ -54,6 +55,12 @@ func (s *sodorJobs) createJob() {
 
 func (s *sodorJobs) editJob() {
 	info := newSodorJobInfo(1234567890)
+	s.docs.Append(info.tabItem)
+	s.docs.Select(info.tabItem)
+}
+
+func (s *sodorJobs) viewJobInstance() {
+	info := newSodorJobInstance(1234567890)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
 }
