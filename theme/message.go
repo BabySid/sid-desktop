@@ -210,6 +210,10 @@ const (
 	AppSodorThomasInfoInstanceCreateTime = "Create Time"
 	AppSodorThomasInfoInstanceMetrics    = "Metrics"
 
+	AppSodorFatCtlSetAddr         = "Set Addr of Fat Controller"
+	AppSodorFatCtlAddr            = "Addr of Fat Controller"
+	AppSodorFatCtlAddrPlaceHolder = "The Addr($host:$port) of the fat controller"
+
 	AppSodorJobListCannotCloseMsg    = "The job list can NOT be closed. :)"
 	AppSodorThomasListCannotCloseMsg = "The thomas list can NOT be closed. :)"
 	AppSodorThomsTabName             = "Thomas"
