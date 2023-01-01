@@ -169,6 +169,9 @@ func (mw *MainWin) quitHandle() {
 }
 
 func (mw *MainWin) closeWin() {
+	if tray != nil {
+		tray.Quit()
+	}
 	// TODO. now, close window directly
 	mw.win.Close()
 }

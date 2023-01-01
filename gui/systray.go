@@ -58,3 +58,7 @@ func (s *sysTray) systrayReady() {
 func (s *sysTray) systrayExit() {
 	globalWin.closeWin()
 }
+
+func (s *sysTray) Quit() {
+	systray.Quit()
+}

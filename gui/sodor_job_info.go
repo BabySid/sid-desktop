@@ -120,12 +120,14 @@ func (s *sodorJobInfo) buildJobBrief() {
 
 	s.alertGroup = widget.NewSelect([]string{}, nil)
 
-	infoBox.Add(container.NewGridWithColumns(4,
-		widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoJobID, s.jobID)),
-		widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoJobName, s.jobName)),
-		widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoJobAlertGroup, s.alertGroup)),
-		layout.NewSpacer()),
-	)
+	infoBox.Add(container.NewBorder(nil, nil,
+		widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoJobID, s.jobID)), nil,
+		container.NewGridWithColumns(3,
+			widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoJobName, s.jobName)),
+			widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoJobAlertGroup, s.alertGroup)),
+			layout.NewSpacer(),
+		),
+	))
 
 	s.cronSpec = widget.NewSelect(getDefaultCronSpec(), nil)
 	s.schedulerMode = widget.NewRadioGroup(getJobScheduleMode(), func(opt string) {
@@ -178,15 +180,17 @@ func (s *sodorJobInfo) buildTasks() {
 	}
 	s.taskName = widget.NewEntry()
 
-	taskBox.Add(container.NewGridWithColumns(3,
-		widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoTaskID, s.taskID)),
-		widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoTaskName, s.taskName)),
-		layout.NewSpacer()),
-	)
-
 	s.taskType = widget.NewSelect([]string{"Shell"}, nil)
 	s.taskType.SetSelectedIndex(0)
-	taskBox.Add(widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoTaskType, s.taskType)))
+
+	taskBox.Add(container.NewBorder(nil, nil,
+		widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoTaskID, s.taskID)),
+		nil,
+		container.NewGridWithColumns(3,
+			widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoTaskName, s.taskName)),
+			widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoTaskType, s.taskType)),
+			layout.NewSpacer())),
+	)
 
 	s.runningHosts = make([]*widget.CheckGroup, 0)
 	for i := 0; i < 2; i++ {

@@ -18,6 +18,8 @@ type sodorJobInstance struct {
 	instanceListBinding binding.UntypedList
 	instanceHeader      *widget.List
 	instanceList        *widget.List
+
+	viewTaskInstanceHandle func(int32)
 }
 
 func newSodorJobInstance(id int32) *sodorJobInstance {
@@ -93,7 +95,9 @@ func (s *sodorJobInstance) buildJobInstanceInfo() {
 
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[5].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorJobListOp2)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[5].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
-
+				if s.viewTaskInstanceHandle != nil {
+					s.viewTaskInstanceHandle(12345)
+				}
 			}
 		},
 	)

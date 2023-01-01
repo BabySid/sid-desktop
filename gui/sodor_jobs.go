@@ -61,6 +61,13 @@ func (s *sodorJobs) editJob() {
 
 func (s *sodorJobs) viewJobInstance() {
 	info := newSodorJobInstance(1234567890)
+	info.viewTaskInstanceHandle = s.viewTaskInstance
+	s.docs.Append(info.tabItem)
+	s.docs.Select(info.tabItem)
+}
+
+func (s *sodorJobs) viewTaskInstance(job int32) {
+	info := newSodorJobTaskInstance(job)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
 }
