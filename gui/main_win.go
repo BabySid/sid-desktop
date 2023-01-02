@@ -110,7 +110,7 @@ func NewMainWin() *MainWin {
 
 	content := container.NewBorder(mw.tb.toolbar, mw.sb.widget, nil, mw.toys.widget, mw.at)
 	mw.win.SetContent(content)
-	mw.win.Resize(fyne.NewSize(800, 600))
+	mw.win.Resize(fyne.NewSize(1024, 768))
 
 	mw.win.SetMaster()
 	mw.win.CenterOnScreen()
