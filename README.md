@@ -53,6 +53,8 @@ If you're not sure if that's all installed or you don't know how then check out 
       - Json
     - DateTime
     - HttpClient
+  - Sodor Frontend (WIP)
+    - [Sodor Backend](https://github.com/BabySid/sodor)
 - Desktop Toys
   - Resource Monitor
   - DateTime
@@ -67,3 +69,6 @@ Sid-Desktop only supports **Windows** now.
 ```
 
 Then you can find the binary in the directory `output`
+
+# TODO
+- auto refresh window when theme switched
