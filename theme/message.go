@@ -242,7 +242,10 @@ const (
 
 	AppSodorFatCtlSetAddr         = "Set Addr of Fat Controller"
 	AppSodorFatCtlAddr            = "Addr of Fat Controller"
+	AppSodorFatCtlAddrValidateMsg = AppSodorFatCtlAddr + " must not be empty"
 	AppSodorFatCtlAddrPlaceHolder = "The Addr($host:$port) of the fat controller"
+	ProcessSodorFailedFormat      = "process sodor failed. %v"
+	AppSodorInitFatCtlAddrMessage = "Please Set the FatCtrl Addr first"
 
 	AppSodorJobListCannotCloseMsg        = "The job list can NOT be closed. :)"
 	AppSodorThomasListCannotCloseMsg     = "The thomas list can NOT be closed. :)"

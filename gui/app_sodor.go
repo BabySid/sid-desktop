@@ -1,9 +1,14 @@
 package gui
 
 import (
+	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
+	"github.com/BabySid/gobase"
+	"sid-desktop/backend"
+	"sid-desktop/storage"
 	"sid-desktop/theme"
 )
 
@@ -28,6 +33,14 @@ type appSodor struct {
 }
 
 func (as *appSodor) LazyInit() error {
+	err := storage.GetAppSodorDB().Open(globalWin.app.Storage().RootURI().Path())
+	if err != nil {
+		return err
+	}
+	gobase.RegisterAtExit(storage.GetAppSodorDB().Close)
+
+	as.initDB()
+
 	tabs := container.NewAppTabs()
 
 	registerAppTabs(tabs, theme.AppSodorJobTabName, theme.ResourceJobsIcon, &sodorJobs{})
@@ -44,6 +57,12 @@ func (as *appSodor) LazyInit() error {
 		item.Content.Refresh()
 	}
 	as.tabItem = container.NewTabItemWithIcon(theme.AppSodorName, theme.ResourceSodorIcon, tabs)
+
+	if backend.GetSodorClient().GetFatCrl().ID == 0 {
+		dialog.ShowInformation("", theme.AppSodorInitFatCtlAddrMessage, globalWin.win)
+		setFatCtrlSelected(tabs)
+	}
+
 	return nil
 }
 
@@ -59,6 +78,31 @@ func (as *appSodor) Icon() fyne.Resource {
 	return theme.ResourceSodorIcon
 }
 
+func (as *appSodor) initDB() {
+	need, err := storage.GetAppSodorDB().NeedInit()
+	if err != nil {
+		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		return
+	}
+
+	if need {
+		err = storage.GetAppSodorDB().Init()
+		if err != nil {
+			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+			return
+		}
+	}
+}
+
 func registerAppTabs(tabs *container.AppTabs, name string, icon fyne.Resource, s sodorInterface) {
 	tabs.Append(container.NewTabItemWithIcon(name, icon, s.CreateView()))
+}
+
+func setFatCtrlSelected(tabs *container.AppTabs) {
+	for _, item := range tabs.Items {
+		if item.Text == theme.AppSodorFatCtrlTabName {
+			tabs.Select(item)
+			return
+		}
+	}
 }

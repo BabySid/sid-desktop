@@ -7,7 +7,7 @@ replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7
 require (
 	fyne.io/fyne/v2 v2.3.0
 	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1
-	github.com/BabySid/gobase v0.0.0-20220414095733-2e6d9bbf4d2b
+	github.com/BabySid/gobase v0.0.0-20230104101517-f5f41baef74e
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
 	github.com/go-cmd/cmd v1.4.0
@@ -19,6 +19,8 @@ require (
 	github.com/tc-hib/winres v0.0.0-00010101000000-000000000000
 	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
 	golang.design/x/hotkey v0.3.0
+	gorm.io/driver/sqlite v1.4.4
+	gorm.io/gorm v1.24.3
 	layeh.com/gopher-json v0.0.0-20201124131017-552bb3c4c3bf
 )
 
@@ -40,11 +42,13 @@ require (
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/jchv/go-webview2 v0.0.0-20220126073738-2ea27096a5eb // indirect
 	github.com/jchv/go-winloader v0.0.0-20200815041850-dec1ee9a7fd5 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jsummers/gobmp v0.0.0-20151104160322-e2ba15ffa76e // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
-	github.com/mattn/go-sqlite3 v1.14.12 // indirect
+	github.com/mattn/go-sqlite3 v1.14.15 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
