@@ -35,14 +35,16 @@ func (s *sodorFatController) CreateView() fyne.CanvasObject {
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 	} else if ctrl != nil {
-		backend.GetSodorClient().SetFatCtrlAddr(*ctrl)
+		if err = backend.GetSodorClient().SetFatCtrlAddr(*ctrl); err != nil {
+			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		}
 	}
 
 	s.curFatCtrlAddr = widget.NewLabel(backend.GetSodorClient().GetFatCrl().Addr)
 
 	s.docs = container.NewAppTabs()
 	s.docs.Append(
-		container.NewTabItem(theme.AppSodorFatCtrlTabName,
+		container.NewTabItemWithIcon(theme.AppSodorFatCtrlTabName, theme.ResourceFatCtrlIcon,
 			container.NewVBox(
 				container.NewBorder(nil, nil, s.setFatCtrl, nil, s.curFatCtrlAddr)),
 		),
@@ -68,14 +70,17 @@ func (s *sodorFatController) setFatCtlAddr() {
 
 			ctrl := backend.GetSodorClient().GetFatCrl()
 			ctrl.Addr = addr.Text
-			err := storage.GetAppSodorDB().SetFatCtrl(ctrl)
-			if err != nil {
+
+			if err := backend.GetSodorClient().SetFatCtrlAddr(ctrl); err != nil {
+				printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+				return
+			}
+			if err := storage.GetAppSodorDB().SetFatCtrl(ctrl); err != nil {
 				printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 				return
 			}
 
 			s.curFatCtrlAddr.SetText(ctrl.Addr)
-			backend.GetSodorClient().SetFatCtrlAddr(ctrl)
 		}
 	}, globalWin.win)
 
