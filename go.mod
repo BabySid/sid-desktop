@@ -9,7 +9,7 @@ require (
 	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1
 	github.com/BabySid/gobase v0.0.0-20230109085658-552b312729b2
 	github.com/BabySid/gorpc v0.0.0-20230109072019-3e187d6ea965
-	github.com/BabySid/proto v0.0.0-20221222032737-de2b282f536f
+	github.com/BabySid/proto v0.0.0-20230111084449-12620667b84d
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
 	github.com/go-cmd/cmd v1.4.0

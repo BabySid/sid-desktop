@@ -18,6 +18,7 @@ type sodorThomasInstance struct {
 	thomasID            *widget.Label
 	thomasName          *widget.Label
 	thomasVersion       *widget.Label
+	thomasTags          *widget.Label
 	thomasProto         *widget.Label
 	thomasHost          *widget.Label
 	thomasPort          *widget.Label
@@ -51,6 +52,7 @@ func (s *sodorThomasInstance) buildThomasInfo() {
 	s.thomasID = widget.NewLabel(fmt.Sprintf("%d", s.tid))
 	s.thomasName = widget.NewLabel("thomasName")
 	s.thomasVersion = widget.NewLabel("thomasVersion")
+	s.thomasTags = widget.NewLabel("thomasTags")
 	s.thomasProto = widget.NewLabel("thomasProto")
 	s.thomasHost = widget.NewLabel("thomasHost")
 	s.thomasPort = widget.NewLabel("thomasPort")
@@ -66,6 +68,7 @@ func (s *sodorThomasInstance) buildThomasInfo() {
 			widget.NewForm(widget.NewFormItem(theme.AppSodorThomasInfoID, s.thomasID)),
 			widget.NewForm(widget.NewFormItem(theme.AppSodorThomasInfoName, s.thomasName)),
 			widget.NewForm(widget.NewFormItem(theme.AppSodorThomasInfoVersion, s.thomasVersion)),
+			widget.NewForm(widget.NewFormItem(theme.AppSodorThomasInfoTags, s.thomasTags)),
 			widget.NewForm(widget.NewFormItem(theme.AppSodorThomasInfoType, s.thomasType)),
 		),
 	)
