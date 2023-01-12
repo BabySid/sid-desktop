@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"errors"
 	"fmt"
 	"fyne.io/fyne/v2/dialog"
 	"github.com/BabySid/gobase"
@@ -10,7 +11,30 @@ import (
 
 func printErr(err error) {
 	log.Printf(sidTheme.InternalErrorFormat, err)
-	dialog.ShowError(err, globalWin.win)
+
+	str := err.Error()
+
+	target := ""
+	const maxLen = 64
+
+	n := len(str) / maxLen
+	m := len(str) % maxLen
+	for i := 0; i < n; i++ {
+		begin := i * maxLen
+		end := begin + maxLen
+		if i > 0 {
+			target += "\n"
+		}
+		target += str[begin:end]
+	}
+	if m > 0 {
+		if n > 0 {
+			target += "\n"
+		}
+		target += str[n*maxLen : n*maxLen+m]
+	}
+
+	dialog.ShowError(errors.New(target), globalWin.win)
 }
 
 func assertErr(cond bool, a ...interface{}) {

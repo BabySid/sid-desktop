@@ -92,6 +92,15 @@ func (as *appSodor) initDB() {
 			return
 		}
 	}
+
+	ctrl, err := storage.GetAppSodorDB().LoadFatCtl()
+	if err != nil {
+		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+	} else if ctrl != nil {
+		if err = backend.GetSodorClient().SetFatCtrlAddr(*ctrl); err != nil {
+			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		}
+	}
 }
 
 func registerAppTabs(tabs *container.AppTabs, name string, icon fyne.Resource, s sodorInterface) {

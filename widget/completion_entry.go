@@ -18,7 +18,8 @@ type CompletionEntry struct {
 	OnMenuNavigation func(string) `jsn:"-"`
 }
 
-// NewCompletionEntry creates a new CompletionEntry which creates a popup menu that responds to keystrokes to navigate through the items without losing the editing ability of the text input.
+// NewCompletionEntry creates a new CompletionEntry which creates a popup menu that responds to keystrokes to navigate
+// through the items without losing the editing ability of the text input.
 func NewCompletionEntry(options []string) *CompletionEntry {
 	c := &CompletionEntry{Options: options}
 	c.ExtendBaseWidget(c)

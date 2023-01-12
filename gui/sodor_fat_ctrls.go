@@ -31,15 +31,6 @@ func (s *sodorFatController) CreateView() fyne.CanvasObject {
 
 	s.setFatCtrl = widget.NewButton(theme.AppSodorFatCtlSetAddr, s.setFatCtlAddr)
 
-	ctrl, err := storage.GetAppSodorDB().LoadFatCtl()
-	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
-	} else if ctrl != nil {
-		if err = backend.GetSodorClient().SetFatCtrlAddr(*ctrl); err != nil {
-			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
-		}
-	}
-
 	s.curFatCtrlAddr = widget.NewLabel(backend.GetSodorClient().GetFatCrl().Addr)
 
 	s.docs = container.NewAppTabs()

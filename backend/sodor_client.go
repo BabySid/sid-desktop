@@ -1,6 +1,7 @@
 package backend
 
 import (
+	"errors"
 	"github.com/BabySid/gobase"
 	"github.com/BabySid/gorpc"
 	"github.com/BabySid/gorpc/http"
@@ -24,6 +25,10 @@ type parameterType struct {
 	reqType  reflect.Type
 	respType reflect.Type
 }
+
+var (
+	errNullHandle = errors.New("null handle")
+)
 
 var (
 	sodorHandle *sodorClient
@@ -61,6 +66,7 @@ const (
 	UpdateAlertGroup
 	UpdateAlertPluginInstance
 	UpdateJob
+	UpdateThomas
 	maxMethod
 )
 
@@ -70,8 +76,8 @@ func (c *sodorClient) registerMethod() {
 
 	c.methods[AddThomas] = parameterType{
 		method:   ns + "AddThomas",
-		reqType:  reflect.TypeOf(&sodor.Job{}),
-		respType: reflect.TypeOf(&sodor.JobReply{}),
+		reqType:  reflect.TypeOf(&sodor.ThomasInfo{}),
+		respType: reflect.TypeOf(&sodor.ThomasReply{}),
 	}
 	c.methods[CreateAlertGroup] = parameterType{
 		method:   ns + "CreateAlertGroup",
@@ -168,6 +174,11 @@ func (c *sodorClient) registerMethod() {
 		reqType:  reflect.TypeOf(&sodor.Job{}),
 		respType: reflect.TypeOf(&sodor.JobReply{}),
 	}
+	c.methods[UpdateThomas] = parameterType{
+		method:   ns + "UpdateThomas",
+		reqType:  reflect.TypeOf(&sodor.ThomasInfo{}),
+		respType: reflect.TypeOf(&sodor.ThomasReply{}),
+	}
 
 	gobase.True(len(c.methods) == int(maxMethod))
 }
@@ -175,7 +186,7 @@ func (c *sodorClient) registerMethod() {
 func (c *sodorClient) SetFatCtrlAddr(addr common.FatCtrl) error {
 	handle, err := gorpc.DialHttpClient(addr.Addr, http.WithProtobufCodec())
 	if err != nil {
-		return nil
+		return err
 	}
 
 	c.mutex.Lock()
@@ -192,7 +203,7 @@ func (c *sodorClient) GetFatCrl() common.FatCtrl {
 
 func (c *sodorClient) getHandle() *http.Client {
 	c.mutex.RLock()
-	defer c.mutex.Unlock()
+	defer c.mutex.RUnlock()
 	return c.handle
 }
 
@@ -203,5 +214,8 @@ func (c *sodorClient) Call(method SodorMethod, request interface{}, resp interfa
 	gobase.True(params.respType == reflect.TypeOf(resp))
 
 	handle := c.getHandle()
+	if handle == nil {
+		return errNullHandle
+	}
 	return handle.Call(resp, params.method, request)
 }
