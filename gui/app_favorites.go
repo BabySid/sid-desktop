@@ -28,7 +28,7 @@ type appFavorites struct {
 	importFavor  *widget.Button
 	newFavor     *widget.Button
 	exportFavor  *widget.Button
-	favorHeader  *widget.List
+	favorHeader  fyne.CanvasObject
 	favorList    *widget.List
 	favorBinding binding.UntypedList
 	favorCache   *common.FavoritesList
@@ -141,22 +141,10 @@ func (af *appFavorites) importFavors() {
 
 func (af *appFavorites) createFavorList() {
 	// Favor List Header
-	af.favorHeader = widget.NewList(
-		func() int {
-			return 1
-		},
-		func() fyne.CanvasObject {
-			return container.NewGridWithColumns(3,
-				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignTrailing, fyne.TextStyle{}))
-		},
-		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(theme.AppFavoritesFavorListHeader1)
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppFavoritesFavorListHeader2)
-			item.(*fyne.Container).Objects[2].(*widget.Label).SetText("")
-		},
-	)
+	af.favorHeader = container.NewGridWithColumns(3,
+		widget.NewLabelWithStyle(theme.AppFavoritesFavorListHeader1, fyne.TextAlignLeading, fyne.TextStyle{}),
+		widget.NewLabelWithStyle(theme.AppFavoritesFavorListHeader2, fyne.TextAlignCenter, fyne.TextStyle{}),
+		widget.NewLabelWithStyle("", fyne.TextAlignTrailing, fyne.TextStyle{}))
 
 	// Favor Data
 	af.favorList = widget.NewListWithData(

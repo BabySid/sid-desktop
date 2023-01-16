@@ -25,7 +25,7 @@ type appLauncher struct {
 	explorer    *widget.Select
 	config      *widget.Button
 	configWin   fyne.Window
-	appHeader   *widget.List
+	appHeader   fyne.CanvasObject
 	appList     *widget.List
 	appBinding  binding.UntypedList
 	appHistory  *apps.AppList
@@ -80,22 +80,11 @@ func (al *appLauncher) OnClose() bool {
 
 func (al *appLauncher) createAppList() {
 	// App List Header
-	al.appHeader = widget.NewList(
-		func() int {
-			return 1
-		},
-		func() fyne.CanvasObject {
-			return container.NewGridWithColumns(3,
-				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-				widget.NewLabelWithStyle("", fyne.TextAlignTrailing, fyne.TextStyle{}))
-		},
-		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(theme.AppLauncherAppListHeader1)
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppLauncherAppListHeader2)
-			item.(*fyne.Container).Objects[2].(*widget.Label).SetText("")
-		},
-	)
+	al.appHeader = container.NewGridWithColumns(3,
+		widget.NewLabelWithStyle(theme.AppLauncherAppListHeader1, fyne.TextAlignLeading, fyne.TextStyle{}),
+		widget.NewLabelWithStyle(theme.AppLauncherAppListHeader2, fyne.TextAlignCenter, fyne.TextStyle{}),
+		widget.NewLabelWithStyle("", fyne.TextAlignTrailing, fyne.TextStyle{}))
+
 	// App Data
 	al.appList = widget.NewListWithData(
 		al.appBinding,

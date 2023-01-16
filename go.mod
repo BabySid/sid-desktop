@@ -1,6 +1,6 @@
 module sid-desktop
 
-go 1.17
+go 1.19
 
 replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7-0.20220103002232-5d2af9a563d4
 

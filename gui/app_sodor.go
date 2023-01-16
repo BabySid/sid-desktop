@@ -23,7 +23,7 @@ type sodorAdapter struct {
 }
 
 func (d sodorAdapter) CreateView() fyne.CanvasObject {
-	panic("implement CreateView")
+	panic(any("implement CreateView"))
 }
 
 var _ appInterface = (*appSodor)(nil)

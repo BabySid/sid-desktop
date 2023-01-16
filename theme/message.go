@@ -197,6 +197,7 @@ const (
 	AppSodorThomasInfoVersion            = "Version"
 	AppSodorThomasInfoHost               = "Host"
 	AppSodorThomasInfoPort               = "Port"
+	AppSodorThomasInfoHostPort           = "Host:Port"
 	AppSodorThomasInfoTags               = "Tags"
 	AppSodorThomasInfoPID                = "PID"
 	AppSodorThomasInfoStatus             = "Status"
