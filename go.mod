@@ -7,14 +7,15 @@ replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7
 require (
 	fyne.io/fyne/v2 v2.3.0
 	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1
-	github.com/BabySid/gobase v0.0.0-20230109085658-552b312729b2
-	github.com/BabySid/gorpc v0.0.0-20230109072019-3e187d6ea965
+	github.com/BabySid/gobase v0.0.0-20230117070125-71af9dc64626
+	github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82
 	github.com/BabySid/proto v0.0.0-20230111084449-12620667b84d
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
 	github.com/go-cmd/cmd v1.4.0
 	github.com/jchv/go-webview-selector v0.0.0-20220126075917-13df59bce3cf
 	github.com/jessevdk/go-flags v1.5.0
+	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/parsiya/golnk v0.0.0-20200515071614-5db3107130ce
 	github.com/sahilm/fuzzy v0.1.0
 	github.com/satori/go.uuid v1.2.0

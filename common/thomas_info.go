@@ -51,3 +51,23 @@ func (s *ThomasInfosWrapper) AsInterfaceArray() []interface{} {
 const (
 	ThomasTagSep = ";"
 )
+
+type ThomasMetricsWrapper struct {
+	Metrics []*sodor.ThomasMetrics
+}
+
+func NewThomasMetricsWrapper(m []*sodor.ThomasMetrics) *ThomasMetricsWrapper {
+	return &ThomasMetricsWrapper{
+		Metrics: m,
+	}
+}
+
+func (s *ThomasMetricsWrapper) AsInterfaceArray() []interface{} {
+	rs := make([]interface{}, len(s.Metrics), len(s.Metrics))
+
+	for i := 0; i < len(s.Metrics); i++ {
+		rs[len(s.Metrics)-1-i] = s.Metrics[i]
+	}
+
+	return rs
+}

@@ -45,7 +45,7 @@ func (s *sodorThomas) CreateView() fyne.CanvasObject {
 }
 
 func (s *sodorThomas) viewThomasInstance(thomasID int32) {
-	thomas := newSodorThomasInstance(0)
+	thomas := newSodorThomasInstance(thomasID)
 	s.docs.Append(thomas.tabItem)
 	s.docs.Select(thomas.tabItem)
 }

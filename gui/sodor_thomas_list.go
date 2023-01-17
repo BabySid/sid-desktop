@@ -13,13 +13,13 @@ import (
 	"sid-desktop/backend"
 	"sid-desktop/common"
 	"sid-desktop/theme"
-	"strings"
 )
 
 type sodorThomasList struct {
 	tabItem *container.TabItem
 
 	searchEntry *widget.Entry
+	refresh     *widget.Button
 	newThomas   *widget.Button
 
 	thomasHeader      fyne.CanvasObject
@@ -38,6 +38,9 @@ func newSodorThomasList() *sodorThomasList {
 	s.searchEntry.SetPlaceHolder(theme.AppSodorThomasSearchText)
 	s.searchEntry.OnChanged = s.searchThomas
 
+	s.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+		s.loadThomasList()
+	})
 	s.newThomas = widget.NewButtonWithIcon(theme.AppSodorAddThomas, theme.ResourceAddIcon, func() {
 		s.addThomas()
 	})
@@ -47,7 +50,7 @@ func newSodorThomasList() *sodorThomasList {
 
 	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorThomasListName, theme.ResourceTrainIcon, nil)
 	s.tabItem.Content = container.NewBorder(
-		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.newThomas)),
+		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.refresh, s.newThomas)),
 		nil, nil, nil,
 		container.NewHScroll(container.NewBorder(s.thomasHeader, nil, nil, nil, s.thomasContentList)))
 
@@ -122,7 +125,7 @@ func (s *sodorThomasList) createThomasList() {
 			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(fmt.Sprintf("%d", info.Id))
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(info.Version)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(fmt.Sprintf("%s:%d", info.Host, info.Port))
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(strings.Join(info.Tags, ","))
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(fmt.Sprintf("%s", info.Tags))
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText(info.Status)
 
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorThomasListOp1)
@@ -143,7 +146,9 @@ func (s *sodorThomasList) createThomasList() {
 				resp := sodor.ThomasReply{}
 				if err := backend.GetSodorClient().Call(backend.DropThomas, &req, &resp); err != nil {
 					printErr(err)
+					return
 				}
+				s.loadThomasList()
 			}
 		},
 	)
@@ -165,22 +170,10 @@ func (s *sodorThomasList) showThomasDialog(thomas *sodor.ThomasInfo) {
 
 func (s *sodorThomasList) loadThomasList() {
 	resp := sodor.ThomasInfos{}
-	resp.ThomasInfos = make([]*sodor.ThomasInfo, 0)
-	//err := backend.GetSodorClient().Call(backend.ListThomas, nil, &resp)
-	//if err != nil {
-	//	printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
-	//	return
-	//}
-
-	for i := 0; i < 3; i++ {
-		t := sodor.ThomasInfo{}
-		t.Id = int32(i)
-		t.Host = "127.0.0.1"
-		t.Port = 12345
-		t.Status = "OK"
-		t.Tags = []string{"hello", "world", "gogogo"}
-		t.Version = "thomas_2022-12-23_16:00:21"
-		resp.ThomasInfos = append(resp.ThomasInfos, &t)
+	err := backend.GetSodorClient().Call(backend.ListThomas, nil, &resp)
+	if err != nil {
+		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		return
 	}
 	s.thomasListCache = common.NewThomasInfosWrapper(&resp)
 	s.thomasListBinding.Set(s.thomasListCache.AsInterfaceArray())

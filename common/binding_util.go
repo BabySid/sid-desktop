@@ -8,3 +8,15 @@ func CopyBindingStringList(dst binding.StringList, src binding.StringList) {
 	copy(temp, srcList)
 	_ = dst.Set(temp)
 }
+
+func Find(list binding.UntypedList, item binding.DataItem) int {
+	length := list.Length()
+
+	for i := 0; i < length; i++ {
+		if data, _ := list.GetItem(i); data == item {
+			return i
+		}
+	}
+
+	return -1
+}

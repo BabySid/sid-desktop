@@ -5,14 +5,23 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
+	"github.com/BabySid/proto/sodor"
+	"sid-desktop/backend"
+	"sid-desktop/common"
 	"sid-desktop/theme"
+	"sync"
 )
 
 type sodorThomasInstance struct {
 	tid int32
 
 	tabItem *container.TabItem
+
+	refresh *widget.Button
+	metrics *widget.Button
 
 	thomasCard          *widget.Card
 	thomasID            *widget.Label
@@ -30,37 +39,53 @@ type sodorThomasInstance struct {
 
 	instanceCard        *widget.Card
 	instanceListBinding binding.UntypedList
-	instanceHeader      *widget.List
+	instanceHeader      fyne.CanvasObject
 	instanceList        *widget.List
+
+	thomasInsLock sync.Mutex
+	thomasIns     *sodor.ThomasInstance
 }
 
 func newSodorThomasInstance(id int32) *sodorThomasInstance {
 	ins := sodorThomasInstance{}
 	ins.tid = id
 
+	ins.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+		ins.loadThomasInstance()
+	})
+	ins.metrics = widget.NewButton(theme.AppPageMetrics, func() {
+
+	})
+
 	ins.buildThomasInfo()
 	ins.buildThomasInstanceInfo()
 
 	ins.tabItem = container.NewTabItem(theme.AppSodorThomasInfo, nil)
 	ins.tabItem.Content = container.NewBorder(
-		ins.thomasCard, nil, nil, nil,
+		container.NewBorder(
+			container.NewHBox(layout.NewSpacer(), ins.refresh, ins.metrics),
+			nil, nil, nil,
+			ins.thomasCard),
+		nil, nil, nil,
 		ins.instanceCard)
+
+	ins.loadThomasInstance()
 	return &ins
 }
 
 func (s *sodorThomasInstance) buildThomasInfo() {
 	s.thomasID = widget.NewLabel(fmt.Sprintf("%d", s.tid))
-	s.thomasName = widget.NewLabel("thomasName")
-	s.thomasVersion = widget.NewLabel("thomasVersion")
-	s.thomasTags = widget.NewLabel("thomasTags")
-	s.thomasProto = widget.NewLabel("thomasProto")
-	s.thomasHost = widget.NewLabel("thomasHost")
-	s.thomasPort = widget.NewLabel("thomasPort")
-	s.thomasPID = widget.NewLabel("thomasPID")
-	s.thomasStartTime = widget.NewLabel("thomasStartTime")
-	s.thomasHeartBeatTime = widget.NewLabel("thomasHeartBeatTime")
-	s.thomasType = widget.NewLabel("thomasType")
-	s.thomasStatus = widget.NewLabel("thomasStatus")
+	s.thomasName = widget.NewLabel("")
+	s.thomasVersion = widget.NewLabel("")
+	s.thomasTags = widget.NewLabel("")
+	s.thomasProto = widget.NewLabel("")
+	s.thomasHost = widget.NewLabel("")
+	s.thomasPort = widget.NewLabel("")
+	s.thomasPID = widget.NewLabel("")
+	s.thomasStartTime = widget.NewLabel("")
+	s.thomasHeartBeatTime = widget.NewLabel("")
+	s.thomasType = widget.NewLabel("")
+	s.thomasStatus = widget.NewLabel("")
 
 	infoBox := container.NewVBox()
 	infoBox.Add(
@@ -93,48 +118,85 @@ func (s *sodorThomasInstance) buildThomasInfo() {
 
 func (s *sodorThomasInstance) buildThomasInstanceInfo() {
 	s.instanceListBinding = binding.NewUntypedList()
-	s.instanceListBinding.Set([]interface{}{1, 2, 3})
 
-	s.instanceHeader = widget.NewList(
-		func() int {
-			return 1
-		},
-		func() fyne.CanvasObject {
-			return container.NewBorder(nil, nil,
-				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
-				nil,
-				container.NewBorder(nil, nil,
-					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-					nil,
-					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{})),
-			)
-		},
-		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorThomasInfoInstanceID)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorThomasInfoInstanceCreateTime)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(theme.AppSodorThomasInfoInstanceMetrics)
-		},
+	s.instanceHeader = container.NewBorder(nil, nil,
+		widget.NewLabelWithStyle(theme.AppSodorThomasInfoInstanceID, fyne.TextAlignLeading, fyne.TextStyle{}),
+		nil,
+		container.NewBorder(nil, nil,
+			widget.NewLabelWithStyle(theme.AppSodorThomasInfoInstanceCreateTime, fyne.TextAlignCenter, fyne.TextStyle{}),
+			nil,
+			widget.NewLabelWithStyle(theme.AppSodorThomasInfoInstanceMetrics, fyne.TextAlignCenter, fyne.TextStyle{})),
 	)
 
 	s.instanceList = widget.NewListWithData(
 		s.instanceListBinding,
 		func() fyne.CanvasObject {
+			metrics := widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{})
+			metrics.Wrapping = fyne.TextWrapWord
 			return container.NewBorder(nil, nil,
 				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
 				nil,
 				container.NewBorder(nil, nil,
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
 					nil,
-					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{})),
+					metrics),
 			)
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText("id")
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText("2022-12-12 20:20:33")
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText("{\"cpu\":123,\"mem\":456}")
+			o, _ := data.(binding.Untyped).Get()
+			metrics := o.(*sodor.ThomasMetrics)
+
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(fmt.Sprintf("%d", metrics.Id))
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(gobase.FormatTimeStamp(int64(metrics.CreateAt)))
+
+			txt, _ := metrics.Metrics.MarshalJSON()
+			metricsLabel := item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label)
+			metricsLabel.SetText(string(txt))
+
+			i := common.Find(s.instanceListBinding, data)
+			s.instanceList.SetItemHeight(i, metricsLabel.MinSize().Height)
 		},
 	)
 
 	s.instanceCard = widget.NewCard("", theme.AppSodorThomasInfoInstance,
-		container.NewScroll(container.NewBorder(s.instanceHeader, nil, nil, nil, s.instanceList)))
+		container.NewBorder(
+			s.instanceHeader, nil, nil, nil,
+			s.instanceList))
+}
+
+func (s *sodorThomasInstance) loadThomasInstance() {
+	resp := sodor.ThomasInstance{}
+	req := sodor.ThomasInfo{}
+	req.Id = s.tid
+	err := backend.GetSodorClient().Call(backend.ShowThomas, &req, &resp)
+	if err != nil {
+		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		return
+	}
+
+	s.thomasInsLock.Lock()
+	defer s.thomasInsLock.Unlock()
+	s.thomasIns = &resp
+
+	go s.resetGUI()
+}
+
+func (s *sodorThomasInstance) resetGUI() {
+	s.thomasInsLock.Lock()
+	defer s.thomasInsLock.Unlock()
+
+	s.thomasName.SetText(s.thomasIns.Thomas.Name)
+	s.thomasVersion.SetText(s.thomasIns.Thomas.Version)
+	s.thomasTags.SetText(fmt.Sprintf("%s", s.thomasIns.Thomas.Tags))
+	s.thomasProto.SetText(s.thomasIns.Thomas.Proto)
+	s.thomasHost.SetText(s.thomasIns.Thomas.Host)
+	s.thomasPort.SetText(fmt.Sprintf("%d", s.thomasIns.Thomas.Port))
+	s.thomasPID.SetText(fmt.Sprintf("%d", s.thomasIns.Thomas.Pid))
+	s.thomasStartTime.SetText(fmt.Sprintf("%d", s.thomasIns.Thomas.StartTime))
+	s.thomasHeartBeatTime.SetText(fmt.Sprintf("%d", s.thomasIns.Thomas.HeartBeatTime))
+	s.thomasType.SetText(s.thomasIns.Thomas.ThomasType.String())
+	s.thomasStatus.SetText(s.thomasIns.Thomas.Status)
+
+	m := common.NewThomasMetricsWrapper(s.thomasIns.Metrics)
+	s.instanceListBinding.Set(m.AsInterfaceArray())
 }

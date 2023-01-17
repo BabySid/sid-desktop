@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"fyne.io/fyne/v2/dialog"
 	"github.com/BabySid/gobase"
+	"github.com/mitchellh/go-wordwrap"
 	"log"
 	sidTheme "sid-desktop/theme"
 )
@@ -13,27 +14,9 @@ func printErr(err error) {
 	log.Printf(sidTheme.InternalErrorFormat, err)
 
 	str := err.Error()
-
-	target := ""
 	const maxLen = 64
 
-	n := len(str) / maxLen
-	m := len(str) % maxLen
-	for i := 0; i < n; i++ {
-		begin := i * maxLen
-		end := begin + maxLen
-		if i > 0 {
-			target += "\n"
-		}
-		target += str[begin:end]
-	}
-	if m > 0 {
-		if n > 0 {
-			target += "\n"
-		}
-		target += str[n*maxLen : n*maxLen+m]
-	}
-
+	target := wordwrap.WrapString(str, maxLen)
 	dialog.ShowError(errors.New(target), globalWin.win)
 }
 
