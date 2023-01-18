@@ -74,10 +74,6 @@ func (s *FavoritesList) Debug() {
 	}
 }
 
-const (
-	FavorTagSep = ";"
-)
-
 type Favorites struct {
 	ID         int64    `json:"-"`
 	Name       string   `json:"name"`

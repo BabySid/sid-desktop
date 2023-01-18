@@ -18,7 +18,7 @@ func newToys() *toys {
 		toy := toy
 		err := toy.Init()
 		if err != nil {
-			panic(err)
+			panic(any(err))
 		}
 
 		cards[i] = toy.GetToyCard()

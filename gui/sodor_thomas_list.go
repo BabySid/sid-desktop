@@ -13,6 +13,7 @@ import (
 	"sid-desktop/backend"
 	"sid-desktop/common"
 	"sid-desktop/theme"
+	"strings"
 )
 
 type sodorThomasList struct {
@@ -48,7 +49,7 @@ func newSodorThomasList() *sodorThomasList {
 	s.thomasListBinding = binding.NewUntypedList()
 	s.createThomasList()
 
-	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorThomasListName, theme.ResourceTrainIcon, nil)
+	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorThomsTabName, theme.ResourceTrainIcon, nil)
 	s.tabItem.Content = container.NewBorder(
 		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.refresh, s.newThomas)),
 		nil, nil, nil,
@@ -125,7 +126,7 @@ func (s *sodorThomasList) createThomasList() {
 			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(fmt.Sprintf("%d", info.Id))
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(info.Version)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(fmt.Sprintf("%s:%d", info.Host, info.Port))
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(fmt.Sprintf("%s", info.Tags))
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(strings.Join(info.Tags, common.ArraySeparator))
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText(info.Status)
 
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorThomasListOp1)
@@ -145,7 +146,7 @@ func (s *sodorThomasList) createThomasList() {
 				}
 				resp := sodor.ThomasReply{}
 				if err := backend.GetSodorClient().Call(backend.DropThomas, &req, &resp); err != nil {
-					printErr(err)
+					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 					return
 				}
 				s.loadThomasList()

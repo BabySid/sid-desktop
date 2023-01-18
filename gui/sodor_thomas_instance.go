@@ -12,6 +12,7 @@ import (
 	"sid-desktop/backend"
 	"sid-desktop/common"
 	"sid-desktop/theme"
+	"strings"
 	"sync"
 )
 
@@ -187,13 +188,13 @@ func (s *sodorThomasInstance) resetGUI() {
 
 	s.thomasName.SetText(s.thomasIns.Thomas.Name)
 	s.thomasVersion.SetText(s.thomasIns.Thomas.Version)
-	s.thomasTags.SetText(fmt.Sprintf("%s", s.thomasIns.Thomas.Tags))
+	s.thomasTags.SetText(strings.Join(s.thomasIns.Thomas.Tags, common.ArraySeparator))
 	s.thomasProto.SetText(s.thomasIns.Thomas.Proto)
 	s.thomasHost.SetText(s.thomasIns.Thomas.Host)
 	s.thomasPort.SetText(fmt.Sprintf("%d", s.thomasIns.Thomas.Port))
 	s.thomasPID.SetText(fmt.Sprintf("%d", s.thomasIns.Thomas.Pid))
-	s.thomasStartTime.SetText(fmt.Sprintf("%d", s.thomasIns.Thomas.StartTime))
-	s.thomasHeartBeatTime.SetText(fmt.Sprintf("%d", s.thomasIns.Thomas.HeartBeatTime))
+	s.thomasStartTime.SetText(gobase.FormatTimeStamp(int64(s.thomasIns.Thomas.StartTime)))
+	s.thomasHeartBeatTime.SetText(gobase.FormatTimeStamp(int64(s.thomasIns.Thomas.HeartBeatTime)))
 	s.thomasType.SetText(s.thomasIns.Thomas.ThomasType.String())
 	s.thomasStatus.SetText(s.thomasIns.Thomas.Status)
 

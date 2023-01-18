@@ -236,7 +236,8 @@ const (
 	AppSodorCreateAlertGroupStatusMsg       = "Status"
 	AppSodorCreateAlertGroupAlertCreateTime = "CreateTime"
 
-	AppSodorCreateAlertPluginInstance           = "New Alert Plugin Instance"
+	AppSodorCreateAlertPluginInstance           = "Add Alert Plugin Instance"
+	AppSodorEditAlertPluginInstance             = "Edit Alert Plugin Instance"
 	AppSodorCreateAlertPluginInstanceID         = "ID"
 	AppSodorCreateAlertPluginInstanceName       = "Name"
 	AppSodorCreateAlertPluginInstancePlugin     = "Plugin Name"

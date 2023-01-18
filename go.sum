@@ -43,6 +43,8 @@ fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1 h1:OiHw+bZAGEaSreHsA8dDkBO
 fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1/go.mod h1:oM2AQqGJ1AMo4nNqZFYU8xYygSBZkW2hmdJ7n4yjedE=
 github.com/BabySid/gobase v0.0.0-20230117070125-71af9dc64626 h1:YeQBCZEPS95QSkxo8OTFx/GEXf95xwcZGPoDRUno0v8=
 github.com/BabySid/gobase v0.0.0-20230117070125-71af9dc64626/go.mod h1:s1IGrvYMEJQCIFO42hUwdIa55WNeHbPjyK9iezHbhnk=
+github.com/BabySid/gobase v0.0.0-20230118032844-5288ffb2f24c h1:JlACzuZ+TfkfEJbjr5UFPBL+kpF7ezKoVadcGR+3Mik=
+github.com/BabySid/gobase v0.0.0-20230118032844-5288ffb2f24c/go.mod h1:svF7L3N0VIscajevwiWvBf3nlqKBuj+q1KJva6xgUas=
 github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82 h1:C/PEgrcKDkEXXuNhLJTQPTXePMMfowvA5aSdCtC9XWs=
 github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82/go.mod h1:Zd6Y+R9Cncyk45kK88CoeTLfoLeRsrre9f++EAUFQvU=
 github.com/BabySid/proto v0.0.0-20230111084449-12620667b84d h1:v9FXV7Rkv17rT7WM5EYeBdw/ScBxdQhChG7kQyTY+fQ=
@@ -326,6 +328,8 @@ github.com/mattn/go-runewidth v0.0.9 h1:Lm995f3rfxdpd6TSmuVCHVb/QhupuXlYr8sCI/Qd
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/mattn/go-sqlite3 v1.14.15 h1:vfoHhTN1af61xCRSWzFIWzx2YskyMTwHLrExkBOjvxI=
 github.com/mattn/go-sqlite3 v1.14.15/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
+github.com/mattn/go-sqlite3 v1.14.16 h1:yOQRA0RpS5PFz/oikGwBEqvAWhWg5ufRz4ETLjwpU1Y=
+github.com/mattn/go-sqlite3 v1.14.16/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 github.com/matttproud/golang_protobuf_extensions v1.0.1 h1:4hp9jkHxhMHkqkrB3Ix0jegS5sx/RkqARlsWZ6pIwiU=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
 github.com/mcuadros/go-version v0.0.0-20190830083331-035f6764e8d2/go.mod h1:76rfSfYPWj01Z85hUf/ituArm797mNKcvINh1OlsZKo=

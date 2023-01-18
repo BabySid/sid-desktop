@@ -164,7 +164,7 @@ func (af *appFavorites) createFavorList() {
 			favor := o.(common.Favorites)
 
 			name := gobase.CutUTF8(favor.Name, 0, 16, "...")
-			name += "(" + strings.Join(favor.Tags, common.FavorTagSep) + ")"
+			name += "(" + strings.Join(favor.Tags, common.ArraySeparator) + ")"
 			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(name)
 
 			localUrl := gobase.CutUTF8(favor.Url, 0, 64, "...")
@@ -248,7 +248,7 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 		},
 	)
 	tags.OnChanged = func(s string) {
-		arr := strings.Split(s, common.FavorTagSep)
+		arr := strings.Split(s, common.ArraySeparator)
 		_ = tagArray.Set(arr)
 	}
 
@@ -256,7 +256,7 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 	if favor != nil { // edit or remove
 		url.SetText(favor.Url)
 		name.SetText(favor.Name)
-		tags.SetText(strings.Join(favor.Tags, common.FavorTagSep))
+		tags.SetText(strings.Join(favor.Tags, common.ArraySeparator))
 		title = theme.AppFavoritesEditFavorTitle
 	}
 

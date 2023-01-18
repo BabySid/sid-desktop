@@ -7,7 +7,7 @@ replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7
 require (
 	fyne.io/fyne/v2 v2.3.0
 	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1
-	github.com/BabySid/gobase v0.0.0-20230117070125-71af9dc64626
+	github.com/BabySid/gobase v0.0.0-20230118032844-5288ffb2f24c
 	github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82
 	github.com/BabySid/proto v0.0.0-20230111084449-12620667b84d
 	github.com/PuerkitoBio/goquery v1.8.0
@@ -67,7 +67,7 @@ require (
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
-	github.com/mattn/go-sqlite3 v1.14.15 // indirect
+	github.com/mattn/go-sqlite3 v1.14.16 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect

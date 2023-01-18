@@ -93,7 +93,7 @@ func (db *AppFavoritesDB) LoadFavorites() (*common.FavoritesList, error) {
 			if err != nil {
 				return err
 			}
-			fav.Tags = strings.Split(tagStr, common.FavorTagSep)
+			fav.Tags = strings.Split(tagStr, common.ArraySeparator)
 			favors.Append(fav)
 		}
 		return nil
@@ -105,7 +105,7 @@ func (db *AppFavoritesDB) LoadFavorites() (*common.FavoritesList, error) {
 func (db *AppFavoritesDB) AddFavorites(favor common.Favorites) error {
 	_, _, err := db.sqlite.Exec("insert into "+db.appFavoritesTbl+
 		" (name, url, tags, create_time, access_time) values(?, ?, ?, ?, ?)",
-		favor.Name, favor.Url, strings.Join(favor.Tags, common.FavorTagSep), favor.CreateTime, favor.AccessTime)
+		favor.Name, favor.Url, strings.Join(favor.Tags, common.ArraySeparator), favor.CreateTime, favor.AccessTime)
 	return err
 }
 
@@ -120,7 +120,7 @@ func (db *AppFavoritesDB) AddFavoritesList(favors *common.FavoritesList) error {
 	for _, favor := range favs {
 		_, _, err := tx.Exec("insert into "+db.appFavoritesTbl+
 			" (name, url, tags, create_time, access_time) values(?, ?, ?, ?, ?)",
-			favor.Name, favor.Url, strings.Join(favor.Tags, common.FavorTagSep), favor.CreateTime, favor.AccessTime)
+			favor.Name, favor.Url, strings.Join(favor.Tags, common.ArraySeparator), favor.CreateTime, favor.AccessTime)
 
 		if err != nil {
 			_ = tx.Rollback()
@@ -139,6 +139,6 @@ func (db *AppFavoritesDB) RmFavorites(favor common.Favorites) error {
 
 func (db *AppFavoritesDB) UpdateFavorites(favor common.Favorites) error {
 	_, _, err := db.sqlite.Exec("update "+db.appFavoritesTbl+" set name = ?, url = ?, tags = ?, access_time = ? where id = ?",
-		favor.Name, favor.Url, strings.Join(favor.Tags, common.FavorTagSep), favor.AccessTime, favor.ID)
+		favor.Name, favor.Url, strings.Join(favor.Tags, common.ArraySeparator), favor.AccessTime, favor.ID)
 	return err
 }

@@ -48,10 +48,6 @@ func (s *ThomasInfosWrapper) AsInterfaceArray() []interface{} {
 	return rs
 }
 
-const (
-	ThomasTagSep = ";"
-)
-
 type ThomasMetricsWrapper struct {
 	Metrics []*sodor.ThomasMetrics
 }

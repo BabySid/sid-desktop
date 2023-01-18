@@ -9,6 +9,7 @@ import (
 	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
 	"github.com/BabySid/proto/sodor"
 	"image/color"
 	"sid-desktop/backend"
@@ -49,7 +50,7 @@ func (s *sodorThomasInfo) show() {
 	s.port.Validator = validation.NewRegexp(`\d+`, theme.AppSodorThomasInfoPort+" must not be number")
 	s.tags = widget.NewEntry()
 	s.tags.OnChanged = func(str string) {
-		arr := strings.Split(str, common.FavorTagSep)
+		arr := gobase.SplitAndTrimSpace(str, common.ArraySeparator)
 		_ = s.tagListBinding.Set(arr)
 
 		if s.tagContent.Visible() {
@@ -94,7 +95,7 @@ func (s *sodorThomasInfo) show() {
 	if s.thomas != nil { // edit or remove
 		s.host.SetText(s.thomas.Host)
 		s.port.SetText(fmt.Sprintf("%d", s.thomas.Port))
-		s.tags.SetText(strings.Join(s.thomas.Tags, common.ThomasTagSep))
+		s.tags.SetText(strings.Join(s.thomas.Tags, common.ArraySeparator))
 		title = theme.AppSodorEditThomas
 	}
 
