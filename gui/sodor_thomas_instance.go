@@ -9,7 +9,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
 	"github.com/BabySid/proto/sodor"
-	"sid-desktop/backend"
 	"sid-desktop/common"
 	"sid-desktop/theme"
 	"strings"
@@ -169,7 +168,7 @@ func (s *sodorThomasInstance) loadThomasInstance() {
 	resp := sodor.ThomasInstance{}
 	req := sodor.ThomasInfo{}
 	req.Id = s.tid
-	err := backend.GetSodorClient().Call(backend.ShowThomas, &req, &resp)
+	err := common.GetSodorClient().Call(common.ShowThomas, &req, &resp)
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 		return

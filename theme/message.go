@@ -226,7 +226,7 @@ const (
 	AppSodorCreateAlertGroupCreateTime = "CreateTime"
 	AppSodorCreateAlertGroupUpdateTime = "UpdateTime"
 	AppSodorCreateAlertGroupOp1        = "Edit"
-	AppSodorCreateAlertGroupOp2        = "Alert History"
+	AppSodorCreateAlertGroupOp2        = "History"
 	AppSodorCreateAlertGroupOp3        = "Del"
 
 	AppSodorAddAlertGroupHistory            = "Alert Group History"

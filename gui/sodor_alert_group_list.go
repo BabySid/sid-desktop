@@ -1,21 +1,27 @@
 package gui
 
 import (
+	"fmt"
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
+	"github.com/BabySid/proto/sodor"
+	"image/color"
 	"sid-desktop/theme"
 )
 
 type sodorAlertGroupList struct {
 	tabItem *container.TabItem
 
+	refresh       *widget.Button
 	newAlertGroup *widget.Button
 
-	groupHeader *widget.List
+	groupHeader fyne.CanvasObject
 	groupList   *widget.List
 
 	alertGroupListBinding binding.UntypedList
@@ -26,19 +32,21 @@ type sodorAlertGroupList struct {
 func newSodorAlertGroupList() *sodorAlertGroupList {
 	s := sodorAlertGroupList{}
 
+	s.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+		s.loadAlertGroupList()
+	})
 	s.newAlertGroup = widget.NewButton(theme.AppSodorAddAlertGroup, func() {
 		s.addAlertGroupDialog()
 	})
 
 	s.alertGroupListBinding = binding.NewUntypedList()
-	s.alertGroupListBinding.Set([]interface{}{1, 2, 3})
 	s.createAlertGroupList()
 
 	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorAlertGroupTabName, theme.ResourceAlertIcon, nil)
 	s.tabItem.Content = container.NewBorder(
-		container.NewHBox(layout.NewSpacer(), s.newAlertGroup),
+		container.NewHBox(layout.NewSpacer(), s.refresh, s.newAlertGroup),
 		nil, nil, nil,
-		container.NewHScroll(container.NewBorder(s.groupHeader, nil, nil, nil, s.groupList)))
+		container.NewBorder(s.groupHeader, nil, nil, nil, s.groupList))
 	return &s
 }
 
@@ -50,32 +58,28 @@ func (s *sodorAlertGroupList) GetTabItem() *container.TabItem {
 	return s.tabItem
 }
 
+func (s *sodorAlertGroupList) createAlertGroupOpButtons() *fyne.Container {
+	return container.NewHBox(
+		widget.NewButton(theme.AppSodorCreateAlertGroupOp1, nil),
+		widget.NewButton(theme.AppSodorCreateAlertGroupOp2, nil),
+		widget.NewButton(theme.AppSodorCreateAlertGroupOp3, nil),
+	)
+}
+
 func (s *sodorAlertGroupList) createAlertGroupList() {
-	s.groupHeader = widget.NewList(
-		func() int {
-			return 1
-		},
-		func() fyne.CanvasObject {
-			return container.NewBorder(nil, nil,
-				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
-				nil,
-				container.NewGridWithColumns(5,
-					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-					widget.NewLabelWithStyle("", fyne.TextAlignTrailing, fyne.TextStyle{}),
-				),
-			)
-		},
-		func(id widget.ListItemID, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorCreateAlertGroupID)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(theme.AppSodorCreateAlertGroupName)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(theme.AppSodorCreateAlertGroupPlugins)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(theme.AppSodorCreateAlertGroupCreateTime)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText(theme.AppSodorCreateAlertGroupUpdateTime)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*widget.Label).SetText("")
-		},
+	size := s.createAlertGroupOpButtons().MinSize()
+	spaceLabel := canvas.NewRectangle(color.Transparent)
+	spaceLabel.SetMinSize(fyne.NewSize(size.Width, size.Height))
+
+	s.groupHeader = container.NewBorder(nil, nil,
+		widget.NewLabelWithStyle(theme.AppSodorCreateAlertGroupID, fyne.TextAlignLeading, fyne.TextStyle{}),
+		spaceLabel,
+		container.NewGridWithColumns(4,
+			widget.NewLabelWithStyle(theme.AppSodorCreateAlertGroupName, fyne.TextAlignCenter, fyne.TextStyle{}),
+			widget.NewLabelWithStyle(theme.AppSodorCreateAlertGroupPlugins, fyne.TextAlignCenter, fyne.TextStyle{}),
+			widget.NewLabelWithStyle(theme.AppSodorCreateAlertGroupCreateTime, fyne.TextAlignCenter, fyne.TextStyle{}),
+			widget.NewLabelWithStyle(theme.AppSodorCreateAlertGroupUpdateTime, fyne.TextAlignCenter, fyne.TextStyle{}),
+		),
 	)
 
 	s.groupList = widget.NewListWithData(
@@ -83,39 +87,37 @@ func (s *sodorAlertGroupList) createAlertGroupList() {
 		func() fyne.CanvasObject {
 			return container.NewBorder(nil, nil,
 				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
-				nil,
-				container.NewGridWithColumns(5,
+				s.createAlertGroupOpButtons(),
+				container.NewGridWithColumns(4,
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-					container.NewHBox(
-						layout.NewSpacer(),
-						widget.NewButton(theme.AppSodorCreateAlertGroupOp1, nil),
-						widget.NewButton(theme.AppSodorCreateAlertGroupOp2, nil),
-						widget.NewButton(theme.AppSodorCreateAlertGroupOp3, nil),
-					)),
+				),
 			)
 		},
 		func(data binding.DataItem, item fyne.CanvasObject) {
-			item.(*fyne.Container).Objects[1].(*widget.Label).SetText("1")
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText("group1")
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText("DINGDING; Wexin")
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText("2022-12-12 23:12:12")
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText("2022-12-12 23:12:12")
+			o, _ := data.(binding.Untyped).Get()
+			group := o.(*sodor.AlertGroup)
 
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorCreateAlertGroupOp1)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
-				s.editAlertGroupDialog()
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(fmt.Sprintf("%d", group.Id))
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(group.Name)
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText("")
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(gobase.FormatTimeStamp(int64(group.CreateAt)))
+			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText(gobase.FormatTimeStamp(int64(group.UpdateAt)))
+
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[0].(*widget.Button).SetText(theme.AppSodorCreateAlertGroupOp1)
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[0].(*widget.Button).OnTapped = func() {
+				s.editAlertGroupDialog(group)
 			}
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorCreateAlertGroupOp2)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorCreateAlertGroupOp2)
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
 				if s.viewHistoryHandle != nil {
 					s.viewHistoryHandle()
 				}
 			}
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*fyne.Container).Objects[3].(*widget.Button).SetText(theme.AppSodorCreateAlertGroupOp3)
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[4].(*fyne.Container).Objects[3].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorCreateAlertGroupOp3)
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
 				// rm
 			}
 		},
@@ -159,6 +161,10 @@ func (s *sodorAlertGroupList) addAlertGroupDialog() {
 	diag.Show()
 }
 
-func (s *sodorAlertGroupList) editAlertGroupDialog() {
+func (s *sodorAlertGroupList) editAlertGroupDialog(group *sodor.AlertGroup) {
+
+}
+
+func (s *sodorAlertGroupList) loadAlertGroupList() {
 
 }

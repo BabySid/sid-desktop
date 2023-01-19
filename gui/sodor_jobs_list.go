@@ -46,7 +46,7 @@ func newSodorJobList() *sodorJobList {
 	s.tabItem.Content = container.NewBorder(
 		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.newJob)),
 		nil, nil, nil,
-		container.NewScroll(container.NewBorder(s.jobHeader, nil, nil, nil, s.jobContentList)))
+		container.NewBorder(s.jobHeader, nil, nil, nil, s.jobContentList))
 	return &s
 }
 

@@ -11,7 +11,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
 	"github.com/BabySid/proto/sodor"
-	"sid-desktop/backend"
 	"sid-desktop/common"
 	"sid-desktop/theme"
 	"strings"
@@ -93,7 +92,7 @@ func (s *sodorAlertPlugin) CreateView() fyne.CanvasObject {
 					Id: plugin.Id,
 				}
 				resp := sodor.AlertPluginReply{}
-				if err := backend.GetSodorClient().Call(backend.DeleteAlertPluginInstance, &req, &resp); err != nil {
+				if err := common.GetSodorClient().Call(common.DeleteAlertPluginInstance, &req, &resp); err != nil {
 					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 					return
 				}
@@ -121,7 +120,7 @@ func (s *sodorAlertPlugin) CreateView() fyne.CanvasObject {
 
 func (s *sodorAlertPlugin) loadAlertPlugins() {
 	resp := sodor.AlertPluginInstances{}
-	err := backend.GetSodorClient().Call(backend.ListAlertPluginInstances, nil, &resp)
+	err := common.GetSodorClient().Call(common.ListAlertPluginInstances, nil, &resp)
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 		return
@@ -217,11 +216,11 @@ func (s *sodorAlertPlugin) buildPluginInstanceDialog(plugin *sodor.AlertPluginIn
 
 			var err error
 			if plugin != nil {
-				if err = backend.GetSodorClient().Call(backend.UpdateAlertPluginInstance, &req, &resp); err != nil {
+				if err = common.GetSodorClient().Call(common.UpdateAlertPluginInstance, &req, &resp); err != nil {
 					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 				}
 			} else {
-				if err = backend.GetSodorClient().Call(backend.CreateAlertPluginInstance, &req, &resp); err != nil {
+				if err = common.GetSodorClient().Call(common.CreateAlertPluginInstance, &req, &resp); err != nil {
 					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 				}
 			}

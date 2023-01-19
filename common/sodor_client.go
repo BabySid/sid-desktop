@@ -1,4 +1,4 @@
-package backend
+package common
 
 import (
 	"errors"
@@ -7,12 +7,11 @@ import (
 	"github.com/BabySid/gorpc/http"
 	"github.com/BabySid/proto/sodor"
 	"reflect"
-	"sid-desktop/common"
 	"sync"
 )
 
 type sodorClient struct {
-	fatCtrl common.FatCtrl
+	fatCtrl FatCtrl
 	handle  *http.Client
 
 	mutex sync.RWMutex
@@ -183,7 +182,7 @@ func (c *sodorClient) registerMethod() {
 	gobase.True(len(c.methods) == int(maxMethod))
 }
 
-func (c *sodorClient) SetFatCtrlAddr(addr common.FatCtrl) error {
+func (c *sodorClient) SetFatCtrlAddr(addr FatCtrl) error {
 	handle, err := gorpc.DialHttpClient(addr.Addr, http.WithProtobufCodec())
 	if err != nil {
 		return err
@@ -197,7 +196,7 @@ func (c *sodorClient) SetFatCtrlAddr(addr common.FatCtrl) error {
 	return nil
 }
 
-func (c *sodorClient) GetFatCrl() common.FatCtrl {
+func (c *sodorClient) GetFatCrl() FatCtrl {
 	return c.fatCtrl
 }
 

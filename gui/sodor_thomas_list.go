@@ -10,7 +10,6 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/proto/sodor"
 	"image/color"
-	"sid-desktop/backend"
 	"sid-desktop/common"
 	"sid-desktop/theme"
 	"strings"
@@ -53,7 +52,7 @@ func newSodorThomasList() *sodorThomasList {
 	s.tabItem.Content = container.NewBorder(
 		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.refresh, s.newThomas)),
 		nil, nil, nil,
-		container.NewHScroll(container.NewBorder(s.thomasHeader, nil, nil, nil, s.thomasContentList)))
+		container.NewBorder(s.thomasHeader, nil, nil, nil, s.thomasContentList))
 
 	go s.loadThomasList()
 	return &s
@@ -82,7 +81,6 @@ func (s *sodorThomasList) searchThomas(name string) {
 
 func (s *sodorThomasList) createThomasContListOpButtons() *fyne.Container {
 	return container.NewHBox(
-		layout.NewSpacer(),
 		widget.NewButtonWithIcon(theme.AppSodorThomasListOp1, theme.ResourceInstanceIcon, nil),
 		widget.NewButtonWithIcon(theme.AppSodorThomasListOp2, theme.ResourceEditIcon, nil),
 		widget.NewButtonWithIcon(theme.AppSodorThomasListOp3, theme.ResourceRmIcon, nil),
@@ -129,23 +127,23 @@ func (s *sodorThomasList) createThomasList() {
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(strings.Join(info.Tags, common.ArraySeparator))
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText(info.Status)
 
-			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorThomasListOp1)
-			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[0].(*widget.Button).SetText(theme.AppSodorThomasListOp1)
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[0].(*widget.Button).OnTapped = func() {
 				if s.viewInstanceHandle != nil {
 					s.viewInstanceHandle(info.Id)
 				}
 			}
-			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorThomasListOp2)
-			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorThomasListOp2)
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
 				s.editThomas(info)
 			}
-			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[3].(*widget.Button).SetText(theme.AppSodorThomasListOp3)
-			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[3].(*widget.Button).OnTapped = func() {
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorThomasListOp3)
+			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
 				req := sodor.ThomasInfo{
 					Id: info.Id,
 				}
 				resp := sodor.ThomasReply{}
-				if err := backend.GetSodorClient().Call(backend.DropThomas, &req, &resp); err != nil {
+				if err := common.GetSodorClient().Call(common.DropThomas, &req, &resp); err != nil {
 					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 					return
 				}
@@ -171,7 +169,7 @@ func (s *sodorThomasList) showThomasDialog(thomas *sodor.ThomasInfo) {
 
 func (s *sodorThomasList) loadThomasList() {
 	resp := sodor.ThomasInfos{}
-	err := backend.GetSodorClient().Call(backend.ListThomas, nil, &resp)
+	err := common.GetSodorClient().Call(common.ListThomas, nil, &resp)
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 		return

@@ -7,7 +7,7 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
 	"github.com/BabySid/gobase"
-	"sid-desktop/backend"
+	"sid-desktop/common"
 	"sid-desktop/storage"
 	"sid-desktop/theme"
 )
@@ -58,7 +58,7 @@ func (as *appSodor) LazyInit() error {
 	}
 	as.tabItem = container.NewTabItemWithIcon(theme.AppSodorName, theme.ResourceSodorIcon, tabs)
 
-	if backend.GetSodorClient().GetFatCrl().ID == 0 {
+	if common.GetSodorClient().GetFatCrl().ID == 0 {
 		dialog.ShowInformation("", theme.AppSodorInitFatCtlAddrMessage, globalWin.win)
 		setFatCtrlSelected(tabs)
 	}
@@ -97,7 +97,7 @@ func (as *appSodor) initDB() {
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 	} else if ctrl != nil {
-		if err = backend.GetSodorClient().SetFatCtrlAddr(*ctrl); err != nil {
+		if err = common.GetSodorClient().SetFatCtrlAddr(*ctrl); err != nil {
 			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 		}
 	}

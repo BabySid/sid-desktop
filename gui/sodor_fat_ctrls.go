@@ -7,7 +7,7 @@ import (
 	"fyne.io/fyne/v2/data/validation"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
-	"sid-desktop/backend"
+	"sid-desktop/common"
 	"sid-desktop/storage"
 	"sid-desktop/theme"
 	"strings"
@@ -31,7 +31,7 @@ func (s *sodorFatController) CreateView() fyne.CanvasObject {
 
 	s.setFatCtrl = widget.NewButton(theme.AppSodorFatCtlSetAddr, s.setFatCtlAddr)
 
-	s.curFatCtrlAddr = widget.NewLabel(backend.GetSodorClient().GetFatCrl().Addr)
+	s.curFatCtrlAddr = widget.NewLabel(common.GetSodorClient().GetFatCrl().Addr)
 
 	s.docs = container.NewAppTabs()
 	s.docs.Append(
@@ -48,7 +48,7 @@ func (s *sodorFatController) CreateView() fyne.CanvasObject {
 
 func (s *sodorFatController) setFatCtlAddr() {
 	addr := widget.NewEntry()
-	addr.SetText(backend.GetSodorClient().GetFatCrl().Addr)
+	addr.SetText(common.GetSodorClient().GetFatCrl().Addr)
 	addr.Validator = validation.NewRegexp(`\S+`, theme.AppSodorFatCtlAddrValidateMsg)
 	addr.SetPlaceHolder(theme.AppSodorFatCtlAddrPlaceHolder)
 
@@ -59,10 +59,10 @@ func (s *sodorFatController) setFatCtlAddr() {
 				return
 			}
 
-			ctrl := backend.GetSodorClient().GetFatCrl()
+			ctrl := common.GetSodorClient().GetFatCrl()
 			ctrl.Addr = addr.Text
 
-			if err := backend.GetSodorClient().SetFatCtrlAddr(ctrl); err != nil {
+			if err := common.GetSodorClient().SetFatCtrlAddr(ctrl); err != nil {
 				printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 				return
 			}

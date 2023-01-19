@@ -12,7 +12,6 @@ import (
 	"github.com/BabySid/gobase"
 	"github.com/BabySid/proto/sodor"
 	"image/color"
-	"sid-desktop/backend"
 	"sid-desktop/common"
 	"sid-desktop/theme"
 	"strconv"
@@ -134,11 +133,11 @@ func (s *sodorThomasInfo) show() {
 			resp := sodor.ThomasReply{}
 
 			if s.thomas != nil {
-				if err = backend.GetSodorClient().Call(backend.UpdateThomas, &req, &resp); err != nil {
+				if err = common.GetSodorClient().Call(common.UpdateThomas, &req, &resp); err != nil {
 					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 				}
 			} else {
-				if err = backend.GetSodorClient().Call(backend.AddThomas, &req, &resp); err != nil {
+				if err = common.GetSodorClient().Call(common.AddThomas, &req, &resp); err != nil {
 					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 				}
 			}

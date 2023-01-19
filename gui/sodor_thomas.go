@@ -27,7 +27,7 @@ func (s *sodorThomas) CreateView() fyne.CanvasObject {
 	s.docs.Append(s.thomasList.GetTabItem())
 	s.docs.SetTabLocation(container.TabLocationTop)
 	s.docs.CloseIntercept = func(item *container.TabItem) {
-		if item.Text != theme.AppSodorThomasListName {
+		if item.Text != theme.AppSodorThomsTabName {
 			s.docs.Remove(item)
 		} else {
 			dialog.ShowInformation(theme.CannotCloseTitle, theme.AppSodorThomasListCannotCloseMsg, globalWin.win)
