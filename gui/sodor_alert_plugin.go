@@ -119,14 +119,13 @@ func (s *sodorAlertPlugin) CreateView() fyne.CanvasObject {
 }
 
 func (s *sodorAlertPlugin) loadAlertPlugins() {
-	resp := sodor.AlertPluginInstances{}
-	err := common.GetSodorClient().Call(common.ListAlertPluginInstances, nil, &resp)
+	err := common.GetSodorCache().LoadAlertPluginInstances()
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 		return
 	}
 
-	wrapper := common.NewSodorAlertPluginsWrapper(&resp)
+	wrapper := common.NewSodorAlertPluginsWrapper(common.GetSodorCache().GetAlertPluginInstances())
 	s.instanceListBinding.Set(wrapper.AsInterfaceArray())
 }
 

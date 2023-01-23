@@ -168,12 +168,11 @@ func (s *sodorThomasList) showThomasDialog(thomas *sodor.ThomasInfo) {
 }
 
 func (s *sodorThomasList) loadThomasList() {
-	resp := sodor.ThomasInfos{}
-	err := common.GetSodorClient().Call(common.ListThomas, nil, &resp)
+	err := common.GetSodorCache().LoadThomasInfos()
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 		return
 	}
-	s.thomasListCache = common.NewThomasInfosWrapper(&resp)
+	s.thomasListCache = common.NewThomasInfosWrapper(common.GetSodorCache().GetThomasInfos())
 	s.thomasListBinding.Set(s.thomasListCache.AsInterfaceArray())
 }

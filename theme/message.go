@@ -220,8 +220,11 @@ const (
 	AppSodorThomasInfoInstanceMetrics    = "Metrics"
 
 	AppSodorAddAlertGroup              = "Add Alert Group"
+	AppSodorEditAlertGroup             = "Add Alert Group"
+	AppSodorEmptyAlertPluginInstance   = "Alert Plugin Instance is empty. Create plugin instance first."
 	AppSodorCreateAlertGroupID         = "ID"
 	AppSodorCreateAlertGroupName       = "Name"
+	AppSodorAlertGroupNameTooltip      = "use `SODOR` as system alert"
 	AppSodorCreateAlertGroupPlugins    = "Plugin Instance"
 	AppSodorCreateAlertGroupCreateTime = "CreateTime"
 	AppSodorCreateAlertGroupUpdateTime = "UpdateTime"

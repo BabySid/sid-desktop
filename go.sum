@@ -49,6 +49,8 @@ github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82 h1:C/PEgrcKDkEXXuNhL
 github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82/go.mod h1:Zd6Y+R9Cncyk45kK88CoeTLfoLeRsrre9f++EAUFQvU=
 github.com/BabySid/proto v0.0.0-20230111084449-12620667b84d h1:v9FXV7Rkv17rT7WM5EYeBdw/ScBxdQhChG7kQyTY+fQ=
 github.com/BabySid/proto v0.0.0-20230111084449-12620667b84d/go.mod h1:cSJ+d6Znm3Ju/WlMxETsHcCLawedmjDo89ZR9J1lLdE=
+github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba h1:GZLiu/2K0xPn6iANfcYCsxUsg7nUPWTO/4z/kae1l3U=
+github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba/go.mod h1:cSJ+d6Znm3Ju/WlMxETsHcCLawedmjDo89ZR9J1lLdE=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v1.1.0/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=

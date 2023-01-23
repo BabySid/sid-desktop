@@ -30,12 +30,12 @@ var (
 )
 
 var (
-	sodorHandle *sodorClient
-	sodorOnce   sync.Once
+	sodorHandle     *sodorClient
+	sodorHandleOnce sync.Once
 )
 
 func GetSodorClient() *sodorClient {
-	sodorOnce.Do(func() {
+	sodorHandleOnce.Do(func() {
 		sodorHandle = &sodorClient{}
 		sodorHandle.registerMethod()
 	})
