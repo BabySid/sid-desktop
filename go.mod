@@ -7,7 +7,7 @@ replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7
 require (
 	fyne.io/fyne/v2 v2.3.0
 	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1
-	github.com/BabySid/gobase v0.0.0-20230118032844-5288ffb2f24c
+	github.com/BabySid/gobase v0.0.0-20230126123652-0bb398f7c4d4
 	github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82
 	github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba
 	github.com/PuerkitoBio/goquery v1.8.0

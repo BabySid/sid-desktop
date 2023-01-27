@@ -29,7 +29,7 @@ type sodorAlertGroupList struct {
 
 	alertGroupListBinding binding.UntypedList
 
-	viewHistoryHandle func()
+	viewHistoryHandle func(group *sodor.AlertGroup)
 }
 
 func newSodorAlertGroupList() *sodorAlertGroupList {
@@ -42,7 +42,6 @@ func newSodorAlertGroupList() *sodorAlertGroupList {
 		s.addAlertGroupDialog()
 	})
 
-	s.alertGroupListBinding = binding.NewUntypedList()
 	s.createAlertGroupList()
 
 	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorAlertGroupTabName, theme.ResourceAlertIcon, nil)
@@ -87,6 +86,7 @@ func (s *sodorAlertGroupList) createAlertGroupList() {
 		),
 	)
 
+	s.alertGroupListBinding = binding.NewUntypedList()
 	s.groupList = widget.NewListWithData(
 		s.alertGroupListBinding,
 		func() fyne.CanvasObject {
@@ -118,7 +118,7 @@ func (s *sodorAlertGroupList) createAlertGroupList() {
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorCreateAlertGroupOp2)
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
 				if s.viewHistoryHandle != nil {
-					s.viewHistoryHandle()
+					s.viewHistoryHandle(group.GroupObj)
 				}
 			}
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorCreateAlertGroupOp3)
@@ -268,6 +268,7 @@ func (s *sodorAlertGroupList) loadAlertGroupList() {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 		return
 	}
+
 	wrapper := common.NewSodorAlertGroupsWrapperWrapper(common.GetSodorCache().GetAlertGroups())
 	s.alertGroupListBinding.Set(wrapper.AsInterfaceArray())
 }

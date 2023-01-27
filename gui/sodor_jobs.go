@@ -51,16 +51,22 @@ func (s *sodorJobs) createJob() {
 	info := newSodorJobInfo(0)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
+	info.dismissHandle = func() {
+		s.docs.Remove(info.tabItem)
+	}
 }
 
-func (s *sodorJobs) editJob() {
-	info := newSodorJobInfo(1234567890)
+func (s *sodorJobs) editJob(id int32) {
+	info := newSodorJobInfo(id)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
+	info.dismissHandle = func() {
+		s.docs.Remove(info.tabItem)
+	}
 }
 
-func (s *sodorJobs) viewJobInstance() {
-	info := newSodorJobInstance(1234567890)
+func (s *sodorJobs) viewJobInstance(id int32) {
+	info := newSodorJobInstance(id)
 	info.viewTaskInstanceHandle = s.viewTaskInstance
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)

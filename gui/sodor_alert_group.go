@@ -4,6 +4,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
+	"github.com/BabySid/proto/sodor"
 	"sid-desktop/theme"
 )
 
@@ -45,8 +46,8 @@ func (s *sodorAlertGroup) CreateView() fyne.CanvasObject {
 	return s.content
 }
 
-func (s *sodorAlertGroup) viewAlertPluginInstanceHistory() {
-	info := newSodorAlertGroupHistory(1234567890)
+func (s *sodorAlertGroup) viewAlertPluginInstanceHistory(group *sodor.AlertGroup) {
+	info := newSodorAlertGroupHistory(group)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
 }

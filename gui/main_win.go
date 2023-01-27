@@ -95,6 +95,8 @@ func NewMainWin() *MainWin {
 		mw.app.Settings().SetTheme(theme.LightTheme)
 	}
 
+	// todo setup splash window
+
 	// Main Menu
 	mw.mm = newMainMenu()
 	mw.win.SetMainMenu(mw.mm.MainMenu)

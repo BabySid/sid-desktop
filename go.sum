@@ -45,6 +45,12 @@ github.com/BabySid/gobase v0.0.0-20230117070125-71af9dc64626 h1:YeQBCZEPS95QSkxo
 github.com/BabySid/gobase v0.0.0-20230117070125-71af9dc64626/go.mod h1:s1IGrvYMEJQCIFO42hUwdIa55WNeHbPjyK9iezHbhnk=
 github.com/BabySid/gobase v0.0.0-20230118032844-5288ffb2f24c h1:JlACzuZ+TfkfEJbjr5UFPBL+kpF7ezKoVadcGR+3Mik=
 github.com/BabySid/gobase v0.0.0-20230118032844-5288ffb2f24c/go.mod h1:svF7L3N0VIscajevwiWvBf3nlqKBuj+q1KJva6xgUas=
+github.com/BabySid/gobase v0.0.0-20230125142419-916450245c59 h1:YVKGjaOb7E023/T1jjTKGHGAzn++u4k+uTiwWyAkve4=
+github.com/BabySid/gobase v0.0.0-20230125142419-916450245c59/go.mod h1:svF7L3N0VIscajevwiWvBf3nlqKBuj+q1KJva6xgUas=
+github.com/BabySid/gobase v0.0.0-20230126121058-6073347c40ec h1:ricMqqHZ1GgOEjrL9JE8DCzIunpNlWZNvRmXSdOdo1U=
+github.com/BabySid/gobase v0.0.0-20230126121058-6073347c40ec/go.mod h1:svF7L3N0VIscajevwiWvBf3nlqKBuj+q1KJva6xgUas=
+github.com/BabySid/gobase v0.0.0-20230126123652-0bb398f7c4d4 h1:gKMts/HGcwcvsADPvP69rhM0Yd+CHw5ffXlhif9S2mM=
+github.com/BabySid/gobase v0.0.0-20230126123652-0bb398f7c4d4/go.mod h1:svF7L3N0VIscajevwiWvBf3nlqKBuj+q1KJva6xgUas=
 github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82 h1:C/PEgrcKDkEXXuNhLJTQPTXePMMfowvA5aSdCtC9XWs=
 github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82/go.mod h1:Zd6Y+R9Cncyk45kK88CoeTLfoLeRsrre9f++EAUFQvU=
 github.com/BabySid/proto v0.0.0-20230111084449-12620667b84d h1:v9FXV7Rkv17rT7WM5EYeBdw/ScBxdQhChG7kQyTY+fQ=

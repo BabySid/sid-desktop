@@ -38,10 +38,13 @@ func NewSodorAlertGroupsWrapperWrapper(m *sodor.AlertGroups) *SodorAlertGroupsWr
 }
 
 func (s *SodorAlertGroupsWrapper) AsInterfaceArray() []interface{} {
-	rs := make([]interface{}, len(s.groups.AlertGroups), len(s.groups.AlertGroups))
+	rs := make([]interface{}, 0)
 	for i := 0; i < len(s.groups.AlertGroups); i++ {
 		plugins := GetSodorCache().GetAlertPluginInstances(s.groups.AlertGroups[i].PluginInstances...)
-		rs[len(s.groups.AlertGroups)-1-i] = convertToSodorAlertGroup(s.groups.AlertGroups[i], plugins)
+		ag := convertToSodorAlertGroup(s.groups.AlertGroups[i], plugins)
+		if ag != nil {
+			rs = append(rs, *ag)
+		}
 	}
 
 	return rs
@@ -57,8 +60,12 @@ type SodorAlertGroup struct {
 	GroupObj *sodor.AlertGroup
 }
 
-func convertToSodorAlertGroup(group *sodor.AlertGroup, plugins *sodor.AlertPluginInstances) SodorAlertGroup {
+func convertToSodorAlertGroup(group *sodor.AlertGroup, plugins *sodor.AlertPluginInstances) *SodorAlertGroup {
+	if plugins == nil {
+		return nil
+	}
 	var ag SodorAlertGroup
+
 	ag.ID = fmt.Sprintf("%d", group.Id)
 	ag.Name = group.Name
 	names := make([]string, 0)
@@ -69,5 +76,24 @@ func convertToSodorAlertGroup(group *sodor.AlertGroup, plugins *sodor.AlertPlugi
 	ag.CreateTime = gobase.FormatTimeStamp(int64(group.CreateAt))
 	ag.UpdateTime = gobase.FormatTimeStamp(int64(group.UpdateAt))
 	ag.GroupObj = group
-	return ag
+	return &ag
+}
+
+type SodorAlertGroupHistoriesWrapper struct {
+	histories *sodor.AlertPluginInstanceHistories
+}
+
+func NewSodorAlertGroupHistoriesWrapperWrapper(m *sodor.AlertPluginInstanceHistories) *SodorAlertGroupHistoriesWrapper {
+	return &SodorAlertGroupHistoriesWrapper{
+		histories: m,
+	}
+}
+
+func (s *SodorAlertGroupHistoriesWrapper) AsInterfaceArray() []interface{} {
+	rs := make([]interface{}, len(s.histories.AlertPluginInstanceHistory), len(s.histories.AlertPluginInstanceHistory))
+	for i := 0; i < len(s.histories.AlertPluginInstanceHistory); i++ {
+		rs[len(s.histories.AlertPluginInstanceHistory)-1-i] = s.histories.AlertPluginInstanceHistory[i]
+	}
+
+	return rs
 }

@@ -4,12 +4,17 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/driver/desktop"
-	"image/color"
+	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
+	"sid-desktop/theme"
 	"time"
 )
 
 type splashWin struct {
+	loadProgress binding.Float
+	loadStatus   binding.String
 }
 
 func (sw *splashWin) run() {
@@ -17,21 +22,33 @@ func (sw *splashWin) run() {
 	if drv, ok := drv.(desktop.Driver); ok {
 		w := drv.CreateSplashWindow()
 
-		line := canvas.NewLine(color.NRGBA{R: 0, G: 0, B: 180, A: 128})
-		line.StrokeWidth = 5
-		line.Position1 = fyne.NewPos(0, 0)
-		line.Position2 = fyne.NewPos(50, 0)
-		w.SetContent(container.NewWithoutLayout(line))
-		w.Resize(fyne.NewSize(800, 3))
+		logo := canvas.NewImageFromResource(theme.ResourceSidLogo)
+		logo.FillMode = canvas.ImageFillContain
+
+		sw.loadProgress = binding.NewFloat()
+		progressBar := widget.NewProgressBarWithData(sw.loadProgress)
+		progressBar.Max = 100.0
+		progressBar.Min = 0.0
+
+		sw.loadStatus = binding.NewString()
+		progressLabel := widget.NewLabelWithData(sw.loadStatus)
+
+		w.SetContent(container.NewBorder(nil, container.NewVBox(progressLabel, progressBar), nil, nil, logo))
+		w.Resize(fyne.NewSize(600, 500))
 		w.Show()
 
-		a2 := canvas.NewPositionAnimation(fyne.NewPos(0, 0), fyne.NewPos(800, 0), time.Second*3, func(p fyne.Position) {
-			line.Move(p)
-			line.Refresh()
-		})
-		a2.RepeatCount = fyne.AnimationRepeatForever
-		a2.AutoReverse = true
-		a2.Curve = fyne.AnimationLinear
-		a2.Start()
+		go func() {
+			begin := 0.0
+			for {
+				sw.loadStatus.Set(gobase.FormatTimeStamp(time.Now().Unix()))
+				sw.loadProgress.Set(begin)
+				begin += 10
+				if begin >= 100 {
+					break
+				}
+				time.Sleep(time.Second * 3)
+			}
+			w.Hide()
+		}()
 	}
 }

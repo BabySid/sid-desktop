@@ -9,6 +9,7 @@ type sodorCache struct {
 	thomasInfos          *sodor.ThomasInfos
 	alertPluginInstances *sodor.AlertPluginInstances
 	alertGroups          *sodor.AlertGroups
+	jobs                 *sodor.Jobs
 }
 
 var (
@@ -48,6 +49,9 @@ func (s *sodorCache) LoadAlertPluginInstances() error {
 }
 
 func (s *sodorCache) GetAlertPluginInstances(pluginID ...int32) *sodor.AlertPluginInstances {
+	if s.alertPluginInstances == nil {
+		return nil
+	}
 	if len(pluginID) == 0 {
 		return s.alertPluginInstances
 	}
@@ -78,4 +82,18 @@ func (s *sodorCache) LoadAlertGroups() error {
 
 func (s *sodorCache) GetAlertGroups() *sodor.AlertGroups {
 	return s.alertGroups
+}
+
+func (s *sodorCache) LoadJobs() error {
+	resp := sodor.Jobs{}
+	err := GetSodorClient().Call(ListJobs, nil, &resp)
+	if err != nil {
+		return err
+	}
+	s.jobs = &resp
+	return nil
+}
+
+func (s *sodorCache) GetJobs() *sodor.Jobs {
+	return s.jobs
 }

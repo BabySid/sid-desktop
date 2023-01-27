@@ -160,6 +160,7 @@ const (
 	AppSodorJobInfoJobAlertGroup             = "AlertGroup"
 	AppSodorJobInfoTaskTitle                 = "Task"
 	AppSodorJobInfoAddTask                   = "Add Task"
+	AppSodorJobInfoNewTaskFormat             = "NewTask_%s"
 	AppSodorTaskListOp1                      = "Del"
 	AppSodorJobInfoTaskID                    = "ID"
 	AppSodorJobInfoTaskName                  = "Name"

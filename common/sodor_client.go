@@ -144,7 +144,7 @@ func (c *sodorClient) registerMethod() {
 		respType: reflect.TypeOf(&sodor.Job{}),
 	}
 	c.methods[SelectJobInstances] = parameterType{
-		method:   ns + "SelectJob",
+		method:   ns + "SelectJobInstances",
 		reqType:  reflect.TypeOf(&sodor.JobInstance{}),
 		respType: reflect.TypeOf(&sodor.JobTaskInstances{}),
 	}
