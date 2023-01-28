@@ -169,8 +169,9 @@ const (
 	AppSodorJobInfoTaskContent               = "Content"
 	AppSodorJobInfoRelationTitle             = "Task Relation"
 	AppSodorJobInfoAddTaskRelation           = "Add Relation"
+	AppSodorJobInfoTaskRelationFrom          = "From"
+	AppSodorJobInfoTaskRelationTo            = "To"
 	AppSodorRelationItemOp1                  = "Del"
-	AppSodorRelationItemDirection            = " => "
 	AppSodorJobInfoJobInstance               = "Job Instance"
 	AppSodorJobInfoJobInstanceID             = "ID"
 	AppSodorJobInfoJobInstanceScheduleTime   = "Schedule Time"
@@ -222,6 +223,7 @@ const (
 
 	AppSodorAddAlertGroup              = "Add Alert Group"
 	AppSodorEditAlertGroup             = "Add Alert Group"
+	AppSodorAlertGroupNotExist         = "Alert Group Not Exist"
 	AppSodorEmptyAlertPluginInstance   = "Alert Plugin Instance is empty. Create plugin instance first."
 	AppSodorCreateAlertGroupID         = "ID"
 	AppSodorCreateAlertGroupName       = "Name"

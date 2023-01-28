@@ -51,6 +51,9 @@ func (s *sodorJobs) createJob() {
 	info := newSodorJobInfo(0)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
+	info.okHandle = func() {
+		s.docs.Remove(info.tabItem)
+	}
 	info.dismissHandle = func() {
 		s.docs.Remove(info.tabItem)
 	}
@@ -60,6 +63,9 @@ func (s *sodorJobs) editJob(id int32) {
 	info := newSodorJobInfo(id)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
+	info.okHandle = func() {
+		s.docs.Remove(info.tabItem)
+	}
 	info.dismissHandle = func() {
 		s.docs.Remove(info.tabItem)
 	}

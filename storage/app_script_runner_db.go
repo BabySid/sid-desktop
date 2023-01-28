@@ -93,7 +93,7 @@ func (db *AppScriptRunnerDB) LoadScriptFiles() (*common.ScriptFileList, error) {
 			files.Append(script)
 		}
 		return nil
-	}, "select id, name, cont, create_time, access_time from "+db.appScriptTbl+" order by access_time desc")
+	}, "select id, name, cont, create_time, access_time from "+db.appScriptTbl+" order by create_time desc")
 
 	return files, err
 }

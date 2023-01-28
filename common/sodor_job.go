@@ -43,3 +43,21 @@ func (s *JobsWrapper) AsInterfaceArray() []interface{} {
 	}
 	return rs
 }
+
+type JobTasksWrapper struct {
+	Tasks []*sodor.Task
+}
+
+func NewJobTasksWrapper(job *sodor.Job) *JobTasksWrapper {
+	return &JobTasksWrapper{
+		Tasks: job.Tasks,
+	}
+}
+
+func (s *JobTasksWrapper) AsInterfaceArray() []interface{} {
+	rs := make([]interface{}, len(s.Tasks), len(s.Tasks))
+	for i := range s.Tasks {
+		rs[i] = s.Tasks[i]
+	}
+	return rs
+}

@@ -38,6 +38,20 @@ func (s *sodorCache) GetThomasInfos() *sodor.ThomasInfos {
 	return s.thomasInfos
 }
 
+func (s *sodorCache) FindThomasInfo(ip string) *sodor.ThomasInfo {
+	if s.thomasInfos == nil {
+		return nil
+	}
+
+	for _, t := range s.thomasInfos.ThomasInfos {
+		if t.Host == ip {
+			return t
+		}
+	}
+
+	return nil
+}
+
 func (s *sodorCache) LoadAlertPluginInstances() error {
 	resp := sodor.AlertPluginInstances{}
 	err := GetSodorClient().Call(ListAlertPluginInstances, nil, &resp)
@@ -82,6 +96,33 @@ func (s *sodorCache) LoadAlertGroups() error {
 
 func (s *sodorCache) GetAlertGroups() *sodor.AlertGroups {
 	return s.alertGroups
+}
+
+func (s *sodorCache) FindAlertGroupByName(name string) *sodor.AlertGroup {
+	if s.alertGroups == nil {
+		return nil
+	}
+
+	for _, g := range s.alertGroups.AlertGroups {
+		if g.Name == name {
+			return g
+		}
+	}
+
+	return nil
+}
+
+func (s *sodorCache) FindAlertGroupByID(id int32) *sodor.AlertGroup {
+	if s.alertGroups == nil {
+		return nil
+	}
+	for _, g := range s.alertGroups.AlertGroups {
+		if g.Id == id {
+			return g
+		}
+	}
+
+	return nil
 }
 
 func (s *sodorCache) LoadJobs() error {
