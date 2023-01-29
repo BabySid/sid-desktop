@@ -235,7 +235,7 @@ func (s *sodorJobInfo) buildTasks() {
 	s.taskID = widget.NewLabel("")
 	s.taskName = widget.NewEntry()
 	s.taskName.Validator = validation.NewRegexp(`\S+`, theme.AppSodorJobInfoTaskName+" must not be empty")
-	s.taskName.OnChanged = func(_ string) {
+	s.taskName.OnChanged = func(name string) {
 		if s.curTask == nil {
 			return
 		}
@@ -246,6 +246,9 @@ func (s *sodorJobInfo) buildTasks() {
 			v, _ := s.taskListBinding.GetValue(i)
 			if v.(*sodor.Task) == s.curTask {
 				s.taskListBinding.SetValue(i, s.curTask)
+				// todo use bindString to listItem instead of refresh()
+				// refer: https://developer.fyne.io/binding/list
+				// but in fyne v2.3.0, there is a bug, window will crash when minimize https://github.com/fyne-io/fyne/issues/3611
 				s.tasks.Refresh()
 				break
 			}
@@ -368,27 +371,27 @@ func getDefaultCronSpec() []string {
 	}
 }
 
-func (s *sodorJobInfo) loadJob() error {
+func (s *sodorJobInfo) loadJob() {
 	if s.jID == 0 {
-		return nil
+		return
 	}
 	resp := sodor.Job{}
 	req := sodor.Job{Id: s.jID}
 	err := common.GetSodorClient().Call(common.SelectJob, &req, &resp)
 	if err != nil {
-		return err
+		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		return
 	}
 	s.jobObj = &resp
 
 	s.resetUIWithJob()
-	return nil
 }
 
 func (s *sodorJobInfo) resetUIWithJob() {
 	// job brief
 	s.jobID.SetText(fmt.Sprintf("%d", s.jobObj.Id))
 	s.jobName.SetText(s.jobObj.Name)
-	group := common.GetSodorCache().FindAlertGroupByID(s.jobObj.Id)
+	group := common.GetSodorCache().FindAlertGroupByID(s.jobObj.AlertGroupId)
 	if group != nil {
 		s.alertGroup.SetSelected(fmt.Sprintf("%d:%s", group.Id, group.Name))
 	}
@@ -412,6 +415,9 @@ func (s *sodorJobInfo) resetUIWithJob() {
 }
 
 func (s *sodorJobInfo) saveCurTask() {
+	if s.curTask == nil {
+		return
+	}
 	s.curTask.Name = s.taskName.Text
 
 	s.curTask.RunningHosts = make([]*sodor.Host, 0)
@@ -475,7 +481,7 @@ func (s *sodorJobInfo) setRunningHostContentSize(opts []string) fyne.Size {
 		size = 3
 	}
 
-	return fyne.NewSize(200, common.GetItemsHeightInCheck(size))
+	return fyne.NewSize(100, common.GetItemsHeightInCheck(size))
 }
 
 func (s *sodorJobInfo) setAlertGroupOpts() {
@@ -491,10 +497,30 @@ func (s *sodorJobInfo) setAlertGroupOpts() {
 }
 
 func (s *sodorJobInfo) submitHandle() error {
-	// check job
-	// check tasks
-	// check relation
 	s.saveCurTask()
+
+	// check job
+	if err := s.jobName.Validate(); err != nil {
+		return err
+	}
+
+	// check tasks
+	if s.taskListBinding.Length() == 0 {
+		return errors.New(fmt.Sprintf("%s", theme.AppSodorJobTasksIsRequired))
+	}
+
+	for i := 0; i < s.taskListBinding.Length(); i++ {
+		obj, _ := s.taskListBinding.GetValue(i)
+		t := obj.(*sodor.Task)
+		if t.Name == "" || t.Content == "" {
+			return errors.New(fmt.Sprintf(theme.AppSodorJobTaskFieldRequiredFormat, i))
+		}
+	}
+
+	// check relations
+	if s.taskListBinding.Length() > 1 && len(s.relationData) == 0 {
+		return errors.New(fmt.Sprintf("%s", theme.AppSodorJobRelationsIsRequired))
+	}
 
 	req := sodor.Job{}
 	if s.jobObj != nil {
@@ -520,12 +546,14 @@ func (s *sodorJobInfo) submitHandle() error {
 		req.RoutineSpec = &sodor.RoutineSpec{CtSpec: s.cronSpec.Selected}
 	}
 
+	// tasks
 	req.Tasks = make([]*sodor.Task, s.taskListBinding.Length())
 	for i := 0; i < s.taskListBinding.Length(); i++ {
 		obj, _ := s.taskListBinding.GetValue(i)
 		req.Tasks[i] = obj.(*sodor.Task)
 	}
 
+	// relations
 	req.Relations = make([]*sodor.TaskRelation, len(s.relationData))
 	for i, rel := range s.relationData {
 		req.Relations[i] = &sodor.TaskRelation{
@@ -533,13 +561,11 @@ func (s *sodorJobInfo) submitHandle() error {
 			ToTask:   rel.to.Selected,
 		}
 	}
-
-	return nil
-	// resp := sodor.JobReply{}
-	//if s.jobObj != nil {
-	//	return common.GetSodorClient().Call(common.UpdateJob, &req, &resp)
-	//}
-	//return common.GetSodorClient().Call(common.CreateJob, &req, &resp)
+	resp := sodor.JobReply{}
+	if s.jobObj != nil {
+		return common.GetSodorClient().Call(common.UpdateJob, &req, &resp)
+	}
+	return common.GetSodorClient().Call(common.CreateJob, &req, &resp)
 }
 
 type taskNameListener struct {

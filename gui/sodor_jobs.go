@@ -4,6 +4,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
+	"github.com/BabySid/proto/sodor"
 	"sid-desktop/theme"
 )
 
@@ -27,7 +28,7 @@ func (s *sodorJobs) CreateView() fyne.CanvasObject {
 	s.jobList.viewInstanceHandle = s.viewJobInstance
 
 	s.docs = container.NewDocTabs()
-	s.docs.Append(s.jobList.GetTabItem())
+	s.docs.Append(s.jobList.tabItem)
 	s.docs.SetTabLocation(container.TabLocationTop)
 	s.docs.CloseIntercept = func(item *container.TabItem) {
 		if item.Text != theme.AppSodorJobListName {
@@ -52,6 +53,7 @@ func (s *sodorJobs) createJob() {
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
 	info.okHandle = func() {
+		s.jobList.loadJobList()
 		s.docs.Remove(info.tabItem)
 	}
 	info.dismissHandle = func() {
@@ -71,15 +73,15 @@ func (s *sodorJobs) editJob(id int32) {
 	}
 }
 
-func (s *sodorJobs) viewJobInstance(id int32) {
-	info := newSodorJobInstance(id)
+func (s *sodorJobs) viewJobInstance(job *sodor.Job) {
+	info := newSodorJobInstance(job)
 	info.viewTaskInstanceHandle = s.viewTaskInstance
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
 }
 
-func (s *sodorJobs) viewTaskInstance(job int32) {
-	info := newSodorJobTaskInstance(job)
+func (s *sodorJobs) viewTaskInstance(param taskInstanceParam) {
+	info := newSodorJobTaskInstance(param)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
 }

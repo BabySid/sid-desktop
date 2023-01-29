@@ -38,8 +38,8 @@ func (s *JobsWrapper) Len() int {
 
 func (s *JobsWrapper) AsInterfaceArray() []interface{} {
 	rs := make([]interface{}, len(s.Jobs.Jobs), len(s.Jobs.Jobs))
-	for i := range s.Jobs.Jobs {
-		rs[len(s.Jobs.Jobs)-1-i] = s.Jobs.Jobs[i]
+	for i, job := range s.Jobs.Jobs {
+		rs[len(s.Jobs.Jobs)-1-i] = job
 	}
 	return rs
 }
@@ -56,8 +56,51 @@ func NewJobTasksWrapper(job *sodor.Job) *JobTasksWrapper {
 
 func (s *JobTasksWrapper) AsInterfaceArray() []interface{} {
 	rs := make([]interface{}, len(s.Tasks), len(s.Tasks))
-	for i := range s.Tasks {
-		rs[i] = s.Tasks[i]
+	for i, task := range s.Tasks {
+		rs[i] = task
 	}
+	return rs
+}
+
+type JobInstanceWrapper struct {
+	JobInstances *sodor.JobInstances
+}
+
+func NewJobInstanceWrapper(ins *sodor.JobInstances) *JobInstanceWrapper {
+	return &JobInstanceWrapper{
+		JobInstances: ins,
+	}
+}
+
+func (s *JobInstanceWrapper) AsInterfaceArray() []interface{} {
+	rs := make([]interface{}, len(s.JobInstances.JobInstances), len(s.JobInstances.JobInstances))
+	for i, ins := range s.JobInstances.JobInstances {
+		rs[len(s.JobInstances.JobInstances)-1-i] = ins
+	}
+	return rs
+}
+
+type TaskInstanceWrapper struct {
+	TaskInstances *sodor.TaskInstances
+}
+
+func NewTaskInstanceWrapper(ins *sodor.TaskInstances) *TaskInstanceWrapper {
+	return &TaskInstanceWrapper{
+		TaskInstances: ins,
+	}
+}
+
+func (s *TaskInstanceWrapper) AsInterfaceArray(taskIDs ...int32) []interface{} {
+	rs := make([]interface{}, 0, len(s.TaskInstances.TaskInstances))
+
+	for i := len(s.TaskInstances.TaskInstances) - 1; i >= 0; i-- {
+		for _, id := range taskIDs {
+			if s.TaskInstances.TaskInstances[i].TaskId == id {
+				rs = append(rs, s.TaskInstances.TaskInstances[i])
+				break
+			}
+		}
+	}
+
 	return rs
 }

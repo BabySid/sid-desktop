@@ -28,7 +28,7 @@ type sodorJobList struct {
 
 	createJobHandle    func()
 	editJobHandle      func(jobID int32)
-	viewInstanceHandle func(jobID int32)
+	viewInstanceHandle func(job *sodor.Job)
 }
 
 func newSodorJobList() *sodorJobList {
@@ -58,14 +58,6 @@ func newSodorJobList() *sodorJobList {
 
 	go s.loadJobList()
 	return &s
-}
-
-func (s *sodorJobList) GetText() string {
-	return s.tabItem.Text
-}
-
-func (s *sodorJobList) GetTabItem() *container.TabItem {
-	return s.tabItem
 }
 
 func (s *sodorJobList) createJobList() {
@@ -115,7 +107,7 @@ func (s *sodorJobList) createJobList() {
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorJobListOp2)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
 				if s.viewInstanceHandle != nil {
-					s.viewInstanceHandle(job.Id)
+					s.viewInstanceHandle(job)
 				}
 			}
 

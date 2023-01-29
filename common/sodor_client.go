@@ -60,6 +60,7 @@ const (
 	RunJob
 	SelectJob
 	SelectJobInstances
+	SelectTaskInstances
 	ShowAlertPluginInstanceHistories
 	ShowThomas
 	UpdateAlertGroup
@@ -146,7 +147,12 @@ func (c *sodorClient) registerMethod() {
 	c.methods[SelectJobInstances] = parameterType{
 		method:   ns + "SelectJobInstances",
 		reqType:  reflect.TypeOf(&sodor.JobInstance{}),
-		respType: reflect.TypeOf(&sodor.JobTaskInstances{}),
+		respType: reflect.TypeOf(&sodor.JobInstances{}),
+	}
+	c.methods[SelectTaskInstances] = parameterType{
+		method:   ns + "SelectTaskInstances",
+		reqType:  reflect.TypeOf(&sodor.TaskInstance{}),
+		respType: reflect.TypeOf(&sodor.TaskInstances{}),
 	}
 	c.methods[ShowAlertPluginInstanceHistories] = parameterType{
 		method:   ns + "ShowAlertPluginInstanceHistories",
