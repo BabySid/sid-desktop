@@ -11,6 +11,7 @@ import (
 	"github.com/BabySid/proto/sodor"
 	"sid-desktop/common"
 	"sid-desktop/theme"
+	sw "sid-desktop/widget"
 	"strings"
 	"sync"
 )
@@ -20,7 +21,7 @@ type sodorThomasInstance struct {
 
 	tabItem *container.TabItem
 
-	refresh *widget.Button
+	refresh *sw.RefreshButton
 	metrics *widget.Button
 
 	thomasCard          *widget.Card
@@ -50,7 +51,7 @@ func newSodorThomasInstance(id int32) *sodorThomasInstance {
 	ins := sodorThomasInstance{}
 	ins.tid = id
 
-	ins.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+	ins.refresh = sw.NewRefreshButton(nil, func() {
 		ins.loadThomasInstance()
 	})
 	ins.metrics = widget.NewButton(theme.AppPageMetrics, func() {
@@ -63,7 +64,7 @@ func newSodorThomasInstance(id int32) *sodorThomasInstance {
 	ins.tabItem = container.NewTabItem(theme.AppSodorThomasInfo, nil)
 	ins.tabItem.Content = container.NewBorder(
 		container.NewBorder(
-			container.NewHBox(layout.NewSpacer(), ins.refresh, ins.metrics),
+			container.NewHBox(layout.NewSpacer(), ins.refresh.Content, ins.metrics),
 			nil, nil, nil,
 			ins.thomasCard),
 		nil, nil, nil,

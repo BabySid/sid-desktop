@@ -13,8 +13,9 @@ const (
 
 	CannotCloseTitle = "Cannot Close"
 
-	AppPageRefresh = "Refresh"
-	AppPageMetrics = "Metrics"
+	AppPageRefresh     = "Refresh"
+	AppPageAutoRefresh = "Auto"
+	AppPageMetrics     = "Metrics"
 
 	WebPageProcessErrorFormat = "process webpage failed. %v"
 	NetWorkErrorFormat        = "network error. %v"

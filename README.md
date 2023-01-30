@@ -76,3 +76,6 @@ Then you can find the binary in the directory `output`
 - tooltip for entry
 - init db on splash before main window is shown
 - IO asynchronization via channel
+- metrics for sodor
+  - gauge for thomas instance which is range from [0, 100]
+  - line(smooth) for task instance which is number
