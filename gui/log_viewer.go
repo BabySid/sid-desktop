@@ -4,15 +4,16 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"sid-desktop/common"
 	sidTheme "sid-desktop/theme"
+	sw "sid-desktop/widget"
 	"strings"
 )
 
 type logViewer struct {
 	logArea *widget.Entry
-	refresh *widget.Button
+	refresh *sw.RefreshButton
 
 	Win fyne.Window
 }
@@ -25,13 +26,11 @@ func newLogViewer() *logViewer {
 
 	go lv.initLogContent()
 
-	lv.refresh = widget.NewButtonWithIcon(sidTheme.LogViewerRefreshBtn, theme.ViewRefreshIcon(), func() {
-		lv.initLogContent()
-	})
+	lv.refresh = sw.NewRefreshButton(common.GetConfig().LogRefreshSpec, lv.initLogContent)
 
 	lv.Win = fyne.CurrentApp().NewWindow(sidTheme.LogViewerTitle)
 	lv.Win.SetContent(container.NewBorder(
-		container.NewHBox(layout.NewSpacer(), lv.refresh), nil, nil, nil,
+		container.NewHBox(layout.NewSpacer(), lv.refresh.Content), nil, nil, nil,
 		lv.logArea))
 	lv.Win.Resize(fyne.NewSize(800, 600))
 	lv.Win.CenterOnScreen()

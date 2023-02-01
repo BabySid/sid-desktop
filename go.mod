@@ -7,13 +7,14 @@ replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7
 require (
 	fyne.io/fyne/v2 v2.3.0
 	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1
-	fyne.io/x/fyne v0.0.0-20230128220048-43a1c4cd1ed8
 	github.com/BabySid/gobase v0.0.0-20230130105149-04b7712da556
 	github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82
 	github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
+	github.com/gin-gonic/gin v1.8.1
 	github.com/go-cmd/cmd v1.4.0
+	github.com/go-echarts/go-echarts/v2 v2.2.4
 	github.com/jchv/go-webview-selector v0.0.0-20220126075917-13df59bce3cf
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/mitchellh/go-wordwrap v1.0.1
@@ -40,7 +41,6 @@ require (
 	github.com/fyne-io/glfw-js v0.0.0-20220120001248-ee7290d23504 // indirect
 	github.com/fyne-io/image v0.0.0-20220602074514-4956b0afb3d2 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.8.1 // indirect
 	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect

@@ -12,6 +12,7 @@ import (
 	"image/color"
 	"sid-desktop/common"
 	"sid-desktop/theme"
+	sw "sid-desktop/widget"
 	"strings"
 )
 
@@ -19,7 +20,8 @@ type sodorThomasList struct {
 	tabItem *container.TabItem
 
 	searchEntry *widget.Entry
-	refresh     *widget.Button
+	refresh     *sw.RefreshButton
+	metrics     *widget.Button
 	newThomas   *widget.Button
 
 	thomasHeader      fyne.CanvasObject
@@ -38,8 +40,9 @@ func newSodorThomasList() *sodorThomasList {
 	s.searchEntry.SetPlaceHolder(theme.AppSodorThomasSearchText)
 	s.searchEntry.OnChanged = s.searchThomas
 
-	s.refresh = widget.NewButton(theme.AppPageRefresh, func() {
-		s.loadThomasList()
+	s.refresh = sw.NewRefreshButton(common.GetConfig().SodorThomasRefreshSpec, s.loadThomasList)
+	s.metrics = widget.NewButtonWithIcon(theme.AppPageMetrics, theme.ResourceMetricsIcon, func() {
+
 	})
 	s.newThomas = widget.NewButtonWithIcon(theme.AppSodorAddThomas, theme.ResourceAddIcon, func() {
 		s.addThomas()
@@ -50,7 +53,7 @@ func newSodorThomasList() *sodorThomasList {
 
 	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorThomsTabName, theme.ResourceTrainIcon, nil)
 	s.tabItem.Content = container.NewBorder(
-		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.refresh, s.newThomas)),
+		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.refresh.Content, s.metrics, s.newThomas)),
 		nil, nil, nil,
 		container.NewBorder(s.thomasHeader, nil, nil, nil, s.thomasContentList))
 

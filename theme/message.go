@@ -14,7 +14,7 @@ const (
 	CannotCloseTitle = "Cannot Close"
 
 	AppPageRefresh     = "Refresh"
-	AppPageAutoRefresh = "Auto"
+	AppPageAutoRefresh = "AutoRefresh"
 	AppPageMetrics     = "Metrics"
 
 	WebPageProcessErrorFormat = "process webpage failed. %v"
@@ -152,7 +152,7 @@ const (
 	AppSodorJobListHeader3                   = "CreateTime"
 	AppSodorJobListHeader4                   = "UpdateTime"
 	AppSodorJobListOp1                       = "Edit"
-	AppSodorJobListOp2                       = "View Instance"
+	AppSodorJobListOp2                       = "Instance"
 	AppSodorJobListOp3                       = "Del"
 	AppSodorJobInfoTitle                     = "Job"
 	AppSodorJobInfoJobID                     = "ID"
@@ -199,6 +199,7 @@ const (
 	AppSodorJobInfoTaskInstanceListOp1       = "Detail"
 
 	AppSodorThomasListName               = "Thomas List"
+	AppSodorNoThomasListFound            = "No ThomasList Found"
 	AppSodorThomasSearchText             = "Type the name of thomas"
 	AppSodorAddThomas                    = "Add Thomas"
 	AppSodorEditThomas                   = "Edit Thomas"
@@ -216,7 +217,7 @@ const (
 	AppSodorThomasInfoStartTime          = "Start Time"
 	AppSodorThomasInfoHeartBeatTime      = "Heart Beat Time"
 	AppSodorThomasInfoType               = "Type"
-	AppSodorThomasListOp1                = "View Instance"
+	AppSodorThomasListOp1                = "Instance"
 	AppSodorThomasListOp2                = "Edit"
 	AppSodorThomasListOp3                = "Del"
 	AppSodorThomasAddThomasExpand        = "Expand"
@@ -242,7 +243,6 @@ const (
 
 	AppSodorAddAlertGroupHistory            = "Alert Group History"
 	AppSodorCreateAlertGroupPluginID        = "Plugin Instance ID"
-	AppSodorCreateAlertGroupPluginName      = "Plugin Instance Name"
 	AppSodorCreateAlertGroupAlertMsg        = "Alert Message"
 	AppSodorCreateAlertGroupStatusMsg       = "Status"
 	AppSodorCreateAlertGroupAlertCreateTime = "CreateTime"
@@ -256,7 +256,6 @@ const (
 	AppSodorCreateAlertPluginInstanceUpdateTime = "UpdateTime"
 	AppSodorCreateAlertPluginOp1                = "Edit"
 	AppSodorCreateAlertPluginOp2                = "Del"
-	AppSodorCreateAlertPluginDingDing           = "DingDing"
 	AppSodorCreateAlertPluginDingDingWebHook    = "WebHook"
 	AppSodorCreateAlertPluginDingDingSign       = "Sign"
 	AppSodorCreateAlertPluginDingDingAtMobiles  = "AtMobiles"

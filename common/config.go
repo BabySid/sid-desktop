@@ -6,18 +6,38 @@ import (
 	"reflect"
 	"sid-desktop/common/apps"
 	"strings"
+	"sync"
 )
 
-type Config struct {
+type config struct {
 	Theme binding.String
 
 	AppLaunchAppSearchPath binding.StringList
 
 	HideWhenQuit binding.Bool
+
+	SodorThomasRefreshInterval int
+	SodorThomasRefreshSpec     string
+	SodorJobRefreshInterval    int
+	SodorJobRefreshSpec        string
+
+	LogRefreshSpec string
 }
 
-func NewConfig() *Config {
-	c := &Config{
+var (
+	configHandle *config
+	configOnce   sync.Once
+)
+
+func GetConfig() *config {
+	configOnce.Do(func() {
+		configHandle = newConfig()
+	})
+	return configHandle
+}
+
+func newConfig() *config {
+	c := &config{
 		Theme:                  binding.NewString(),
 		AppLaunchAppSearchPath: binding.NewStringList(),
 		HideWhenQuit:           binding.NewBool(),
@@ -40,13 +60,23 @@ func NewConfig() *Config {
 	s := reflect.ValueOf(c).Elem()
 	for i := 0; i < s.NumField(); i++ {
 		f := s.Field(i)
-		f.MethodByName("AddListener").Call(in)
+		method := f.MethodByName("AddListener")
+		if method.Kind() == reflect.Func {
+			method.Call(in)
+		}
 	}
+
+	c.SodorThomasRefreshInterval = 30000
+	c.SodorThomasRefreshSpec = "*/30 * * * * *"
+	c.SodorJobRefreshInterval = 60000
+	c.SodorJobRefreshSpec = "0 */1 * * * *"
+
+	c.LogRefreshSpec = "*/10 * * * * *"
 
 	return c
 }
 
-func (c *Config) DataChanged() {
+func (c *config) DataChanged() {
 	// todo flush with field tag instead of the first param
 	theme, _ := c.Theme.Get()
 	fyne.CurrentApp().Preferences().SetString("theme", theme)

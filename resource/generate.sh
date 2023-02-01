@@ -55,4 +55,7 @@ ${fyne} bundle -pkg theme -name ResourceAlertIcon -a -o ../theme/icons.go alert.
 ${fyne} bundle -pkg theme -name ResourceNoticeIcon -a -o ../theme/icons.go notice.png
 ${fyne} bundle -pkg theme -name ResourceInstanceIcon -a -o ../theme/icons.go instance.png
 
+${fyne} bundle -pkg theme -name ResourceRefreshIcon -a -o ../theme/icons.go refresh.png
+${fyne} bundle -pkg theme -name ResourceMetricsIcon -a -o ../theme/icons.go metrics.png
+
 # use https://github.com/lusingander/fyne-theme-generator to generate theme file

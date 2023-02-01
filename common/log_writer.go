@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"github.com/BabySid/gobase"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -70,7 +69,7 @@ func (lw *LogWriter) flush() error {
 		return nil
 	})
 
-	return ioutil.WriteFile(lw.getLogFileName(), []byte(contStr), 0666)
+	return os.WriteFile(lw.getLogFileName(), []byte(contStr), 0666)
 }
 
 func (lw *LogWriter) Write(p []byte) (int, error) {

@@ -10,8 +10,8 @@ import (
 )
 
 type RefreshButton struct {
-	refreshBtn *widget.Button
-	refreshSel *widget.Select
+	refreshBtn  *widget.Button
+	autoRefresh *widget.Check
 
 	Content fyne.CanvasObject
 
@@ -20,56 +20,35 @@ type RefreshButton struct {
 	OnRefresh   func()
 }
 
-func NewRefreshButton(icon fyne.Resource, tapped func()) *RefreshButton {
+func NewRefreshButton(spec string, tapped func()) *RefreshButton {
 	btn := RefreshButton{}
 
 	btn.OnRefresh = tapped
-	if icon == nil {
-		btn.refreshBtn = widget.NewButton(theme.AppPageRefresh, btn.OnRefresh)
-	} else {
-		btn.refreshBtn = widget.NewButtonWithIcon(theme.AppPageRefresh, icon, btn.OnRefresh)
-	}
+	btn.refreshBtn = widget.NewButtonWithIcon(theme.AppPageRefresh, theme.ResourceRefreshIcon, btn.OnRefresh)
 
 	btn.routineName = fmt.Sprintf(refreshButtonRoutine, &btn)
 
-	btn.refreshSel = widget.NewSelect(btn.getCheckInterval(), func(s string) {
+	btn.autoRefresh = widget.NewCheck(theme.AppPageAutoRefresh, func(b bool) {
 		if btn.running {
 			gobase.GlobalScheduler.DelJob(btn.routineName)
 		}
 
-		if s == disableAuto {
+		if !b {
 			btn.running = false
 			return
 		}
 
 		btn.running = true
-		gobase.GlobalScheduler.AddJob(btn.routineName, checkIntervalToCronSpec[s], &btn)
+		gobase.GlobalScheduler.AddJob(btn.routineName, spec, &btn)
 	})
-	btn.refreshSel.PlaceHolder = disableAuto
-	btn.refreshSel.SetSelectedIndex(0)
+	btn.autoRefresh.SetChecked(false)
 
-	btn.Content = container.NewHBox(btn.refreshBtn, btn.refreshSel)
+	btn.Content = container.NewHBox(btn.refreshBtn, btn.autoRefresh)
 
 	return &btn
 }
 
-const disableAuto = "--NotAutoRefresh--"
 const refreshButtonRoutine = "refresh_button_routine_%p"
-
-var checkIntervalToCronSpec = map[string]string{
-	"30s": "*/30 * * * * *",
-	"1m":  "0 */1 * * * *",
-	"5m":  "0 */5 * * * *",
-}
-
-func (rb *RefreshButton) getCheckInterval() []string {
-	return []string{
-		disableAuto,
-		"30s",
-		"1m",
-		"5m",
-	}
-}
 
 func (rb *RefreshButton) Run() {
 	if rb.OnRefresh != nil {

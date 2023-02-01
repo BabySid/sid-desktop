@@ -61,7 +61,7 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 	fileFilter := widget.NewLabel("*.lnk;*.exe")
 	top := container.NewHBox(widget.NewLabel(sidTheme.AppLauncherConfigFileFilter), fileFilter, layout.NewSpacer(), addFolder)
 
-	common.CopyBindingStringList(alc.pathBinding, globalConfig.AppLaunchAppSearchPath)
+	common.CopyBindingStringList(alc.pathBinding, common.GetConfig().AppLaunchAppSearchPath)
 
 	pathCont := widget.NewListWithData(
 		alc.pathBinding,
@@ -96,7 +96,7 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 				alc.ok.Enable()
 				alc.dismiss.Enable()
 			}()
-			common.CopyBindingStringList(globalConfig.AppLaunchAppSearchPath, alc.pathBinding)
+			common.CopyBindingStringList(common.GetConfig().AppLaunchAppSearchPath, alc.pathBinding)
 
 			time.Sleep(200 * time.Millisecond)
 			err := storage.GetAppLauncherDB().Init()
@@ -107,7 +107,7 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 			alc.indexBuildLabel.SetText(sidTheme.AppLauncherConfigStartScanApp)
 			time.Sleep(200 * time.Millisecond)
 
-			path, _ := globalConfig.AppLaunchAppSearchPath.Get()
+			path, _ := common.GetConfig().AppLaunchAppSearchPath.Get()
 			appFound, err := apps.InitApps(path)
 			if err != nil {
 				printErr(fmt.Errorf(sidTheme.RunAppIndexFailedFormat, err))

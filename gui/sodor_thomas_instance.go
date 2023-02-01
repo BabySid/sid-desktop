@@ -51,9 +51,7 @@ func newSodorThomasInstance(id int32) *sodorThomasInstance {
 	ins := sodorThomasInstance{}
 	ins.tid = id
 
-	ins.refresh = sw.NewRefreshButton(nil, func() {
-		ins.loadThomasInstance()
-	})
+	ins.refresh = sw.NewRefreshButton("*/30 * * * * *", ins.loadThomasInstance)
 	ins.metrics = widget.NewButton(theme.AppPageMetrics, func() {
 
 	})

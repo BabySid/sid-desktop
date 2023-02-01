@@ -32,7 +32,7 @@ func init() {
 	// set env to support chinese
 	//_ = os.Setenv("FYNE_FONT", "./resource/Microsoft-YaHei.ttf")
 	//_ = os.Setenv("FYNE_FONT_MONOSPACE", "./resource/Microsoft-YaHei.ttf")
-	_ = os.Setenv("FYNE_SCALE", "0.8")
+	// _ = os.Setenv("FYNE_SCALE", "0.8")
 }
 
 //func setAPPID() {
@@ -51,7 +51,6 @@ func init() {
 
 var (
 	globalWin       *MainWin
-	globalConfig    *common.Config
 	globalLogWriter *common.LogWriter
 
 	tray *sysTray
@@ -61,22 +60,22 @@ func NewMainWin() *MainWin {
 	gobase.NewScheduler().Start()
 	gobase.RegisterAtExit(gobase.GlobalScheduler.Stop)
 
-	//_ = sidTheme.InitSettings()
-
 	var mw MainWin
 	mw.app = app.NewWithID(theme.AppTitle) // Must Set First
 	mw.app.SetIcon(theme.ResourceAppIcon)
 
-	globalWin = &mw
-	globalConfig = common.NewConfig()
+	mw.win = mw.app.NewWindow(theme.AppTitle)
+	mw.win.SetPadded(false)
 
-	// Status Bar
-	mw.sb = newStatusBar()
+	globalWin = &mw
 
 	globalLogWriter = common.NewLogWriter(common.LogWriterOption{
 		CacheCapacity: 256,
 		LogPath:       mw.app.Storage().RootURI().Path(),
 		OnMessage: func(s string) {
+			if mw.sb == nil {
+				return
+			}
 			mw.sb.setMessage(s)
 		},
 	})
@@ -84,10 +83,7 @@ func NewMainWin() *MainWin {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.SetOutput(globalLogWriter)
 
-	mw.win = mw.app.NewWindow(theme.AppTitle)
-	mw.win.SetPadded(false)
-
-	preTheme, _ := globalConfig.Theme.Get()
+	preTheme, _ := common.GetConfig().Theme.Get()
 	switch preTheme {
 	case "__DARK__":
 		mw.app.Settings().SetTheme(theme.DarkTheme)
@@ -109,6 +105,9 @@ func NewMainWin() *MainWin {
 
 	// Main App Tabs
 	mw.at = newAppContainer()
+
+	// Status Bar
+	mw.sb = newStatusBar()
 
 	content := container.NewBorder(mw.tb.toolbar, mw.sb.widget, nil, mw.toys.widget, mw.at)
 	mw.win.SetContent(content)
@@ -153,7 +152,7 @@ func (mw *MainWin) Run() {
 }
 
 func (mw *MainWin) quitHandle() {
-	hide, _ := globalConfig.HideWhenQuit.Get()
+	hide, _ := common.GetConfig().HideWhenQuit.Get()
 	if hide {
 		mw.hideWin()
 		return

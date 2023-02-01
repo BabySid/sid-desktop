@@ -3,6 +3,7 @@ package gui
 import (
 	"fmt"
 	"fyne.io/fyne/v2"
+	"sid-desktop/common"
 	"sid-desktop/theme"
 )
 
@@ -54,7 +55,7 @@ func newMainMenu() *mainMenu {
 		globalWin.app.Settings().SetTheme(theme.DarkTheme)
 		mm.themeDark.Checked = true
 		mm.themeLight.Checked = false
-		_ = globalConfig.Theme.Set("__DARK__")
+		_ = common.GetConfig().Theme.Set("__DARK__")
 		mm.Refresh()
 	})
 	mm.themeDark.Checked = true
@@ -62,11 +63,11 @@ func newMainMenu() *mainMenu {
 		globalWin.app.Settings().SetTheme(theme.LightTheme)
 		mm.themeDark.Checked = false
 		mm.themeLight.Checked = true
-		_ = globalConfig.Theme.Set("__LIGHT__")
+		_ = common.GetConfig().Theme.Set("__LIGHT__")
 		mm.Refresh()
 	})
 	mm.themeLight.Checked = true
-	t, _ := globalConfig.Theme.Get()
+	t, _ := common.GetConfig().Theme.Get()
 	if t == "__DARK__" {
 		mm.themeLight.Checked = false
 	} else {
@@ -101,17 +102,17 @@ func newMainMenu() *mainMenu {
 	mm.hideWhenQuit = fyne.NewMenuItem(theme.MenuOptHideWhenQuit, nil)
 	mm.hideWhenQuit.Checked = true
 	mm.hideWhenQuit.Action = func() {
-		hide, _ := globalConfig.HideWhenQuit.Get()
+		hide, _ := common.GetConfig().HideWhenQuit.Get()
 		if hide {
 			mm.hideWhenQuit.Checked = false
-			_ = globalConfig.HideWhenQuit.Set(false)
+			_ = common.GetConfig().HideWhenQuit.Set(false)
 		} else {
 			mm.hideWhenQuit.Checked = true
-			_ = globalConfig.HideWhenQuit.Set(true)
+			_ = common.GetConfig().HideWhenQuit.Set(true)
 		}
 		mm.Refresh()
 	}
-	hide, _ := globalConfig.HideWhenQuit.Get()
+	hide, _ := common.GetConfig().HideWhenQuit.Get()
 	if !hide {
 		mm.hideWhenQuit.Checked = false
 	}
