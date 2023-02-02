@@ -44,7 +44,7 @@ func (as *appSodor) LazyInit() error {
 	tabs := container.NewAppTabs()
 
 	registerAppTabs(tabs, theme.AppSodorJobTabName, theme.ResourceJobsIcon, &sodorJobs{})
-	registerAppTabs(tabs, theme.AppSodorThomsTabName, theme.ResourceTrainIcon, &sodorThomas{})
+	registerAppTabs(tabs, theme.AppSodorThomasTabName, theme.ResourceTrainIcon, &sodorThomas{})
 	registerAppTabs(tabs, theme.AppSodorAlertGroupTabName, theme.ResourceNoticeIcon, &sodorAlertGroup{})
 	registerAppTabs(tabs, theme.AppSodorAlertPluginTabName, theme.ResourceAlertIcon, &sodorAlertPlugin{})
 	registerAppTabs(tabs, theme.AppSodorFatCtrlTabName, theme.ResourceFatCtrlIcon, &sodorFatController{})

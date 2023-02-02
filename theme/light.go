@@ -22,18 +22,18 @@ func (l lightTheme) Color(c fyne.ThemeColorName, v fyne.ThemeVariant) color.Colo
 
 func (lightTheme) Font(s fyne.TextStyle) fyne.Resource {
 	if s.Monospace {
-		return fontMicrosoftYaHeiTtf
+		return FontMicrosoftYaHeiTtf
 	}
 	if s.Bold {
 		if s.Italic {
-			return fontMicrosoftYaHeiTtf
+			return FontMicrosoftYaHeiTtf
 		}
-		return fontMicrosoftYaHeiTtf
+		return FontMicrosoftYaHeiTtf
 	}
 	if s.Italic {
-		return fontMicrosoftYaHeiTtf
+		return FontMicrosoftYaHeiTtf
 	}
-	return fontMicrosoftYaHeiTtf
+	return FontMicrosoftYaHeiTtf
 }
 
 func (l lightTheme) Icon(n fyne.ThemeIconName) fyne.Resource {

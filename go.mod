@@ -12,9 +12,7 @@ require (
 	github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
-	github.com/gin-gonic/gin v1.8.1
 	github.com/go-cmd/cmd v1.4.0
-	github.com/go-echarts/go-echarts/v2 v2.2.4
 	github.com/jchv/go-webview-selector v0.0.0-20220126075917-13df59bce3cf
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/mitchellh/go-wordwrap v1.0.1
@@ -22,6 +20,7 @@ require (
 	github.com/sahilm/fuzzy v0.1.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/tc-hib/winres v0.0.0-00010101000000-000000000000
+	github.com/vicanso/go-charts/v2 v2.5.7
 	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
 	golang.design/x/hotkey v0.3.0
 	gorm.io/driver/sqlite v1.4.4
@@ -35,12 +34,14 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/fredbi/uri v0.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/fyne-io/gl-js v0.0.0-20220119005834-d2da28d9ccfe // indirect
 	github.com/fyne-io/glfw-js v0.0.0-20220120001248-ee7290d23504 // indirect
 	github.com/fyne-io/image v0.0.0-20220602074514-4956b0afb3d2 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/gin-gonic/gin v1.8.1 // indirect
 	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
@@ -51,6 +52,7 @@ require (
 	github.com/goccy/go-json v0.9.7 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/goki/freetype v0.0.0-20220119013949-7a161fd3728c // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
@@ -93,11 +95,12 @@ require (
 	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	github.com/tklauser/numcpus v0.3.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
+	github.com/wcharczuk/go-chart/v2 v2.1.0 // indirect
 	github.com/webview/webview v0.0.0-20220314230258-a2b7746141c3 // indirect
 	github.com/yuin/goldmark v1.4.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
-	golang.org/x/image v0.0.0-20220601225756-64ec528b34cd // indirect
+	golang.org/x/image v0.0.0-20220902085622-e7cb96979f69 // indirect
 	golang.org/x/mobile v0.0.0-20211207041440-4e6c2922fdee // indirect
 	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect

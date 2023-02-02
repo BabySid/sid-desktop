@@ -42,7 +42,7 @@ func newSodorThomasList() *sodorThomasList {
 
 	s.refresh = sw.NewRefreshButton(common.GetConfig().SodorThomasRefreshSpec, s.loadThomasList)
 	s.metrics = widget.NewButtonWithIcon(theme.AppPageMetrics, theme.ResourceMetricsIcon, func() {
-
+		newMetrics(metricsKindSodorThomas, metricsParam{}).win.Show()
 	})
 	s.newThomas = widget.NewButtonWithIcon(theme.AppSodorAddThomas, theme.ResourceAddIcon, func() {
 		s.addThomas()
@@ -51,7 +51,7 @@ func newSodorThomasList() *sodorThomasList {
 	s.thomasListBinding = binding.NewUntypedList()
 	s.createThomasList()
 
-	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorThomsTabName, theme.ResourceTrainIcon, nil)
+	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorThomasTabName, theme.ResourceTrainIcon, nil)
 	s.tabItem.Content = container.NewBorder(
 		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.refresh.Content, s.metrics, s.newThomas)),
 		nil, nil, nil,

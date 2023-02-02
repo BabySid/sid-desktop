@@ -46,7 +46,7 @@ func newAppLauncherConfig(launcher *appLauncher) *appLauncherConfig {
 	alc.indexBuildLabel = widget.NewLabel("")
 	alc.indexBuildLabel.Hide()
 
-	alc.win = fyne.CurrentApp().NewWindow(sidTheme.AppLauncherConfigTitle)
+	alc.win = globalWin.app.NewWindow(sidTheme.AppLauncherConfigTitle)
 
 	alc.pathBinding = binding.NewStringList()
 	addFolder := widget.NewButtonWithIcon(sidTheme.AppLauncherConfigAddDirBtn, sidTheme.ResourceAddDirIcon, func() {

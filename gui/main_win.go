@@ -7,6 +7,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
 	"github.com/BabySid/gobase"
+	"github.com/vicanso/go-charts/v2"
 	"golang.design/x/hotkey"
 	"log"
 	"os"
@@ -33,6 +34,9 @@ func init() {
 	//_ = os.Setenv("FYNE_FONT", "./resource/Microsoft-YaHei.ttf")
 	//_ = os.Setenv("FYNE_FONT_MONOSPACE", "./resource/Microsoft-YaHei.ttf")
 	// _ = os.Setenv("FYNE_SCALE", "0.8")
+	_ = charts.InstallFont("yahei", theme.FontMicrosoftYaHeiTtf.StaticContent)
+	font, _ := charts.GetFont("yahei")
+	charts.SetDefaultFont(font)
 }
 
 //func setAPPID() {

@@ -199,7 +199,6 @@ const (
 	AppSodorJobInfoTaskInstanceListOp1       = "Detail"
 
 	AppSodorThomasListName               = "Thomas List"
-	AppSodorNoThomasListFound            = "No ThomasList Found"
 	AppSodorThomasSearchText             = "Type the name of thomas"
 	AppSodorAddThomas                    = "Add Thomas"
 	AppSodorEditThomas                   = "Edit Thomas"
@@ -270,13 +269,15 @@ const (
 	AppSodorJobListCannotCloseMsg        = "The job list can NOT be closed. :)"
 	AppSodorThomasListCannotCloseMsg     = "The thomas list can NOT be closed. :)"
 	AppSodorAlertGroupListCannotCloseMsg = "The alert group list can NOT be closed. :)"
-	AppSodorThomsTabName                 = "Thomas"
+	AppSodorThomasTabName                = "Thomas"
 	AppSodorFatCtrlTabName               = "Fat Controller"
 	AppSodorAlertGroupTabName            = "Alert Groups"
 	AppSodorAlertPluginTabName           = "Alert Plugins"
 
-	LogViewerRefreshBtn = "Refresh"
-	LogViewerTitle      = "Show Log"
+	AppSodorMetricsThomasInstanceFormat = AppSodorThomasTabName + " - %s"
+	AppSodorMetricsJobInstanceFormat    = AppSodorJobInfoTitle + " - %s"
+
+	LogViewerTitle = "Show Log"
 
 	AboutTitle = "About"
 	AboutIntro = `
