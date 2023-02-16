@@ -4,7 +4,8 @@ import (
 	"errors"
 	"github.com/BabySid/gobase"
 	"github.com/BabySid/gorpc"
-	"github.com/BabySid/gorpc/http"
+	"github.com/BabySid/gorpc/api"
+	"github.com/BabySid/gorpc/codec"
 	"github.com/BabySid/proto/sodor"
 	"reflect"
 	"sync"
@@ -12,7 +13,7 @@ import (
 
 type sodorClient struct {
 	fatCtrl FatCtrl
-	handle  *http.Client
+	handle  api.Client
 
 	mutex sync.RWMutex
 
@@ -189,7 +190,9 @@ func (c *sodorClient) registerMethod() {
 }
 
 func (c *sodorClient) SetFatCtrlAddr(addr FatCtrl) error {
-	handle, err := gorpc.DialHttpClient(addr.Addr, http.WithProtobufCodec())
+	handle, err := gorpc.Dial(addr.Addr, api.ClientOption{
+		Codec: codec.ProtobufCodec,
+	})
 	if err != nil {
 		return err
 	}
@@ -206,7 +209,7 @@ func (c *sodorClient) GetFatCrl() FatCtrl {
 	return c.fatCtrl
 }
 
-func (c *sodorClient) getHandle() *http.Client {
+func (c *sodorClient) getHandle() api.Client {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
 	return c.handle
@@ -222,5 +225,5 @@ func (c *sodorClient) Call(method SodorMethod, request interface{}, resp interfa
 	if handle == nil {
 		return errNullHandle
 	}
-	return handle.Call(resp, params.method, request)
+	return handle.CallJsonRpc(resp, params.method, request)
 }

@@ -45,6 +45,10 @@ github.com/BabySid/gobase v0.0.0-20230130105149-04b7712da556 h1:7ZHEhhXlQBK4pSfk
 github.com/BabySid/gobase v0.0.0-20230130105149-04b7712da556/go.mod h1:svF7L3N0VIscajevwiWvBf3nlqKBuj+q1KJva6xgUas=
 github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82 h1:C/PEgrcKDkEXXuNhLJTQPTXePMMfowvA5aSdCtC9XWs=
 github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82/go.mod h1:Zd6Y+R9Cncyk45kK88CoeTLfoLeRsrre9f++EAUFQvU=
+github.com/BabySid/gorpc v0.0.0-20230216023646-e06ec91b101b h1:x7UeSdzAHDAPsBSKtqdghHf6Crt67KZyqxeaCzzjWRw=
+github.com/BabySid/gorpc v0.0.0-20230216023646-e06ec91b101b/go.mod h1:FqO3cj7nqcQo+wly/m/kGI518OoKfmMhYvp84v8lPbU=
+github.com/BabySid/gorpc v0.0.0-20230216061620-aee808edab07 h1:NhYtDoMrRki+Zp8IL2CGJcNo3p2Zps3o0W+WKCPof1Y=
+github.com/BabySid/gorpc v0.0.0-20230216061620-aee808edab07/go.mod h1:FqO3cj7nqcQo+wly/m/kGI518OoKfmMhYvp84v8lPbU=
 github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba h1:GZLiu/2K0xPn6iANfcYCsxUsg7nUPWTO/4z/kae1l3U=
 github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba/go.mod h1:cSJ+d6Znm3Ju/WlMxETsHcCLawedmjDo89ZR9J1lLdE=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
@@ -237,6 +241,8 @@ github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORR
 github.com/gopherjs/gopherjs v0.0.0-20211219123610-ec9572f70e60/go.mod h1:cz9oNYuRUWGdHmLF2IodMLkAhcPtXeULvcBNagUrxTI=
 github.com/gopherjs/gopherjs v1.17.2 h1:fQnZVsXk8uxXIStYb0N4bGk7jeyTalG/wsZjQ25dO0g=
 github.com/gopherjs/gopherjs v1.17.2/go.mod h1:pRRIvn/QzFLrKfvEz3qUuEhtE/zLCWfreZ6J5gM2i+k=
+github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
+github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/goxjs/gl v0.0.0-20210104184919-e3fafc6f8f2a/go.mod h1:dy/f2gjY09hwVfIyATps4G2ai7/hLwLkc5TrPqONuXY=
 github.com/goxjs/glfw v0.0.0-20191126052801-d2efb5f20838/go.mod h1:oS8P8gVOT4ywTcjV6wZlOU4GuVFQ8F5328KY3MJ79CY=
 github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=

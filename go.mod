@@ -8,7 +8,7 @@ require (
 	fyne.io/fyne/v2 v2.3.0
 	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1
 	github.com/BabySid/gobase v0.0.0-20230130105149-04b7712da556
-	github.com/BabySid/gorpc v0.0.0-20230117070452-71c1bff8ea82
+	github.com/BabySid/gorpc v0.0.0-20230216061620-aee808edab07
 	github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
@@ -56,6 +56,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
+	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3 // indirect
 	github.com/jchv/go-webview2 v0.0.0-20220126073738-2ea27096a5eb // indirect
 	github.com/jchv/go-winloader v0.0.0-20200815041850-dec1ee9a7fd5 // indirect
