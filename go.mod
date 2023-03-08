@@ -5,8 +5,8 @@ go 1.19
 replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7-0.20220103002232-5d2af9a563d4
 
 require (
-	fyne.io/fyne/v2 v2.3.0
-	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1
+	fyne.io/fyne/v2 v2.3.1
+	fyne.io/systray v1.10.1-0.20230207085535-4a244dbb9d03
 	github.com/BabySid/gobase v0.0.0-20230130105149-04b7712da556
 	github.com/BabySid/gorpc v0.0.0-20230216061620-aee808edab07
 	github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba

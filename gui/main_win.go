@@ -10,7 +10,6 @@ import (
 	"github.com/vicanso/go-charts/v2"
 	"golang.design/x/hotkey"
 	"log"
-	"os"
 	"sid-desktop/common"
 	"sid-desktop/theme"
 )
@@ -23,6 +22,7 @@ type MainWin struct {
 	win   fyne.Window
 	wStat winStatus
 	mm    *mainMenu
+	sm    *sysTrayMenu
 	tb    *toolBar
 	toys  *toys
 	sb    *statusBar
@@ -56,8 +56,6 @@ func init() {
 var (
 	globalWin       *MainWin
 	globalLogWriter *common.LogWriter
-
-	tray *sysTray
 )
 
 func NewMainWin() *MainWin {
@@ -123,8 +121,10 @@ func NewMainWin() *MainWin {
 	mw.win.SetCloseIntercept(mw.quitHandle)
 	mw.wStat.shown = true
 
-	if _, ok := mw.app.(desktop.App); ok {
-		tray = newSysTray()
+	if desk, ok := mw.app.(desktop.App); ok {
+		mw.sm = newSysTrayMenu()
+		desk.SetSystemTrayIcon(theme.ResourceSystrayIcon)
+		desk.SetSystemTrayMenu(mw.sm.trayMeny)
 	}
 
 	mw.registerShortCut()
@@ -136,7 +136,7 @@ func (mw *MainWin) Run() {
 	defer func() {
 		//_ = os.Unsetenv("FYNE_FONT")
 		//_ = os.Unsetenv("FYNE_FONT_MONOSPACE")
-		_ = os.Unsetenv("FYNE_SCALE")
+		//_ = os.Unsetenv("FYNE_SCALE")
 
 		gobase.Exit()
 	}()
@@ -146,11 +146,6 @@ func (mw *MainWin) Run() {
 		printErr(fmt.Errorf(theme.RunAppFailedFormat, appName, err))
 	}
 	log.Print(theme.WelComeMsg)
-
-	// set up systray
-	if tray != nil {
-		tray.run()
-	}
 
 	mw.win.ShowAndRun()
 }
@@ -174,9 +169,6 @@ func (mw *MainWin) quitHandle() {
 }
 
 func (mw *MainWin) closeWin() {
-	if tray != nil {
-		tray.Quit()
-	}
 	// TODO. now, close window directly
 	mw.win.Close()
 }
@@ -184,15 +176,13 @@ func (mw *MainWin) closeWin() {
 func (mw *MainWin) showWin() {
 	mw.win.Show()
 	mw.wStat.shown = true
-
-	tray.setHideMenu()
+	mw.sm.refreshMenu()
 }
 
 func (mw *MainWin) hideWin() {
 	mw.win.Hide()
 	mw.wStat.shown = false
-
-	tray.setShowMenu()
+	mw.sm.refreshMenu()
 }
 
 func (mw *MainWin) registerShortCut() {
