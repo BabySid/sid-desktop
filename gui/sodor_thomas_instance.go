@@ -43,6 +43,8 @@ type sodorThomasInstance struct {
 	instanceHeader      fyne.CanvasObject
 	instanceList        *widget.List
 
+	metricsWin *metrics
+
 	thomasInsLock sync.Mutex
 	thomasIns     *sodor.ThomasInstance
 }
@@ -51,9 +53,20 @@ func newSodorThomasInstance(id int32) *sodorThomasInstance {
 	ins := sodorThomasInstance{}
 	ins.tid = id
 
-	ins.refresh = sw.NewRefreshButton("*/30 * * * * *", ins.loadThomasInstance)
-	ins.metrics = widget.NewButton(theme.AppPageMetrics, func() {
-
+	ins.refresh = sw.NewRefreshButton(common.GetConfig().SodorThomasRefreshSpec, ins.loadThomasInstance)
+	ins.metrics = widget.NewButtonWithIcon(theme.AppPageMetrics, theme.ResourceMetricsIcon, func() {
+		if ins.thomasIns == nil {
+			return
+		}
+		if ins.metricsWin == nil {
+			ins.metricsWin = newMetrics(metricsKindSodorThomasInstance, metricsParam{thomasIns: ins.thomasIns})
+			ins.metricsWin.win.Show()
+			ins.metricsWin.win.SetOnClosed(func() {
+				ins.metricsWin = nil
+			})
+		} else {
+			ins.metricsWin.win.RequestFocus()
+		}
 	})
 
 	ins.buildThomasInfo()
@@ -178,6 +191,10 @@ func (s *sodorThomasInstance) loadThomasInstance() {
 	s.thomasIns = &resp
 
 	go s.resetGUI()
+
+	if s.metricsWin != nil {
+		s.metricsWin.refresh()
+	}
 }
 
 func (s *sodorThomasInstance) resetGUI() {
@@ -195,6 +212,8 @@ func (s *sodorThomasInstance) resetGUI() {
 	s.thomasHeartBeatTime.SetText(gobase.FormatTimeStamp(int64(s.thomasIns.Thomas.HeartBeatTime)))
 	s.thomasType.SetText(s.thomasIns.Thomas.ThomasType.String())
 	s.thomasStatus.SetText(s.thomasIns.Thomas.Status)
+
+	s.tabItem.Text = fmt.Sprintf("%s-%s", s.thomasHost.Text, s.thomasTags.Text)
 
 	m := common.NewThomasMetricsWrapper(s.thomasIns.Metrics)
 	s.instanceListBinding.Set(m.AsInterfaceArray())

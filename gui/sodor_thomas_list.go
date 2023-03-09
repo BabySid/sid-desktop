@@ -30,6 +30,8 @@ type sodorThomasList struct {
 	thomasListBinding binding.UntypedList
 	thomasListCache   *common.ThomasInfosWrapper
 
+	metricsWin *metrics
+
 	viewInstanceHandle func(int32)
 }
 
@@ -42,7 +44,15 @@ func newSodorThomasList() *sodorThomasList {
 
 	s.refresh = sw.NewRefreshButton(common.GetConfig().SodorThomasRefreshSpec, s.loadThomasList)
 	s.metrics = widget.NewButtonWithIcon(theme.AppPageMetrics, theme.ResourceMetricsIcon, func() {
-		newMetrics(metricsKindSodorThomas, metricsParam{}).win.Show()
+		if s.metricsWin == nil {
+			s.metricsWin = newMetrics(metricsKindSodorThomas, metricsParam{})
+			s.metricsWin.win.Show()
+			s.metricsWin.win.SetOnClosed(func() {
+				s.metricsWin = nil
+			})
+		} else {
+			s.metricsWin.win.RequestFocus()
+		}
 	})
 	s.newThomas = widget.NewButtonWithIcon(theme.AppSodorAddThomas, theme.ResourceAddIcon, func() {
 		s.addThomas()
@@ -178,4 +188,8 @@ func (s *sodorThomasList) loadThomasList() {
 	}
 	s.thomasListCache = common.NewThomasInfosWrapper(common.GetSodorCache().GetThomasInfos())
 	s.thomasListBinding.Set(s.thomasListCache.AsInterfaceArray())
+
+	if s.metricsWin != nil {
+		s.metricsWin.refresh()
+	}
 }
