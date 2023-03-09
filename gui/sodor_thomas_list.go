@@ -138,7 +138,12 @@ func (s *sodorThomasList) createThomasList() {
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[0].(*widget.Label).SetText(info.Version)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[1].(*widget.Label).SetText(fmt.Sprintf("%s:%d", info.Host, info.Port))
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[2].(*widget.Label).SetText(strings.Join(info.Tags, common.ArraySeparator))
-			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label).SetText(info.Status)
+
+			statusLabel := item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*widget.Label)
+			statusLabel.SetText(info.Status)
+
+			i := common.Find(s.thomasListBinding, data)
+			s.thomasContentList.SetItemHeight(i, statusLabel.MinSize().Height)
 
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[0].(*widget.Button).SetText(theme.AppSodorThomasListOp1)
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[0].(*widget.Button).OnTapped = func() {
