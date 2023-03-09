@@ -317,10 +317,7 @@ The Source code is [sid-desktop](https://github.com/BabySid/sid-desktop).
 	ToyHotSearchRefreshFormat      = "Refresh (%d/%d)"
 	ToyHotSearchUpdateComplete     = "hot search update complete"
 
-	// SysTrayMenuQuitTooltip begins for systray
-	SysTrayMenuQuitTooltip = "Quit Window"
-	SysTrayMenuShow        = "Show"
-	SysTrayMenuShowTooltip = "Show Window"
-	SysTrayMenuHide        = "Hide"
-	SysTrayMenuHideTooltip = "Hide Window"
+	// SysTrayMenuShow begins for systray
+	SysTrayMenuShow = "Show"
+	SysTrayMenuHide = "Hide"
 )

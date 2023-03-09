@@ -10,7 +10,6 @@ import (
 	"github.com/vicanso/go-charts/v2"
 	"sid-desktop/common"
 	"sid-desktop/theme"
-	"sort"
 	"strings"
 )
 
@@ -41,15 +40,14 @@ func newMetrics(kind int, param metricsParam) *metrics {
 	m.kind = kind
 	m.param = param
 
-	m.win = globalWin.app.NewWindow(m.title)
-
 	m.content = container.NewAdaptiveGrid(2)
-	m.win.SetContent(m.content)
-
-	m.win.Resize(fyne.NewSize(800, 600))
-	m.win.CenterOnScreen()
 
 	m.refresh()
+
+	m.win = globalWin.app.NewWindow(m.title)
+	m.win.SetContent(m.content)
+	m.win.Resize(fyne.NewSize(800, 600))
+	m.win.CenterOnScreen()
 
 	return &m
 }
@@ -102,39 +100,41 @@ func (m *metrics) loadThomasList() []*canvas.Image {
 		return nil
 	}
 
+	// host => metrics
 	data := make(map[string]thomasMetrics)
 	for _, info := range infos.ThomasInfos {
+		// cpu/memory/disk/...
 		infoMetrics := info.LatestMetrics.AsMap()
+		orderedMetrics := gobase.SortMap(infoMetrics)
 
-		for k, v := range infoMetrics {
+		for _, item := range orderedMetrics {
 			var fv float64
 			var ok bool
-			if fv, ok = v.(float64); !ok {
+			if fv, ok = item.Value.(float64); !ok {
 				continue
 			}
 			var arr thomasMetrics
-			if arr, ok = data[k]; !ok {
+			if arr, ok = data[item.Key]; !ok {
 				arr = make([]thomasMetric, 0)
 			}
 			arr = append(arr, thomasMetric{
 				Host:  info.Host,
 				value: fv,
 			})
-			data[k] = arr
+			data[item.Key] = arr
 		}
 	}
 
 	rs := make([]*canvas.Image, 0)
-	for k, v := range data {
-		sort.Sort(v)
-
-		out, err := makeHorizontalBarRenderForThomasList(k, v)
+	orderedHosts := gobase.SortMap(data)
+	for _, v := range orderedHosts {
+		out, err := makeHorizontalBarRenderForThomasList(v.Key, v.Value)
 		if err != nil {
 			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 			continue
 		}
 
-		chart := canvas.NewImageFromResource(fyne.NewStaticResource(k, out))
+		chart := canvas.NewImageFromResource(fyne.NewStaticResource(v.Key, out))
 		chart.FillMode = canvas.ImageFillContain
 		chart.ScaleMode = canvas.ImageScaleFastest
 		chart.SetMinSize(fyne.NewSize(300, 300))
@@ -212,37 +212,40 @@ type thomasInstanceMetric struct {
 }
 
 func (m *metrics) loadThomasInstance() []*canvas.Image {
+	// metricsName => metrics. e.g. cpu->...
 	data := make(map[string][]thomasInstanceMetric)
 	for _, ms := range m.param.thomasIns.Metrics {
 		infoMetrics := ms.Metrics.AsMap()
+		orderedMetrics := gobase.SortMap(infoMetrics)
 
-		for k, v := range infoMetrics {
+		for _, item := range orderedMetrics {
 			var fv float64
 			var ok bool
-			if fv, ok = v.(float64); !ok {
+			if fv, ok = item.Value.(float64); !ok {
 				continue
 			}
 			var arr []thomasInstanceMetric
-			if arr, ok = data[k]; !ok {
+			if arr, ok = data[item.Key]; !ok {
 				arr = make([]thomasInstanceMetric, 0)
 			}
 			arr = append(arr, thomasInstanceMetric{
 				Ts:    ms.CreateAt,
 				value: fv,
 			})
-			data[k] = arr
+			data[item.Key] = arr
 		}
 	}
 
 	rs := make([]*canvas.Image, 0)
-	for k, v := range data {
-		out, err := makeBarRenderForThomasInstance(k, v)
+	orderedMetrics := gobase.SortMap(data)
+	for _, v := range orderedMetrics {
+		out, err := makeBarRenderForThomasInstance(v.Key, v.Value)
 		if err != nil {
 			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
 			continue
 		}
 
-		chart := canvas.NewImageFromResource(fyne.NewStaticResource(k, out))
+		chart := canvas.NewImageFromResource(fyne.NewStaticResource(v.Key, out))
 		chart.FillMode = canvas.ImageFillContain
 		chart.ScaleMode = canvas.ImageScaleFastest
 		chart.SetMinSize(fyne.NewSize(300, 300))
