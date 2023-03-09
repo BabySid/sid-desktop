@@ -119,6 +119,9 @@ func (s *sodorThomasList) createThomasList() {
 	s.thomasContentList = widget.NewListWithData(
 		s.thomasListBinding,
 		func() fyne.CanvasObject {
+			status := widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{})
+			status.Wrapping = fyne.TextWrapWord
+
 			return container.NewBorder(nil, nil,
 				widget.NewLabelWithStyle("", fyne.TextAlignLeading, fyne.TextStyle{}),
 				s.createThomasContListOpButtons(),
@@ -126,7 +129,7 @@ func (s *sodorThomasList) createThomasList() {
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
-					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
+					status,
 				),
 			)
 		},

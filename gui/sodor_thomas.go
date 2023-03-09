@@ -28,6 +28,7 @@ func (s *sodorThomas) CreateView() fyne.CanvasObject {
 	s.docs.SetTabLocation(container.TabLocationTop)
 	s.docs.CloseIntercept = func(item *container.TabItem) {
 		if item.Text != theme.AppSodorThomasTabName {
+			// todo stop the cron and close the metricsWin
 			s.docs.Remove(item)
 		} else {
 			dialog.ShowInformation(theme.CannotCloseTitle, theme.AppSodorThomasListCannotCloseMsg, globalWin.win)
