@@ -32,7 +32,7 @@ type sodorThomasList struct {
 
 	metricsWin *metrics
 
-	viewInstanceHandle func(int32)
+	viewInstanceHandle func(*sodor.ThomasInfo)
 }
 
 func newSodorThomasList() *sodorThomasList {
@@ -151,7 +151,7 @@ func (s *sodorThomasList) createThomasList() {
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[0].(*widget.Button).SetText(theme.AppSodorThomasListOp1)
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[0].(*widget.Button).OnTapped = func() {
 				if s.viewInstanceHandle != nil {
-					s.viewInstanceHandle(info.Id)
+					s.viewInstanceHandle(info)
 				}
 			}
 			item.(*fyne.Container).Objects[2].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorThomasListOp2)

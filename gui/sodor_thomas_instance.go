@@ -16,8 +16,10 @@ import (
 	"sync"
 )
 
+var _ sodorContentPage = (*sodorThomasInstance)(nil)
+
 type sodorThomasInstance struct {
-	tid int32
+	info *sodor.ThomasInfo
 
 	tabItem *container.TabItem
 
@@ -49,9 +51,13 @@ type sodorThomasInstance struct {
 	thomasIns     *sodor.ThomasInstance
 }
 
-func newSodorThomasInstance(id int32) *sodorThomasInstance {
+func getTabNameOfThomasInstance(info *sodor.ThomasInfo) string {
+	return fmt.Sprintf("%s-%s", info.Host, strings.Join(info.Tags, common.ArraySeparator))
+}
+
+func newSodorThomasInstance(info *sodor.ThomasInfo) *sodorThomasInstance {
 	ins := sodorThomasInstance{}
-	ins.tid = id
+	ins.info = info
 
 	ins.refresh = sw.NewRefreshButton(common.GetConfig().SodorThomasRefreshSpec, ins.loadThomasInstance)
 	ins.metrics = widget.NewButtonWithIcon(theme.AppPageMetrics, theme.ResourceMetricsIcon, func() {
@@ -72,7 +78,7 @@ func newSodorThomasInstance(id int32) *sodorThomasInstance {
 	ins.buildThomasInfo()
 	ins.buildThomasInstanceInfo()
 
-	ins.tabItem = container.NewTabItem(theme.AppSodorThomasInfo, nil)
+	ins.tabItem = container.NewTabItem(getTabNameOfThomasInstance(ins.info), nil)
 	ins.tabItem.Content = container.NewBorder(
 		container.NewBorder(
 			container.NewHBox(layout.NewSpacer(), ins.refresh.Content, ins.metrics),
@@ -86,7 +92,7 @@ func newSodorThomasInstance(id int32) *sodorThomasInstance {
 }
 
 func (s *sodorThomasInstance) buildThomasInfo() {
-	s.thomasID = widget.NewLabel(fmt.Sprintf("%d", s.tid))
+	s.thomasID = widget.NewLabel(fmt.Sprintf("%d", s.info.Id))
 	s.thomasName = widget.NewLabel("")
 	s.thomasVersion = widget.NewLabel("")
 	s.thomasTags = widget.NewLabel("")
@@ -179,7 +185,7 @@ func (s *sodorThomasInstance) buildThomasInstanceInfo() {
 func (s *sodorThomasInstance) loadThomasInstance() {
 	resp := sodor.ThomasInstance{}
 	req := sodor.ThomasInfo{}
-	req.Id = s.tid
+	req.Id = s.info.Id
 	err := common.GetSodorClient().Call(common.ShowThomas, &req, &resp)
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
@@ -213,8 +219,13 @@ func (s *sodorThomasInstance) resetGUI() {
 	s.thomasType.SetText(s.thomasIns.Thomas.ThomasType.String())
 	s.thomasStatus.SetText(s.thomasIns.Thomas.Status)
 
-	s.tabItem.Text = fmt.Sprintf("%s-%s", s.thomasHost.Text, s.thomasTags.Text)
-
 	m := common.NewThomasMetricsWrapper(s.thomasIns.Metrics)
 	s.instanceListBinding.Set(m.AsInterfaceArray())
+}
+
+func (s *sodorThomasInstance) OnClose() {
+	s.refresh.Stop()
+	if s.metricsWin != nil {
+		s.metricsWin.win.Close()
+	}
 }

@@ -55,3 +55,10 @@ func (rb *RefreshButton) Run() {
 		rb.OnRefresh()
 	}
 }
+
+func (rb *RefreshButton) Stop() {
+	if rb.running {
+		gobase.GlobalScheduler.DelJob(rb.routineName)
+	}
+	rb.running = false
+}

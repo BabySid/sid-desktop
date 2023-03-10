@@ -16,6 +16,10 @@ type sodorInterface interface {
 	CreateView() fyne.CanvasObject
 }
 
+type sodorContentPage interface {
+	OnClose()
+}
+
 var _ sodorInterface = (*sodorAdapter)(nil)
 
 type sodorAdapter struct {

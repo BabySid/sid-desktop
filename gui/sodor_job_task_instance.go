@@ -41,18 +41,22 @@ type sodorJobTaskInstance struct {
 	taskIdCache map[int32]*sodor.Task
 }
 
+func getTabNameOfJobTaskInstance(param taskInstanceParam) string {
+	return fmt.Sprintf("%s-%d-%d", theme.AppSodorJobInfoTaskInstance, param.jID, param.jInsID)
+}
+
 func newSodorJobTaskInstance(param taskInstanceParam) *sodorJobTaskInstance {
 	ins := sodorJobTaskInstance{}
 	ins.jobInfo = param
 
-	ins.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+	ins.refresh = widget.NewButtonWithIcon(theme.AppPageRefresh, theme.ResourceRefreshIcon, func() {
 		ins.reload()
 	})
 
 	ins.buildTaskNames()
 	ins.buildTasksInstanceInfo()
 
-	ins.tabItem = container.NewTabItem(theme.AppSodorJobInfoTaskInstance, nil)
+	ins.tabItem = container.NewTabItem(getTabNameOfJobTaskInstance(param), nil)
 	ins.tabItem.Content = container.NewBorder(
 		ins.headerContainer, nil, nil, nil,
 		ins.instanceCard)

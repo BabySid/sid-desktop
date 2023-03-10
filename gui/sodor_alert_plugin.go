@@ -35,10 +35,10 @@ func (s *sodorAlertPlugin) CreateView() fyne.CanvasObject {
 		return s.content
 	}
 
-	s.addInstance = widget.NewButton(theme.AppSodorCreateAlertPluginInstance, func() {
+	s.addInstance = widget.NewButtonWithIcon(theme.AppSodorCreateAlertPluginInstance, theme.ResourceAddIcon, func() {
 		s.addPlugin()
 	})
-	s.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+	s.refresh = widget.NewButtonWithIcon(theme.AppPageRefresh, theme.ResourceRefreshIcon, func() {
 		s.loadAlertPlugins()
 	})
 
@@ -67,8 +67,8 @@ func (s *sodorAlertPlugin) CreateView() fyne.CanvasObject {
 					widget.NewLabelWithStyle("", fyne.TextAlignCenter, fyne.TextStyle{}),
 					container.NewHBox(
 						layout.NewSpacer(),
-						widget.NewButton(theme.AppSodorCreateAlertPluginOp1, nil),
-						widget.NewButton(theme.AppSodorCreateAlertPluginOp2, nil),
+						widget.NewButtonWithIcon(theme.AppSodorCreateAlertPluginOp1, theme.ResourceEditIcon, nil),
+						widget.NewButtonWithIcon(theme.AppSodorCreateAlertPluginOp2, theme.ResourceRmIcon, nil),
 					)),
 			)
 		},

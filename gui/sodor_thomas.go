@@ -4,7 +4,9 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
+	"github.com/BabySid/proto/sodor"
 	"sid-desktop/theme"
+	"sync"
 )
 
 var _ sodorInterface = (*sodorThomas)(nil)
@@ -14,6 +16,8 @@ type sodorThomas struct {
 
 	docs       *container.DocTabs
 	thomasList *sodorThomasList
+
+	contentPages sync.Map
 }
 
 func (s *sodorThomas) CreateView() fyne.CanvasObject {
@@ -28,8 +32,10 @@ func (s *sodorThomas) CreateView() fyne.CanvasObject {
 	s.docs.SetTabLocation(container.TabLocationTop)
 	s.docs.CloseIntercept = func(item *container.TabItem) {
 		if item.Text != theme.AppSodorThomasTabName {
-			// todo stop the cron and close the metricsWin
 			s.docs.Remove(item)
+			if page, ok := s.contentPages.LoadAndDelete(item.Text); ok {
+				page.(sodorContentPage).OnClose()
+			}
 		} else {
 			dialog.ShowInformation(theme.CannotCloseTitle, theme.AppSodorThomasListCannotCloseMsg, globalWin.win)
 		}
@@ -45,8 +51,17 @@ func (s *sodorThomas) CreateView() fyne.CanvasObject {
 	return s.content
 }
 
-func (s *sodorThomas) viewThomasInstance(thomasID int32) {
-	thomas := newSodorThomasInstance(thomasID)
+func (s *sodorThomas) viewThomasInstance(info *sodor.ThomasInfo) {
+	for _, item := range s.docs.Items {
+		if item.Text == getTabNameOfThomasInstance(info) {
+			s.docs.Select(item)
+			return
+		}
+	}
+
+	thomas := newSodorThomasInstance(info)
 	s.docs.Append(thomas.tabItem)
 	s.docs.Select(thomas.tabItem)
+
+	s.contentPages.Store(thomas.tabItem.Text, thomas)
 }

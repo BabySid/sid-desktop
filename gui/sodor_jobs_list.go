@@ -27,7 +27,7 @@ type sodorJobList struct {
 	jobListCache   *common.JobsWrapper
 
 	createJobHandle    func()
-	editJobHandle      func(jobID int32)
+	editJobHandle      func(job *sodor.Job)
 	viewInstanceHandle func(job *sodor.Job)
 }
 
@@ -38,7 +38,7 @@ func newSodorJobList() *sodorJobList {
 	s.searchEntry.SetPlaceHolder(theme.AppSodorJobSearchText)
 	s.searchEntry.OnChanged = s.searchJobs
 
-	s.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+	s.refresh = widget.NewButtonWithIcon(theme.AppPageRefresh, theme.ResourceRefreshIcon, func() {
 		s.loadJobList()
 	})
 	s.newJob = widget.NewButtonWithIcon(theme.AppSodorCreateJob, theme.ResourceAddIcon, func() {
@@ -50,7 +50,7 @@ func newSodorJobList() *sodorJobList {
 	s.jobListBinding = binding.NewUntypedList()
 	s.createJobList()
 
-	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorJobListName, theme.ResourceJobsIcon, nil)
+	s.tabItem = container.NewTabItemWithIcon(theme.AppSodorJobTabName, theme.ResourceJobsIcon, nil)
 	s.tabItem.Content = container.NewBorder(
 		container.NewGridWithColumns(2, s.searchEntry, container.NewHBox(layout.NewSpacer(), s.refresh, s.newJob)),
 		nil, nil, nil,
@@ -101,7 +101,7 @@ func (s *sodorJobList) createJobList() {
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[1].(*widget.Button).SetText(theme.AppSodorJobListOp1)
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
 				if s.editJobHandle != nil {
-					s.editJobHandle(job.Id)
+					s.editJobHandle(job)
 				}
 			}
 			item.(*fyne.Container).Objects[0].(*fyne.Container).Objects[3].(*fyne.Container).Objects[2].(*widget.Button).SetText(theme.AppSodorJobListOp2)

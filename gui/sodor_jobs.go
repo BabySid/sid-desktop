@@ -31,7 +31,7 @@ func (s *sodorJobs) CreateView() fyne.CanvasObject {
 	s.docs.Append(s.jobList.tabItem)
 	s.docs.SetTabLocation(container.TabLocationTop)
 	s.docs.CloseIntercept = func(item *container.TabItem) {
-		if item.Text != theme.AppSodorJobListName {
+		if item.Text != theme.AppSodorJobTabName {
 			s.docs.Remove(item)
 		} else {
 			dialog.ShowInformation(theme.CannotCloseTitle, theme.AppSodorJobListCannotCloseMsg, globalWin.win)
@@ -49,7 +49,7 @@ func (s *sodorJobs) CreateView() fyne.CanvasObject {
 }
 
 func (s *sodorJobs) createJob() {
-	info := newSodorJobInfo(0)
+	info := newSodorJobInfo(nil, s.docs)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
 	info.okHandle = func() {
@@ -61,8 +61,15 @@ func (s *sodorJobs) createJob() {
 	}
 }
 
-func (s *sodorJobs) editJob(id int32) {
-	info := newSodorJobInfo(id)
+func (s *sodorJobs) editJob(job *sodor.Job) {
+	for _, item := range s.docs.Items {
+		if item.Text == getTabNameOfJobInfo(job) {
+			s.docs.Select(item)
+			return
+		}
+	}
+
+	info := newSodorJobInfo(job, s.docs)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)
 	info.okHandle = func() {
@@ -74,6 +81,13 @@ func (s *sodorJobs) editJob(id int32) {
 }
 
 func (s *sodorJobs) viewJobInstance(job *sodor.Job) {
+	for _, item := range s.docs.Items {
+		if item.Text == getTabNameOfJobInstance(job) {
+			s.docs.Select(item)
+			return
+		}
+	}
+
 	info := newSodorJobInstance(job)
 	info.viewTaskInstanceHandle = s.viewTaskInstance
 	s.docs.Append(info.tabItem)
@@ -81,6 +95,13 @@ func (s *sodorJobs) viewJobInstance(job *sodor.Job) {
 }
 
 func (s *sodorJobs) viewTaskInstance(param taskInstanceParam) {
+	for _, item := range s.docs.Items {
+		if item.Text == getTabNameOfJobTaskInstance(param) {
+			s.docs.Select(item)
+			return
+		}
+	}
+
 	info := newSodorJobTaskInstance(param)
 	s.docs.Append(info.tabItem)
 	s.docs.Select(info.tabItem)

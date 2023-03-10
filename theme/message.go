@@ -143,8 +143,6 @@ const (
 	AppDevToolsCliPreviewSearchPlaceHolder    = "Search for method/url"
 
 	AppSodorName                             = "Sodor"
-	AppSodorJobTabName                       = "Jobs"
-	AppSodorJobListName                      = "Job List"
 	AppSodorCreateJob                        = "New Job"
 	AppSodorJobSearchText                    = "Type the name of jobs"
 	AppSodorJobListHeader1                   = "ID"
@@ -269,6 +267,7 @@ const (
 	AppSodorJobListCannotCloseMsg        = "The job list can NOT be closed. :)"
 	AppSodorThomasListCannotCloseMsg     = "The thomas list can NOT be closed. :)"
 	AppSodorAlertGroupListCannotCloseMsg = "The alert group list can NOT be closed. :)"
+	AppSodorJobTabName                   = "Jobs"
 	AppSodorThomasTabName                = "Thomas"
 	AppSodorFatCtrlTabName               = "Fat Controller"
 	AppSodorAlertGroupTabName            = "Alert Groups"

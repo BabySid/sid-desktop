@@ -37,7 +37,7 @@ func newRelationItem(tasks []string) *relationItem {
 	item.to = widget.NewSelect(tasks, nil)
 	item.to.SetSelectedIndex(0)
 
-	item.del = widget.NewButton(theme.AppSodorRelationItemOp1, func() {
+	item.del = widget.NewButtonWithIcon(theme.AppSodorRelationItemOp1, theme.ResourceRmIcon, func() {
 		if item.delHandle != nil {
 			item.delHandle(&item)
 		}
@@ -62,9 +62,8 @@ func (rel *relationItem) resetOption(opts []string) {
 }
 
 type sodorJobInfo struct {
-	jID int32
-
 	tabItem *container.TabItem
+	parent  *container.DocTabs
 
 	jobCard       *widget.Card
 	jobID         *widget.Label
@@ -100,9 +99,17 @@ type sodorJobInfo struct {
 	jobObj *sodor.Job
 }
 
-func newSodorJobInfo(jID int32) *sodorJobInfo {
+func getTabNameOfJobInfo(info *sodor.Job) string {
+	if info != nil {
+		return fmt.Sprintf("%s-%d-%s", theme.AppSodorJobInfoTitle, info.Id, info.Name)
+	}
+	return fmt.Sprintf("%s-%d-%s", theme.AppSodorJobInfoTitle, 0, "")
+}
+
+func newSodorJobInfo(job *sodor.Job, parent *container.DocTabs) *sodorJobInfo {
 	info := sodorJobInfo{}
-	info.jID = jID
+	info.jobObj = job
+	info.parent = parent
 
 	// job brief
 	info.buildJobBrief()
@@ -129,7 +136,7 @@ func newSodorJobInfo(jID int32) *sodorJobInfo {
 		}
 	})
 
-	info.tabItem = container.NewTabItem(theme.AppSodorJobInfoTitle, nil)
+	info.tabItem = container.NewTabItem(getTabNameOfJobInfo(info.jobObj), nil)
 	info.tabItem.Content = container.NewBorder(
 		nil, container.NewHBox(layout.NewSpacer(), info.dismiss, info.ok), nil, nil,
 		container.NewScroll(container.NewBorder(info.jobCard, info.relationCard, nil, nil, info.taskCard)))
@@ -144,11 +151,21 @@ func (s *sodorJobInfo) buildJobBrief() {
 
 	s.jobName = widget.NewEntry()
 	s.jobName.Validator = validation.NewRegexp(`\S+`, theme.AppSodorJobInfoJobName+" must not be empty")
+	s.jobName.OnChanged = func(str string) {
+		var info sodor.Job
+		info.Name = str
+		if s.jobObj != nil {
+			info.Id = s.jobObj.Id
+		}
+		s.tabItem.Text = getTabNameOfJobInfo(&info)
+		s.parent.Refresh()
+	}
+
 	s.alertGroup = widget.NewSelect([]string{}, nil)
 	s.setAlertGroupOpts()
 
-	if s.jID > 0 {
-		s.jobID = widget.NewLabel(fmt.Sprintf("%d", s.jID))
+	if s.jobObj != nil {
+		s.jobID = widget.NewLabel(fmt.Sprintf("%d", s.jobObj.Id))
 		infoBox.Add(container.NewBorder(nil, nil,
 			widget.NewForm(widget.NewFormItem(theme.AppSodorJobInfoJobID, s.jobID)), nil,
 			container.NewGridWithColumns(3,
@@ -186,7 +203,7 @@ func (s *sodorJobInfo) buildJobBrief() {
 }
 
 func (s *sodorJobInfo) buildTasks() {
-	s.addTask = widget.NewButton(theme.AppSodorJobInfoAddTask, func() {
+	s.addTask = widget.NewButtonWithIcon(theme.AppSodorJobInfoAddTask, theme.ResourceAddIcon, func() {
 		task := &sodor.Task{Name: fmt.Sprintf(theme.AppSodorJobInfoNewTaskFormat, gobase.FormatDateTime())}
 		s.taskListBinding.Append(task)
 		s.tasks.Select(s.taskListBinding.Length() - 1)
@@ -313,7 +330,7 @@ func (s *sodorJobInfo) buildTasks() {
 func (s *sodorJobInfo) buildTaskRelations() {
 	s.relationData = make([]*relationItem, 0)
 
-	s.addRelation = widget.NewButton(theme.AppSodorJobInfoAddTaskRelation, func() {
+	s.addRelation = widget.NewButtonWithIcon(theme.AppSodorJobInfoAddTaskRelation, theme.ResourceAddIcon, func() {
 		tasks := s.getAllTaskNames()
 		if s.createRelationItem(tasks) != nil {
 			s.relationAccordion.OpenAll()
@@ -372,11 +389,11 @@ func getDefaultCronSpec() []string {
 }
 
 func (s *sodorJobInfo) loadJob() {
-	if s.jID == 0 {
+	if s.jobObj == nil {
 		return
 	}
 	resp := sodor.Job{}
-	req := sodor.Job{Id: s.jID}
+	req := sodor.Job{Id: s.jobObj.Id}
 	err := common.GetSodorClient().Call(common.SelectJob, &req, &resp)
 	if err != nil {
 		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))

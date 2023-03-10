@@ -52,7 +52,7 @@ func (s *sodorAlertGroupHistory) buildPluginNames() {
 	s.groupID = widget.NewLabel(fmt.Sprintf("%d", s.group.Id))
 	s.groupName = widget.NewLabel(s.group.Name)
 
-	s.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+	s.refresh = widget.NewButtonWithIcon(theme.AppPageRefresh, theme.ResourceRefreshIcon, func() {
 		v := s.pluginInstanceNames.Selected
 		rs := strings.SplitN(v, ":", 2)
 		id, _ := strconv.Atoi(rs[0])

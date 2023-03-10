@@ -35,10 +35,10 @@ type sodorAlertGroupList struct {
 func newSodorAlertGroupList() *sodorAlertGroupList {
 	s := sodorAlertGroupList{}
 
-	s.refresh = widget.NewButton(theme.AppPageRefresh, func() {
+	s.refresh = widget.NewButtonWithIcon(theme.AppPageRefresh, theme.ResourceRefreshIcon, func() {
 		s.loadAlertGroupList()
 	})
-	s.newAlertGroup = widget.NewButton(theme.AppSodorAddAlertGroup, func() {
+	s.newAlertGroup = widget.NewButtonWithIcon(theme.AppSodorAddAlertGroup, theme.ResourceAddIcon, func() {
 		s.addAlertGroupDialog()
 	})
 
@@ -64,9 +64,9 @@ func (s *sodorAlertGroupList) GetTabItem() *container.TabItem {
 
 func (s *sodorAlertGroupList) createAlertGroupOpButtons() *fyne.Container {
 	return container.NewHBox(
-		widget.NewButton(theme.AppSodorCreateAlertGroupOp1, nil),
-		widget.NewButton(theme.AppSodorCreateAlertGroupOp2, nil),
-		widget.NewButton(theme.AppSodorCreateAlertGroupOp3, nil),
+		widget.NewButtonWithIcon(theme.AppSodorCreateAlertGroupOp1, theme.ResourceEditIcon, nil),
+		widget.NewButtonWithIcon(theme.AppSodorCreateAlertGroupOp2, theme.ResourceInstanceIcon, nil),
+		widget.NewButtonWithIcon(theme.AppSodorCreateAlertGroupOp3, theme.ResourceRmIcon, nil),
 	)
 }
 
