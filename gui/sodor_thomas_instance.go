@@ -217,7 +217,7 @@ func (s *sodorThomasInstance) resetGUI() {
 	s.thomasStartTime.SetText(gobase.FormatTimeStamp(int64(s.thomasIns.Thomas.StartTime)))
 	s.thomasHeartBeatTime.SetText(gobase.FormatTimeStamp(int64(s.thomasIns.Thomas.HeartBeatTime)))
 	s.thomasType.SetText(s.thomasIns.Thomas.ThomasType.String())
-	s.thomasStatus.SetText(s.thomasIns.Thomas.Status)
+	s.thomasStatus.SetText(common.EllipsisString(s.thomasIns.Thomas.Status, 16))
 
 	m := common.NewThomasMetricsWrapper(s.thomasIns.Metrics)
 	s.instanceListBinding.Set(m.AsInterfaceArray())
