@@ -71,7 +71,6 @@ Sid-Desktop only supports **Windows** now.
 Then you can find the binary in the directory `output`
 
 # TODO
-- auto refresh window when theme switched
 - add max-len for validator of entry
 - tooltip for entry
 - init db on splash before main window is shown
