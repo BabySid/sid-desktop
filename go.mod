@@ -5,8 +5,7 @@ go 1.19
 replace github.com/tc-hib/winres => github.com/ventsislav-georgiev/winres v0.1.7-0.20220103002232-5d2af9a563d4
 
 require (
-	fyne.io/fyne/v2 v2.3.1
-	fyne.io/systray v1.10.1-0.20230207085535-4a244dbb9d03
+	fyne.io/fyne/v2 v2.3.2
 	github.com/BabySid/gobase v0.0.0-20230309103158-b51fc0a70c07
 	github.com/BabySid/gorpc v0.0.0-20230216061620-aee808edab07
 	github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba
@@ -29,6 +28,7 @@ require (
 )
 
 require (
+	fyne.io/systray v1.10.1-0.20230312215936-7f71b037e260 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/benoitkugler/textlayout v0.3.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -98,15 +98,15 @@ require (
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/wcharczuk/go-chart/v2 v2.1.0 // indirect
 	github.com/webview/webview v0.0.0-20220314230258-a2b7746141c3 // indirect
-	github.com/yuin/goldmark v1.4.0 // indirect
+	github.com/yuin/goldmark v1.4.13 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/exp v0.0.0-20230307190834-24139beb5833 // indirect
 	golang.org/x/image v0.0.0-20220902085622-e7cb96979f69 // indirect
 	golang.org/x/mobile v0.0.0-20211207041440-4e6c2922fdee // indirect
-	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect
 	golang.org/x/sys v0.1.0 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/text v0.6.0 // indirect
 	google.golang.org/genproto v0.0.0-20220822174746-9e6da59bd2fc // indirect
 	google.golang.org/grpc v1.49.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect

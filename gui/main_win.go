@@ -10,6 +10,8 @@ import (
 	"github.com/vicanso/go-charts/v2"
 	"golang.design/x/hotkey"
 	"log"
+	"os"
+	"os/exec"
 	"sid-desktop/common"
 	"sid-desktop/theme"
 )
@@ -33,7 +35,7 @@ func init() {
 	// set env to support chinese
 	//_ = os.Setenv("FYNE_FONT", "./resource/Microsoft-YaHei.ttf")
 	//_ = os.Setenv("FYNE_FONT_MONOSPACE", "./resource/Microsoft-YaHei.ttf")
-	// _ = os.Setenv("FYNE_SCALE", "0.8")
+	_ = os.Setenv("FYNE_SCALE", "0.8")
 	_ = charts.InstallFont("yahei", theme.FontMicrosoftYaHeiTtf.StaticContent)
 	font, _ := charts.GetFont("yahei")
 	charts.SetDefaultFont(font)
@@ -136,7 +138,7 @@ func (mw *MainWin) Run() {
 	defer func() {
 		//_ = os.Unsetenv("FYNE_FONT")
 		//_ = os.Unsetenv("FYNE_FONT_MONOSPACE")
-		//_ = os.Unsetenv("FYNE_SCALE")
+		_ = os.Unsetenv("FYNE_SCALE")
 
 		gobase.Exit()
 	}()
@@ -171,6 +173,24 @@ func (mw *MainWin) quitHandle() {
 func (mw *MainWin) closeWin() {
 	// TODO. now, close window directly
 	mw.win.Close()
+}
+
+func (mw *MainWin) restart() {
+	path, err := os.Executable()
+	if err != nil {
+		printErr(err)
+		return
+	}
+
+	cmd := exec.Command(path, os.Args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err = cmd.Start(); err != nil {
+		printErr(err)
+		return
+	}
+
+	globalWin.closeWin()
 }
 
 func (mw *MainWin) showWin() {

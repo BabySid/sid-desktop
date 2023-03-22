@@ -3,6 +3,7 @@ package gui
 import (
 	"fmt"
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/dialog"
 	"sid-desktop/common"
 	"sid-desktop/theme"
 )
@@ -52,19 +53,29 @@ func newMainMenu() *mainMenu {
 
 	// Option-Theme
 	mm.themeDark = fyne.NewMenuItem(theme.MenuOptThemeDark, func() {
-		globalWin.app.Settings().SetTheme(theme.DarkTheme)
-		mm.themeDark.Checked = true
-		mm.themeLight.Checked = false
-		_ = common.GetConfig().Theme.Set("__DARK__")
-		mm.Refresh()
+		dialog.ShowConfirm(theme.RestartTitle, theme.RestartMsg, func(b bool) {
+			if b {
+				_ = common.GetConfig().Theme.Set("__DARK__")
+				globalWin.restart()
+				//globalWin.app.Settings().SetTheme(theme.DarkTheme)
+				//mm.themeDark.Checked = true
+				//mm.themeLight.Checked = false
+				//mm.Refresh()
+			}
+		}, globalWin.win)
 	})
 	mm.themeDark.Checked = true
 	mm.themeLight = fyne.NewMenuItem(theme.MenuOptThemeLight, func() {
-		globalWin.app.Settings().SetTheme(theme.LightTheme)
-		mm.themeDark.Checked = false
-		mm.themeLight.Checked = true
-		_ = common.GetConfig().Theme.Set("__LIGHT__")
-		mm.Refresh()
+		dialog.ShowConfirm(theme.RestartTitle, theme.RestartMsg, func(b bool) {
+			if b {
+				_ = common.GetConfig().Theme.Set("__LIGHT__")
+				globalWin.restart()
+				//globalWin.app.Settings().SetTheme(theme.LightTheme)
+				//mm.themeDark.Checked = false
+				//mm.themeLight.Checked = true
+				//mm.Refresh()
+			}
+		}, globalWin.win)
 	})
 	mm.themeLight.Checked = true
 	t, _ := common.GetConfig().Theme.Get()

@@ -11,6 +11,8 @@ const (
 	DismissText = "Cancel"
 	ConfirmText = "OK"
 
+	RestartTitle     = "Need Restart"
+	RestartMsg       = "This operation requires a restart to take effect.\n Are you sure you want to restart?"
 	CannotCloseTitle = "Cannot Close"
 
 	AppPageRefresh     = "Refresh"
