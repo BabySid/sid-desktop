@@ -10,21 +10,16 @@ require (
 	github.com/BabySid/gorpc v0.0.0-20230216061620-aee808edab07
 	github.com/BabySid/proto v0.0.0-20230118104448-31546252cdba
 	github.com/PuerkitoBio/goquery v1.8.0
-	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
-	github.com/go-cmd/cmd v1.4.0
 	github.com/jchv/go-webview-selector v0.0.0-20220126075917-13df59bce3cf
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/parsiya/golnk v0.0.0-20200515071614-5db3107130ce
 	github.com/sahilm/fuzzy v0.1.0
-	github.com/satori/go.uuid v1.2.0
 	github.com/tc-hib/winres v0.0.0-00010101000000-000000000000
 	github.com/vicanso/go-charts/v2 v2.5.7
-	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
 	golang.design/x/hotkey v0.3.0
 	gorm.io/driver/sqlite v1.4.4
 	gorm.io/gorm v1.24.3
-	layeh.com/gopher-json v0.0.0-20201124131017-552bb3c4c3bf
 )
 
 require (
@@ -42,6 +37,7 @@ require (
 	github.com/fyne-io/image v0.0.0-20220602074514-4956b0afb3d2 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.8.1 // indirect
+	github.com/go-cmd/cmd v1.4.0 // indirect
 	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect

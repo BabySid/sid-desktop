@@ -297,8 +297,8 @@ The Source code is [sid-desktop](https://github.com/BabySid/sid-desktop).
 	// ToyDateTimeTitle begins for toys
 	ToyDateTimeTitle               = "DateTime"
 	ToyResourceMonitorTitle        = "Monitor"
-	ToyResourceMonitorItem1        = "CPU:"
-	ToyResourceMonitorItem2        = "MEM:"
+	ToyResourceMonitorItem1        = "CPU"
+	ToyResourceMonitorItem2        = "MEM"
 	ToyResourceMonitorUpTimeFormat = "Up time %d:%d:%d"
 	ToyHotSearchTitle              = "Hot Search(BD)"
 	ToyHotSearchRefreshing         = "Content is Updating"

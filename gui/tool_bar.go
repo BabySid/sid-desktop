@@ -23,6 +23,9 @@ func newToolBar() *toolBar {
 		widget.NewToolbarAction(theme.ResourceFavoritesIcon, func() {
 			openApp(theme.AppFavoritesName)
 		}),
+		widget.NewToolbarAction(theme.ResourceMarkDownIcon, func() {
+			openApp("MarkDown")
+		}),
 		widget.NewToolbarAction(theme.ResourceDevToolsIcon, func() {
 			openApp(theme.AppDevToolsName)
 		}),
