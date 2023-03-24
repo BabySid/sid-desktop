@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/data/validation"
@@ -13,6 +14,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"github.com/BabySid/gobase"
+	"image/color"
 	"sid-desktop/common"
 	"sid-desktop/storage"
 	"sid-desktop/theme"
@@ -260,7 +262,10 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 		title = theme.AppFavoritesEditFavorTitle
 	}
 
-	tagList.Hide()
+	tagBack := canvas.NewRectangle(color.Transparent)
+	tagBack.SetMinSize(fyne.NewSize(300, 50))
+	tagContent := container.NewMax(tagList, tagBack)
+	tagContent.Hide()
 
 	var opContainer *fyne.Container
 	if favor != nil {
@@ -268,61 +273,59 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 	} else {
 		opContainer = container.NewHBox(expand, layout.NewSpacer())
 	}
-	cont := container.NewBorder(
-		container.NewVBox(
-			widget.NewForm(
-				widget.NewFormItem(theme.AppFavoritesAddFavorUrl, url),
-				widget.NewFormItem(theme.AppFavoritesAddFavorName, name),
-				widget.NewFormItem(theme.AppFavoritesAddFavorTags, tags),
-			),
-			opContainer,
-		),
-		nil, nil, nil,
-		tagList,
-	)
 
-	win := dialog.NewCustomConfirm(
-		title, theme.ConfirmText, theme.DismissText,
-		cont, func(b bool) {
-			if b {
-				t, _ := tagArray.Get()
+	win := dialog.NewForm(title, theme.ConfirmText, theme.DismissText, []*widget.FormItem{
+		widget.NewFormItem(theme.AppFavoritesAddFavorUrl, url),
+		widget.NewFormItem(theme.AppFavoritesAddFavorName, name),
+		widget.NewFormItem(theme.AppFavoritesAddFavorTags, tags),
+		widget.NewFormItem("", container.NewVBox(opContainer, tagContent)),
+	}, func(b bool) {
+		if !b {
+			return
+		}
 
-				var tempFavor common.Favorites
-				if favor != nil {
-					tempFavor = *favor
-				}
-				tempFavor.Name = name.Text
-				tempFavor.Url = url.Text
-				tempFavor.Tags = t
-				tempFavor.CreateTime = time.Now().Unix()
-				tempFavor.AccessTime = time.Now().Unix()
+		t, _ := tagArray.Get()
 
-				if favor != nil {
-					err := storage.GetAppFavoritesDB().UpdateFavorites(tempFavor)
-					if err != nil {
-						printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
-					}
-				} else {
-					err := storage.GetAppFavoritesDB().AddFavorites(tempFavor)
-					if err != nil {
-						printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
-					}
-				}
+		var tempFavor common.Favorites
+		if favor != nil {
+			tempFavor = *favor
+		}
+		tempFavor.Name = name.Text
+		tempFavor.Url = url.Text
+		tempFavor.Tags = t
+		tempFavor.CreateTime = time.Now().Unix()
+		tempFavor.AccessTime = time.Now().Unix()
 
-				af.reloadFavorList()
+		if favor != nil {
+			err := storage.GetAppFavoritesDB().UpdateFavorites(tempFavor)
+			if err != nil {
+				printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
 			}
-		},
-		globalWin.win)
+		} else {
+			err := storage.GetAppFavoritesDB().AddFavorites(tempFavor)
+			if err != nil {
+				printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
+			}
+		}
+
+		af.reloadFavorList()
+
+	}, globalWin.win)
 
 	expand.OnTapped = func() {
-		if tagList.Visible() {
-			tagList.Hide()
+		if tagContent.Visible() {
+			tagContent.Hide()
 			win.Resize(fyne.NewSize(500, 300))
 
 			expand.SetText(theme.AppFavoritesAddFavorExpand)
 			expand.SetIcon(theme.ResourceExpandDownIcon)
 		} else {
-			tagList.Show()
+			tagContent.Show()
+			size := tagArray.Length()
+			if size >= 5 {
+				size = 5
+			}
+			tagBack.SetMinSize(fyne.NewSize(300, common.GetItemsHeightInList(tagList, size)))
 			win.Resize(fyne.NewSize(500, 500))
 
 			expand.SetText(theme.AppFavoritesAddFavorShrink)

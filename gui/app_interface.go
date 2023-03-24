@@ -21,7 +21,6 @@ var (
 		&appWelcome{},
 		&appLauncher{},
 		&appFavorites{},
-		&appScriptRunner{},
 		&appDevTools{},
 		&appSodor{},
 	}
