@@ -15,7 +15,7 @@ func getGormConfig() *gorm.Config {
 			SlowThreshold:             time.Second * 3,
 			Colorful:                  false,
 			IgnoreRecordNotFoundError: true,
-			LogLevel:                  logger.Info,
+			LogLevel:                  logger.Silent,
 		}),
 		DryRun:      false,
 		PrepareStmt: true,

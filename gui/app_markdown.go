@@ -12,6 +12,7 @@ import (
 	"sid-desktop/common"
 	"sid-desktop/storage"
 	"sid-desktop/theme"
+	"strconv"
 )
 
 var _ appInterface = (*appMarkDown)(nil)
@@ -120,37 +121,91 @@ func (amd *appMarkDown) Icon() fyne.Resource {
 }
 
 func (amd *appMarkDown) searchMarkDown(s string) {
-
+	if s == "" {
+		if amd.fileCache != nil {
+			_ = amd.fileBinding.Set(amd.fileCache.AsInterfaceArray())
+		}
+	} else {
+		if amd.fileCache != nil {
+			rs := amd.fileCache.Find(s)
+			_ = amd.fileBinding.Set(rs.AsInterfaceArray())
+		}
+	}
 }
 
 func (amd *appMarkDown) addFile() {
 	amd.fileNameEntry.SetText("")
 	amd.editEntry.SetText("")
+	amd.fileList.UnselectAll()
+	amd.curFile = nil
 }
 
 func (amd *appMarkDown) createFileList() {
 	amd.fileList = widget.NewListWithData(
 		amd.fileBinding,
 		func() fyne.CanvasObject {
-			return widget.NewLabel("")
+			return container.NewBorder(nil, nil,
+				widget.NewLabel(""),
+				widget.NewButtonWithIcon("Del", theme.ResourceRmIcon, nil),
+				widget.NewLabel(""))
 		}, func(data binding.DataItem, item fyne.CanvasObject) {
 			o, _ := data.(binding.Untyped).Get()
 			md := o.(common.MarkDownFile)
-			item.(*widget.Label).SetText(md.Name)
+			item.(*fyne.Container).Objects[0].(*widget.Label).SetText(md.Name)
+			item.(*fyne.Container).Objects[1].(*widget.Label).SetText(strconv.Itoa(int(md.ID)))
+			item.(*fyne.Container).Objects[2].(*widget.Button).OnTapped = func() {
+				err := storage.GetAppMarkDownDB().DelMarkDownFile(&common.MarkDownFile{
+					TableModel: gobase.TableModel{
+						ID: md.ID,
+					},
+				})
+				if err != nil {
+					printErr(fmt.Errorf("markdown failed %v", err))
+				}
+				amd.reloadMarkDownFiles()
+			}
 		})
+
+	amd.fileList.OnSelected = func(id widget.ListItemID) {
+		item, _ := amd.fileBinding.GetValue(id)
+		o := item.(common.MarkDownFile)
+		amd.curFile = &o
+		amd.fileNameEntry.SetText(o.Name)
+		amd.editEntry.SetText(o.Cont)
+	}
 }
 
 func (amd *appMarkDown) saveMarkDownFile() {
-	file := common.MarkDownFile{
-		Name: amd.fileNameEntry.Text,
-		Cont: amd.editEntry.Text,
-	}
-	err := storage.GetAppMarkDownDB().UpdateMarkDownFile(&file)
-	if err != nil {
-		printErr(fmt.Errorf("markdown failed %v", err))
+	var file *common.MarkDownFile
+	if amd.curFile == nil {
+		file = &common.MarkDownFile{
+			Name: amd.fileNameEntry.Text,
+			Cont: amd.editEntry.Text,
+		}
+		err := storage.GetAppMarkDownDB().AddMarkDownFile(file)
+		if err != nil {
+			printErr(fmt.Errorf("markdown failed %v", err))
+		}
+	} else {
+		file = &common.MarkDownFile{
+			TableModel: gobase.TableModel{
+				ID: amd.curFile.ID,
+			},
+			Name: amd.fileNameEntry.Text,
+			Cont: amd.editEntry.Text,
+		}
+		err := storage.GetAppMarkDownDB().UpdateMarkDownFile(file)
+		if err != nil {
+			printErr(fmt.Errorf("markdown failed %v", err))
+		}
 	}
 
 	amd.reloadMarkDownFiles()
+	for i, f := range *amd.fileCache {
+		if f.ID == file.ID {
+			amd.fileList.Select(i)
+		}
+	}
 }
 
 func (amd *appMarkDown) initDB() {
