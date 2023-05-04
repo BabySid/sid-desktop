@@ -65,7 +65,7 @@ func (db *AppMarkDownDB) NeedInit() (bool, error) {
 
 func (db *AppMarkDownDB) LoadMarkDownFiles() (*common.MarkDownFileList, error) {
 	var files common.MarkDownFileList
-	if rs := db.handle.Order("update_at desc").Find(&files); rs.Error != nil {
+	if rs := db.handle.Order("updated_at desc").Find(&files); rs.Error != nil {
 		return nil, rs.Error
 	}
 	return &files, nil

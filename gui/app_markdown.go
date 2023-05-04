@@ -98,7 +98,7 @@ Markdown中使用[]和()符号表示链接，例如：
 		split,
 	)
 
-	//go amd.initDB()
+	go amd.initDB()
 
 	return nil
 }
@@ -135,11 +135,9 @@ func (amd *appMarkDown) createFileList() {
 			return widget.NewLabel("")
 		}, func(data binding.DataItem, item fyne.CanvasObject) {
 			o, _ := data.(binding.Untyped).Get()
-			md := o.(string)
-			item.(*widget.Label).SetText(md)
+			md := o.(common.MarkDownFile)
+			item.(*widget.Label).SetText(md.Name)
 		})
-
-	amd.fileBinding.Set([]interface{}{"file1", "file2", "file3"})
 }
 
 func (amd *appMarkDown) saveMarkDownFile() {
@@ -151,6 +149,8 @@ func (amd *appMarkDown) saveMarkDownFile() {
 	if err != nil {
 		printErr(fmt.Errorf("markdown failed %v", err))
 	}
+
+	amd.reloadMarkDownFiles()
 }
 
 func (amd *appMarkDown) initDB() {

@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"fmt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -10,12 +11,25 @@ import (
 func getGormConfig() *gorm.Config {
 	return &gorm.Config{
 		SkipDefaultTransaction: true,
-		Logger:                 logger.Discard,
-		DryRun:                 false,
-		PrepareStmt:            true,
-		QueryFields:            true,
+		Logger: logger.New(&logWriter{}, logger.Config{
+			SlowThreshold:             time.Second * 3,
+			Colorful:                  false,
+			IgnoreRecordNotFoundError: true,
+			LogLevel:                  logger.Info,
+		}),
+		DryRun:      false,
+		PrepareStmt: true,
+		QueryFields: true,
 	}
 }
+
+type logWriter struct{}
+
+func (w *logWriter) Printf(format string, data ...interface{}) {
+	fmt.Printf(format, data...)
+	fmt.Println()
+}
+
 func initGorm(file string) (*gorm.DB, error) {
 	db, err := gorm.Open(sqlite.Open(file), getGormConfig())
 
