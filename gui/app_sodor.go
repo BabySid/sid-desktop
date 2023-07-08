@@ -75,7 +75,7 @@ func (as *appSodor) GetAppName() string {
 }
 
 func (as *appSodor) ShortCut() fyne.Shortcut {
-	return &desktop.CustomShortcut{KeyName: fyne.Key5, Modifier: fyne.KeyModifierAlt}
+	return &desktop.CustomShortcut{KeyName: fyne.Key6, Modifier: fyne.KeyModifierControl + fyne.KeyModifierShift}
 }
 
 func (as *appSodor) Icon() fyne.Resource {

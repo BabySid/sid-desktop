@@ -1,23 +1,23 @@
 package theme
 
 const (
-	AppTitle   = "Sid Desktop"
+	AppTitle   = "Sid 桌面工具"
 	WelComeMsg = "Welcome to Sid Desktop"
 
 	// QuitAppTitle begins for common messages
-	QuitAppTitle = "Want To Quit?"
-	QuitAppMsg   = "Are you sure to want to quit?"
+	QuitAppTitle = "想要退出?"
+	QuitAppMsg   = "你确定退出吗?"
 
-	DismissText = "Cancel"
-	ConfirmText = "OK"
+	DismissText = "取消"
+	ConfirmText = "确定"
 
-	RestartTitle     = "Need Restart"
-	RestartMsg       = "This operation requires a restart to take effect.\n Are you sure you want to restart?"
+	RestartTitle     = "需要重启"
+	RestartMsg       = "该操作需要重启生效,你确定重启吗?"
 	CannotCloseTitle = "Cannot Close"
 
-	AppPageRefresh     = "Refresh"
-	AppPageAutoRefresh = "AutoRefresh"
-	AppPageMetrics     = "Metrics"
+	AppPageRefresh     = "刷新"
+	AppPageAutoRefresh = "自动刷新"
+	AppPageMetrics     = "指标"
 
 	WebPageProcessErrorFormat = "process webpage failed. %v"
 	NetWorkErrorFormat        = "network error. %v"
@@ -58,7 +58,7 @@ const (
 	RunAppIndexFailedFormat              = "app index run failed. %v"
 
 	AppFavoritesName                   = "Favorites"
-	AppFavoritesSearchText             = "Type the name, url or tags of favorites"
+	AppFavoritesSearchText             = "输入收藏的名字,URL 或者标签"
 	AppFavoritesImportBtnText          = "Import"
 	AppFavoritesExportBtnText          = "Export"
 	AppFavoritesAddFavorBtnText        = "Add"
@@ -280,19 +280,20 @@ The Source code is [sid-desktop](https://github.com/BabySid/sid-desktop).
 `
 
 	// MenuSys begins for menus
-	MenuSys     = "System"
-	MenuSysQuit = "Quit"
+	MenuSys     = "系统"
+	MenuSysQuit = "退出"
 
-	MenuOption          = "Option"
-	MenuOptTheme        = "Theme"
+	MenuOption          = "选项"
+	MenuOptTheme        = "主题"
+	MenuOptThemeDefault = "默认"
 	MenuOptThemeDark    = "Dark"
 	MenuOptThemeLight   = "Light"
-	MenuOptFullScreen   = "FullScreen"
-	MenuOptHideWhenQuit = "Hide When Quit"
+	MenuOptFullScreen   = "全屏"
+	MenuOptHideWhenQuit = "退出时隐藏"
 
-	MenuHelp      = "Help"
-	MenuHelpLog   = "Show Log"
-	MenuHelpAbout = "About Sid"
+	MenuHelp      = "帮助"
+	MenuHelpLog   = "显示日志"
+	MenuHelpAbout = "关于 Sid"
 
 	// ToyDateTimeTitle begins for toys
 	ToyDateTimeTitle               = "DateTime"
@@ -306,6 +307,6 @@ The Source code is [sid-desktop](https://github.com/BabySid/sid-desktop).
 	ToyHotSearchUpdateComplete     = "hot search update complete"
 
 	// SysTrayMenuShow begins for systray
-	SysTrayMenuShow = "Show"
-	SysTrayMenuHide = "Hide"
+	SysTrayMenuShow = "显示"
+	SysTrayMenuHide = "隐藏"
 )

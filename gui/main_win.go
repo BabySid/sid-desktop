@@ -93,6 +93,8 @@ func NewMainWin() *MainWin {
 		mw.app.Settings().SetTheme(theme.DarkTheme)
 	case "__LIGHT__":
 		mw.app.Settings().SetTheme(theme.LightTheme)
+	case "__DEFAULT__":
+		mw.app.Settings().SetTheme(theme.DefaultTheme)
 	}
 
 	// todo setup splash window
