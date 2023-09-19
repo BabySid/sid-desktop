@@ -128,7 +128,7 @@ func (s *sodorAlertGroupList) createAlertGroupList() {
 				}
 				resp := sodor.AlertGroupReply{}
 				if err := common.GetSodorClient().Call(common.DeleteAlertGroup, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 					return
 				}
 				s.loadAlertGroupList()
@@ -156,7 +156,7 @@ func (s *sodorAlertGroupList) editAlertGroupDialog(group *sodor.AlertGroup) {
 func (s *sodorAlertGroupList) checkBeforeBuild() bool {
 	pluginIns := common.GetSodorCache().GetAlertPluginInstances()
 	if pluginIns == nil || len(pluginIns.AlertPluginInstances) == 0 {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, theme.AppSodorEmptyAlertPluginInstance))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, theme.AppSodorEmptyAlertPluginInstance))
 		return false
 	}
 
@@ -245,11 +245,11 @@ func (s *sodorAlertGroupList) buildAlertGroupDialog(group *sodor.AlertGroup) dia
 			var err error
 			if group != nil {
 				if err = common.GetSodorClient().Call(common.UpdateAlertGroup, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				}
 			} else {
 				if err = common.GetSodorClient().Call(common.CreateAlertGroup, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				}
 			}
 
@@ -265,7 +265,7 @@ func (s *sodorAlertGroupList) buildAlertGroupDialog(group *sodor.AlertGroup) dia
 func (s *sodorAlertGroupList) loadAlertGroupList() {
 	err := common.GetSodorCache().LoadAlertGroups()
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 

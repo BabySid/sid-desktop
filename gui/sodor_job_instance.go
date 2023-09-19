@@ -135,7 +135,7 @@ func (s *sodorJobInstance) loadJobInstance() {
 	resp := &sodor.JobInstances{}
 	err := common.GetSodorClient().Call(common.SelectJobInstances, &req, resp)
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 

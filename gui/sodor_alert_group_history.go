@@ -128,7 +128,7 @@ func (s *sodorAlertGroupHistory) loadAlertGroupHistory(pluginID int32) {
 	req.InstanceId = pluginID
 	err := common.GetSodorClient().Call(common.ShowAlertPluginInstanceHistories, &req, &resp)
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 

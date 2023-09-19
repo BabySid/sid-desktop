@@ -93,7 +93,7 @@ func (s *sodorAlertPlugin) CreateView() fyne.CanvasObject {
 				}
 				resp := sodor.AlertPluginReply{}
 				if err := common.GetSodorClient().Call(common.DeleteAlertPluginInstance, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 					return
 				}
 				s.loadAlertPlugins()
@@ -121,7 +121,7 @@ func (s *sodorAlertPlugin) CreateView() fyne.CanvasObject {
 func (s *sodorAlertPlugin) loadAlertPlugins() {
 	err := common.GetSodorCache().LoadAlertPluginInstances()
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 
@@ -216,11 +216,11 @@ func (s *sodorAlertPlugin) buildPluginInstanceDialog(plugin *sodor.AlertPluginIn
 			var err error
 			if plugin != nil {
 				if err = common.GetSodorClient().Call(common.UpdateAlertPluginInstance, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				}
 			} else {
 				if err = common.GetSodorClient().Call(common.CreateAlertPluginInstance, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				}
 			}
 

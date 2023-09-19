@@ -188,7 +188,7 @@ func (s *sodorThomasInstance) loadThomasInstance() {
 	req.Id = s.info.Id
 	err := common.GetSodorClient().Call(common.ShowThomas, &req, &resp)
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 

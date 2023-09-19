@@ -118,7 +118,7 @@ func (s *sodorJobList) createJobList() {
 				}
 				resp := sodor.JobReply{}
 				if err := common.GetSodorClient().Call(common.DeleteJob, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 					return
 				}
 				s.loadJobList()
@@ -143,7 +143,7 @@ func (s *sodorJobList) searchJobs(name string) {
 func (s *sodorJobList) loadJobList() {
 	err := common.GetSodorCache().LoadJobs()
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 	s.jobListCache = common.NewJobsWrapper(common.GetSodorCache().GetJobs())

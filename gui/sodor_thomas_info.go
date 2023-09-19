@@ -119,7 +119,7 @@ func (s *sodorThomasInfo) show() {
 
 			portValue, err := strconv.ParseInt(s.port.Text, 10, 32)
 			if err != nil {
-				printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+				printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				return
 			}
 
@@ -134,11 +134,11 @@ func (s *sodorThomasInfo) show() {
 
 			if s.thomas != nil {
 				if err = common.GetSodorClient().Call(common.UpdateThomas, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				}
 			} else {
 				if err = common.GetSodorClient().Call(common.AddThomas, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				}
 			}
 

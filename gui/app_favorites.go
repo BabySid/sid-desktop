@@ -299,12 +299,12 @@ func (af *appFavorites) showFavorDialog(favor *common.Favorites) {
 		if favor != nil {
 			err := storage.GetAppFavoritesDB().UpdateFavorites(tempFavor)
 			if err != nil {
-				printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
+				printErr(fmt.Errorf(theme.AppFavoritesFailedFormat, err))
 			}
 		} else {
 			err := storage.GetAppFavoritesDB().AddFavorites(tempFavor)
 			if err != nil {
-				printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
+				printErr(fmt.Errorf(theme.AppFavoritesFailedFormat, err))
 			}
 		}
 
@@ -357,21 +357,21 @@ func (af *appFavorites) loadFavoritesFromDB() {
 	var err error
 	af.favorCache, err = storage.GetAppFavoritesDB().LoadFavorites()
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppFavoritesFailedFormat, err))
 	}
 }
 
 func (af *appFavorites) initDB() {
 	need, err := storage.GetAppFavoritesDB().NeedInit()
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppFavoritesFailedFormat, err))
 		return
 	}
 
 	if need {
 		err = storage.GetAppFavoritesDB().Init()
 		if err != nil {
-			printErr(fmt.Errorf(theme.ProcessFavoritesFailedFormat, err))
+			printErr(fmt.Errorf(theme.AppFavoritesFailedFormat, err))
 			return
 		}
 	} else {

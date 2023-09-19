@@ -63,11 +63,11 @@ func (s *sodorFatController) setFatCtlAddr() {
 			ctrl.Addr = addr.Text
 
 			if err := common.GetSodorClient().SetFatCtrlAddr(ctrl); err != nil {
-				printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+				printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				return
 			}
 			if err := storage.GetAppSodorDB().SetFatCtrl(ctrl); err != nil {
-				printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+				printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 				return
 			}
 

@@ -18,18 +18,18 @@ It should be noted that this software is built purely for personal interest and 
     </tr>
     <tr style="border: none;">
       <td style="border: none;">
-        <img src="img/favorites.png" width="400" height="230" alt="Main UI" />
+        <img src="img/favorites.png" width="400" height="230" alt="favorites" />
       </td>
       <td style="border: none;">
-        <img src="img/http.png" width="400" height="230" alt="App Launcher" />
+        <img src="img/http.png" width="400" height="230" alt="dev_tool_http_client" />
       </td>
     </tr>
      <tr style="border: none;">
       <td style="border: none;">
-        <img src="img/lua.png" width="400" height="230" alt="Main UI" />
+        <img src="img/markdown.png" width="400" height="230" alt="markdown" />
       </td>
       <td style="border: none;">
-        <img src="img/json.png" width="400" height="230" alt="App Launcher" />
+        <img src="img/json.png" width="400" height="230" alt="dev_tool_json" />
       </td>
     </tr>
   </table>
@@ -45,14 +45,17 @@ If you're not sure if that's all installed or you don't know how then check out 
   - Application Launcher
     - App Launcher is inspired by [prosper](https://github.com/ventsislav-georgiev/prosper). You can find app in computer with fuzzy search, and open it directly.
   - Favorites
-  - Markdown (WIP)
+  - Markdown 
   - Dev Tools
     - Codec
       - base64
       - Json
     - DateTime
-    - HttpClient
-  - Sodor Frontend (WIP)
+    - Client
+      - HttpClient
+    - Math
+      - Statistic
+  - Sodor Frontend
     - [Sodor Backend](https://github.com/BabySid/sodor)
 - Desktop Toys
   - Resource Monitor

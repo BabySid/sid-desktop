@@ -13,6 +13,7 @@ require (
 	github.com/jchv/go-webview-selector v0.0.0-20220126075917-13df59bce3cf
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/mitchellh/go-wordwrap v1.0.1
+	github.com/montanaflynn/stats v0.7.1
 	github.com/parsiya/golnk v0.0.0-20200515071614-5db3107130ce
 	github.com/sahilm/fuzzy v0.1.0
 	github.com/tc-hib/winres v0.0.0-00010101000000-000000000000

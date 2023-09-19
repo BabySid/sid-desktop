@@ -193,7 +193,7 @@ func (s *sodorJobTaskInstance) loadTaskInstance() {
 	req := sodor.TaskInstance{JobId: s.jobInfo.jID, JobInstanceId: insID}
 	err := common.GetSodorClient().Call(common.SelectTaskInstances, &req, &resp)
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 
@@ -207,7 +207,7 @@ func (s *sodorJobTaskInstance) loadJobInfo() {
 	req := sodor.Job{Id: s.jobInfo.jID}
 	err := common.GetSodorClient().Call(common.SelectJob, &req, &resp)
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 

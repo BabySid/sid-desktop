@@ -75,7 +75,7 @@ const (
 	AppFavoritesAddFavorTags           = "Tags"
 	AppFavoritesAddFavorExpand         = "Expand"
 	AppFavoritesAddFavorShrink         = "Shrink"
-	ProcessFavoritesFailedFormat       = "process favorites failed. %v"
+	AppFavoritesFailedFormat           = "process favorites failed. %v"
 	OpenFavoritesFailedFormat          = "open favorites failed. %v"
 	ExportFavoritesFailedFormat        = "export favorites failed. %v"
 	ImportFavoritesFailedFormat        = "import favorites failed. %v"
@@ -130,6 +130,22 @@ const (
 	AppDevToolsCliSearchTitle                 = AppDevToolsHttpCliName + "-" + AppDevToolsHttpCliSearchHisName
 	AppDevToolsCliPreviewLoading              = "History is loading ..."
 	AppDevToolsCliPreviewSearchPlaceHolder    = "Search for method/url"
+	AppDevToolsMathName                       = "Math"
+	AppDevToolsStatisticName                  = "Statistic"
+	AppDevToolsOpenFileName                   = "Open File"
+	AppDevToolsSelectedFileNameFormat         = "FileName: %s"
+	AppDevToolsMathStatsResultFormat          = `Stats Uint: seconds
+Total Line: %d
+Min: %f
+Mean: %f
+P50: %f
+P75: %f
+P80: %f
+P90: %f
+P95: %f
+P99: %f
+Max: %f
+`
 
 	AppSodorName                             = "Sodor"
 	AppSodorCreateJob                        = "New Job"
@@ -250,7 +266,7 @@ const (
 	AppSodorFatCtlAddr            = "Addr of Fat Controller"
 	AppSodorFatCtlAddrValidateMsg = AppSodorFatCtlAddr + " must not be empty"
 	AppSodorFatCtlAddrPlaceHolder = "The Addr($host:$port) of the fat controller"
-	ProcessSodorFailedFormat      = "process sodor failed. %v"
+	AppSodorFailedFormat          = "process sodor failed. %v"
 	AppSodorInitFatCtlAddrMessage = "Please Set the FatCtrl Addr first"
 
 	AppSodorJobListCannotCloseMsg        = "The job list can NOT be closed. :)"

@@ -13,9 +13,10 @@ import (
 
 var (
 	devToolIndex = map[string][]string{
-		"":                            {theme.AppDevToolsTextProcName, theme.AppDevToolsCliName, theme.AppDevToolsDateTimeName},
+		"":                            {theme.AppDevToolsTextProcName, theme.AppDevToolsCliName, theme.AppDevToolsDateTimeName, theme.AppDevToolsMathName},
 		theme.AppDevToolsTextProcName: {theme.AppDevToolsJsonProcName, theme.AppDevToolsBase64ProcName},
 		theme.AppDevToolsCliName:      {theme.AppDevToolsHttpCliName},
+		theme.AppDevToolsMathName:     {theme.AppDevToolsStatisticName},
 	}
 
 	devTools = map[string]devToolInterface{
@@ -23,6 +24,7 @@ var (
 		theme.AppDevToolsBase64ProcName: &devToolBase64{},
 		theme.AppDevToolsDateTimeName:   &devToolDateTime{},
 		theme.AppDevToolsHttpCliName:    &devToolHttpClient{},
+		theme.AppDevToolsStatisticName:  &devToolStatistic{},
 	}
 )
 
@@ -77,9 +79,9 @@ func (adt *appDevTools) LazyInit() error {
 	adt.contTree.OpenAllBranches()
 
 	adt.tabItem = container.NewTabItemWithIcon(theme.AppDevToolsName, theme.ResourceDevToolsIcon, nil)
-	adt.content = container.NewMax()
+	adt.content = container.NewStack()
 	panel := container.NewHSplit(adt.contTree, adt.content)
-	panel.SetOffset(0.15)
+	panel.SetOffset(0.30)
 	adt.tabItem.Content = panel
 
 	go adt.initDB()

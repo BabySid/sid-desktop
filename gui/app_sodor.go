@@ -85,24 +85,24 @@ func (as *appSodor) Icon() fyne.Resource {
 func (as *appSodor) initDB() {
 	need, err := storage.GetAppSodorDB().NeedInit()
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 
 	if need {
 		err = storage.GetAppSodorDB().Init()
 		if err != nil {
-			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+			printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 			return
 		}
 	}
 
 	ctrl, err := storage.GetAppSodorDB().LoadFatCtl()
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 	} else if ctrl != nil {
 		if err = common.GetSodorClient().SetFatCtrlAddr(*ctrl); err != nil {
-			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+			printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		}
 	}
 }

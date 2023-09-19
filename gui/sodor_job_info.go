@@ -127,7 +127,7 @@ func newSodorJobInfo(job *sodor.Job, parent *container.DocTabs) *sodorJobInfo {
 				info.okHandle()
 			}
 		} else {
-			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+			printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		}
 	})
 	info.dismiss = widget.NewButtonWithIcon(theme.DismissText, fyneTheme.CancelIcon(), func() {
@@ -396,7 +396,7 @@ func (s *sodorJobInfo) loadJob() {
 	req := sodor.Job{Id: s.jobObj.Id}
 	err := common.GetSodorClient().Call(common.SelectJob, &req, &resp)
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 	s.jobObj = &resp

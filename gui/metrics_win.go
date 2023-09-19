@@ -130,7 +130,7 @@ func (m *metrics) loadThomasList() []*canvas.Image {
 	for _, v := range orderedHosts {
 		out, err := makeHorizontalBarRenderForThomasList(v.Key, v.Value)
 		if err != nil {
-			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+			printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 			continue
 		}
 
@@ -241,7 +241,7 @@ func (m *metrics) loadThomasInstance() []*canvas.Image {
 	for _, v := range orderedMetrics {
 		out, err := makeBarRenderForThomasInstance(v.Key, v.Value)
 		if err != nil {
-			printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+			printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 			continue
 		}
 

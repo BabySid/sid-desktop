@@ -165,7 +165,7 @@ func (s *sodorThomasList) createThomasList() {
 				}
 				resp := sodor.ThomasReply{}
 				if err := common.GetSodorClient().Call(common.DropThomas, &req, &resp); err != nil {
-					printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+					printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 					return
 				}
 				s.loadThomasList()
@@ -191,7 +191,7 @@ func (s *sodorThomasList) showThomasDialog(thomas *sodor.ThomasInfo) {
 func (s *sodorThomasList) loadThomasList() {
 	err := common.GetSodorCache().LoadThomasInfos()
 	if err != nil {
-		printErr(fmt.Errorf(theme.ProcessSodorFailedFormat, err))
+		printErr(fmt.Errorf(theme.AppSodorFailedFormat, err))
 		return
 	}
 	s.thomasListCache = common.NewThomasInfosWrapper(common.GetSodorCache().GetThomasInfos())
