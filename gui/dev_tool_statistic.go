@@ -8,10 +8,12 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/BabySid/gobase"
 	"github.com/montanaflynn/stats"
 	"io"
 	"os"
 	"sid-desktop/theme"
+	"strconv"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -47,7 +49,8 @@ func (d *devToolStatistic) CreateView() fyne.CanvasObject {
 
 	d.fileName = widget.NewLabel(fmt.Sprintf(theme.AppDevToolsSelectedFileNameFormat, ""))
 	d.fileFormat = widget.NewSelect([]string{
-		"Duration",
+		theme.AppDevToolsFileFormatNumber,
+		theme.AppDevToolsFileFormatDuration,
 	}, nil)
 	d.fileFormat.SetSelectedIndex(0)
 
@@ -102,12 +105,12 @@ func (d *devToolStatistic) runStatistic(fileName string) {
 			}
 			s = strings.TrimSpace(s)
 			if s != "" {
-				d, e := time.ParseDuration(s)
+				v, e := d.parseLine(s)
 				if e != nil {
 					printErr(fmt.Errorf(theme.AppDevToolsFailedFormat, err))
 					return
 				}
-				rawData = append(rawData, d.Seconds())
+				rawData = append(rawData, v)
 			}
 			if err == io.EOF {
 				break
@@ -132,6 +135,19 @@ func (d *devToolStatistic) runStatistic(fileName string) {
 		progress.Hide()
 		d.statisticResultText.SetText(cont)
 	}()
+}
+
+func (d *devToolStatistic) parseLine(s string) (float64, error) {
+	switch d.fileFormat.Selected {
+	case theme.AppDevToolsFileFormatNumber:
+		t, e := strconv.ParseFloat(s, 64)
+		return t, e
+	case theme.AppDevToolsFileFormatDuration:
+		t, e := time.ParseDuration(s)
+		return t.Seconds(), e
+	default:
+		gobase.AssertHere()
+	}
 }
 
 type statsResult struct {
