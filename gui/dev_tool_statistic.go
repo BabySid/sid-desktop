@@ -148,6 +148,7 @@ func (d *devToolStatistic) parseLine(s string) (float64, error) {
 	default:
 		gobase.AssertHere()
 	}
+	return 0, nil
 }
 
 type statsResult struct {
