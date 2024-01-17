@@ -136,8 +136,7 @@ const (
 	AppDevToolsSelectedFileNameFormat         = "FileName: %s"
 	AppDevToolsFileFormatDuration             = "Duration"
 	AppDevToolsFileFormatNumber               = "Number"
-	AppDevToolsMathStatsResultFormat          = `Stats Uint: seconds
-Total Line: %d
+	AppDevToolsMathStatsResultFormat          = `Total Line: %d
 Min: %f
 Mean: %f
 P50: %f
