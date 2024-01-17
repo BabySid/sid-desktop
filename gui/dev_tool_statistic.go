@@ -187,42 +187,42 @@ func calcStats(input []float64, flag *atomic.Bool) (statsResult, error) {
 		if flag.Load() {
 			return sr, nil
 		}
-		sr.p50, err = stats.Percentile(input, 50)
+		sr.p50, err = stats.PercentileNearestRank(input, 50)
 		if err != nil {
 			return sr, err
 		}
 		if flag.Load() {
 			return sr, nil
 		}
-		sr.p75, err = stats.Percentile(input, 75)
+		sr.p75, err = stats.PercentileNearestRank(input, 75)
 		if err != nil {
 			return sr, err
 		}
 		if flag.Load() {
 			return sr, nil
 		}
-		sr.p80, err = stats.Percentile(input, 80)
+		sr.p80, err = stats.PercentileNearestRank(input, 80)
 		if err != nil {
 			return sr, err
 		}
 		if flag.Load() {
 			return sr, nil
 		}
-		sr.p90, err = stats.Percentile(input, 90)
+		sr.p90, err = stats.PercentileNearestRank(input, 90)
 		if err != nil {
 			return sr, err
 		}
 		if flag.Load() {
 			return sr, nil
 		}
-		sr.p95, err = stats.Percentile(input, 95)
+		sr.p95, err = stats.PercentileNearestRank(input, 95)
 		if err != nil {
 			return sr, err
 		}
 		if flag.Load() {
 			return sr, nil
 		}
-		sr.p99, err = stats.Percentile(input, 99)
+		sr.p99, err = stats.PercentileNearestRank(input, 99)
 		if err != nil {
 			return sr, err
 		}
