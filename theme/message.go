@@ -134,6 +134,8 @@ const (
 	AppDevToolsStatisticName                  = "Statistic"
 	AppDevToolsOpenFileName                   = "Open File"
 	AppDevToolsSelectedFileNameFormat         = "FileName: %s"
+	AppDevToolsFileFormatDuration             = "Duration"
+	AppDevToolsFileFormatNumber               = "Number"
 	AppDevToolsMathStatsResultFormat          = `Stats Uint: seconds
 Total Line: %d
 Min: %f
