@@ -5,6 +5,9 @@ It is designed to build applications that provides a collection of commonly tool
 
 It should be noted that this software is built purely for personal interest and can be used for learning and communication. 
 
+# Note
+A new flutter-based version is being developed recently, so the current fyne-based version is temporarily stopped from updating. But still welcome to have try and give feedback.
+
 # ScreenShorts
 <div align="center">
   <table cellpadding="0" cellspacing="0" style="margin: auto; border-collapse: collapse;">
